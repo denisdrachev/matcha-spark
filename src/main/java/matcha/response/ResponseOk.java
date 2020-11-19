@@ -13,7 +13,7 @@ public class ResponseOk implements MyObject, Response {
 
     private String type = "success";
     private final String token;
-    private final String login;
+//    private final String login;
 
     @Override
     public String toString() {

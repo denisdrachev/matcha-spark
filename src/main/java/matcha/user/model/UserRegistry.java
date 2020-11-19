@@ -26,6 +26,7 @@ public class UserRegistry implements Serializable, MyObject {
     private String fname;
     @NotBlank(message = "Поле 'lname' не может быть пустым")
     private String lname;
+    @NotBlank(message = "Поле 'email' не может быть пустым")
     @Email(message = "Поле 'email' не соответствует email паттерну")
     private String email;
     private Date time = Calendar.getInstance().getTime();

@@ -55,7 +55,7 @@ public class ValidationMessageService {
     }
 
     public ResponseOnlyType prepareMessageOkOnlyType() {
-        return new ResponseOnlyType("success");
+        return new ResponseOnlyType("ok");
     }
 
     public ResponseOkData prepareMessageOkData(JSONObject o) {
@@ -67,6 +67,10 @@ public class ValidationMessageService {
     }
 
     public Response validateMessage(MyObject myObject) {
+        if (myObject == null) {
+            return new ResponseError("error", "Body is empty");
+        }
+
         Set<ConstraintViolation<MyObject>> validate = validator.validate(myObject);
 
         String validatorMessage = validate.stream()

@@ -23,11 +23,20 @@ public class LocationManipulator {
     private final LocationDB locationDB = new LocationDB();
 
     public Location getLocationByUserIdAndActive(Integer userId) {
-        try {
-            return locationDB.getLocationByUserIdAndActive(userId);
-        } catch (GetActiveLocationByLoginException e) {
+
+        Location locationByUserIdAndActive = locationDB.getLocationByUserIdAndActive(userId);
+        if (locationByUserIdAndActive == null) {
             return new Location();
+        } else {
+            return locationByUserIdAndActive;
         }
+
+
+//        try {
+//            return locationDB.getLocationByUserIdAndActive(userId);
+//        } catch (GetActiveLocationByLoginException e) {
+//            return new Location();
+//        }
     }
 
     public void insertLocation(Location location) {

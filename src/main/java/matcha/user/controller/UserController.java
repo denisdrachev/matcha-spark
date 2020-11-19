@@ -13,6 +13,8 @@ import org.ietf.jgss.GSSContext;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Locale;
+
 import static spark.Spark.*;
 
 
@@ -103,24 +105,39 @@ public class UserController {
             UserProfileWithoutEmail userProfile = userService.getUserProfile(token, login);
             return validationMessageService.prepareMessageOkData(new Gson().toJsonTree(userProfile));
         });
-
-
-//        log.info("Request get user profile by login: {}", login);
-//        UserProfileWithoutEmail userProfile = userService.getUserProfile(token, login);
-//        return validationMessageService.prepareMessageOkData(userProfile);
+        exception(Exception.class, (exception, request, response) -> {
+            response.body(validationMessageService.prepareErrorMessage(exception.getMessage()).toString());
+        });
     }
 //
 //    @GetMapping("/regitrationConfirm.html")
-//    public String confirmRegistration(WebRequest request, Model model, @RequestParam("token") String token) {
-//
-//        Locale locale = request.getLocale();
-//        boolean verificationToken = userService.activationUserByToken(token);
-//
-//        if (!verificationToken) {
-//            String message = "auth.message.invalidToken"; //messages.getMessage("auth.message.invalidToken", null, locale);
-//            model.addAttribute("message", message);
-//            return "redirect:/badUser.html?lang=" + locale.getLanguage();
-//        }
-//        return "redirect:?lang=" + request.getLocale().getLanguage();
-//    }
+    //TODO переделать в рабочую форму. Пока не работает
+    public void confirmRegistration(/*WebRequest request, Model model, @RequestParam("token") String token*/) {
+
+        get("/regitrationConfirm.html", (req, res) -> {
+
+            String token = req.cookie("token");
+
+            if (token == null || token.isEmpty()) {
+                return validationMessageService.prepareErrorMessage("Вы не авторизованы.");
+            }
+
+//            Locale locale = req.getLocale();
+            boolean verificationToken = userService.activationUserByToken(token);
+
+            if (!verificationToken) {
+                String message = "auth.message.invalidToken"; //messages.getMessage("auth.message.invalidToken", null, locale);
+//                model.addAttribute("message", message);
+//                return "redirect:/badUser.html?lang=" + locale.getLanguage();
+//                return "redirect:/badUser.html?lang=ru";
+                res.redirect("/badUser.html?lang=ru");
+            }
+            res.redirect("/redirect:?lang=ru");
+            return "";
+//            return "redirect:?lang=" + request.getLocale().getLanguage();
+        });
+        exception(Exception.class, (exception, request, response) -> {
+            response.body(validationMessageService.prepareErrorMessage(exception.getMessage()).toString());
+        });
+    }
 }

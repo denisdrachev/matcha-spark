@@ -11,9 +11,7 @@ import matcha.model.MyObject;
 import org.json.JSONObject;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
@@ -37,6 +35,8 @@ public class UserInfoModel implements Serializable, MyObject {
     @NotBlank(message = "Значение поля 'email' не может быть пустым.")
     private String email;
     @NotNull(message = "Значение поля 'age' не может быть пустым.")
+    @Min(value = 1, message = "Значение поля 'age' не может быть меньше 1.")
+    @Max(value = 120, message = "Значение поля 'age' не может быть больше 120.")
     private Integer age;
     @NotNull(message = "Значение поля 'gender' не может быть пустым.")
     private Integer gender;

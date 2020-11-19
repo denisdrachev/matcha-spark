@@ -2,6 +2,7 @@ package matcha;
 
 import matcha.controller.LocationsController;
 import matcha.controller.UsersController;
+import matcha.profile.controller.ProfileController;
 import matcha.user.controller.UserController;
 
 public class SingletonControllers {
@@ -14,6 +15,9 @@ public class SingletonControllers {
 
         LocationsController locationsController = new LocationsController();
         locationsController.init();
+
+        ProfileController profileController = new ProfileController();
+        profileController.init();
 
     }
 }

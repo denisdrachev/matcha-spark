@@ -108,7 +108,7 @@ public class ProfileDB {
 
     public void updateProfileById(ProfileEntity profile) {
         log.info("Update profile by ID. profile: {}", profile);
-        try (org.sql2o.Connection conn = sql2o.beginTransaction()) {
+        try (org.sql2o.Connection conn = sql2o.open()) {
 
             int result = conn.createQuery(Update.updateProfileById)
                     .addParameter("age", profile.getAge())
@@ -127,6 +127,7 @@ public class ProfileDB {
             log.info("Update profile end. result: {}", result);
         } catch (Exception e) {
             log.warn("Exception. updateProfileById: {}", e.getMessage());
+            e.printStackTrace();
             throw new UpdateProfileByIdDBException();
         }
     }

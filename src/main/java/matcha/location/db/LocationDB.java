@@ -77,6 +77,8 @@ public class LocationDB {
 //            Location location = jdbcTemplate.queryForObject(Select.selectLocationByUserIdAndActive,
 //                    new LocationRowMapper(), userId);
             log.info("Get active location by login done. Result: {}", locations);
+            if (locations.isEmpty())
+                return null;
             return locations.get(0);
         } catch (Exception e) {
             e.printStackTrace();
