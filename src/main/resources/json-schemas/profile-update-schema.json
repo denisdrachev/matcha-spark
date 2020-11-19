@@ -1,0 +1,328 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "http://example.com/example.json",
+  "type": "object",
+  "title": "The root schema",
+  "description": "The root schema comprises the entire JSON document.",
+  "default": {},
+  "examples": [
+    {
+      "activationCode": "activation_code",
+      "login": "login",
+      "password": "password",
+      "fname": "first name",
+      "lname": "last name",
+      "email": "email@gmail.com",
+      "age": 55,
+      "gender": 1,
+      "preference": [
+        0,
+        1
+      ],
+      "biography": "my name is bobby",
+      "tags": [
+        "aaa",
+        "bbb"
+      ],
+      "images": [
+        {
+          "index": 0,
+          "src": "uwyeihfuiwue"
+        },
+        {
+          "index": 1,
+          "src": "uwyeihfu2iwue"
+        }
+      ],
+      "avatar": 1,
+      "location": {
+        "x": 55.6634545,
+        "y": 37.5102081
+      }
+    }
+  ],
+  "required": [
+    "activationCode",
+    "login",
+    "password",
+    "fname",
+    "lname",
+    "email",
+    "age",
+    "gender",
+    "preference",
+    "biography",
+    "tags",
+    "images",
+    "avatar",
+    "location"
+  ],
+  "additionalProperties": true,
+  "properties": {
+    "activationCode": {
+      "$id": "#/properties/activationCode",
+      "type": "string",
+      "title": "The activationCode schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": "",
+      "examples": [
+        "activation_code"
+      ]
+    },
+    "login": {
+      "$id": "#/properties/login",
+      "type": "string",
+      "title": "The login schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": "",
+      "examples": [
+        "login"
+      ]
+    },
+    "password": {
+      "$id": "#/properties/password",
+      "type": "string",
+      "title": "The password schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": "",
+      "examples": [
+        "password"
+      ]
+    },
+    "fname": {
+      "$id": "#/properties/fname",
+      "type": "string",
+      "title": "The fname schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": "",
+      "examples": [
+        "first name"
+      ]
+    },
+    "lname": {
+      "$id": "#/properties/lname",
+      "type": "string",
+      "title": "The lname schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": "",
+      "examples": [
+        "last name"
+      ]
+    },
+    "email": {
+      "$id": "#/properties/email",
+      "type": "string",
+      "title": "The email schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": "",
+      "examples": [
+        "email@gmail.com"
+      ]
+    },
+    "age": {
+      "$id": "#/properties/age",
+      "type": "integer",
+      "title": "The age schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": 0,
+      "examples": [
+        55
+      ]
+    },
+    "gender": {
+      "$id": "#/properties/gender",
+      "type": "integer",
+      "title": "The gender schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": 0,
+      "examples": [
+        1
+      ]
+    },
+    "preference": {
+      "$id": "#/properties/preference",
+      "type": "array",
+      "title": "The preference schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": [],
+      "examples": [
+        [
+          0,
+          1
+        ]
+      ],
+      "additionalItems": true,
+      "items": {
+        "anyOf": [
+          {
+            "$id": "#/properties/preference/items/anyOf/0",
+            "type": "integer",
+            "title": "The first anyOf schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": 0,
+            "examples": [
+              0,
+              1
+            ]
+          }
+        ],
+        "$id": "#/properties/preference/items"
+      }
+    },
+    "biography": {
+      "$id": "#/properties/biography",
+      "type": "string",
+      "title": "The biography schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": "",
+      "examples": [
+        "my name is bobby"
+      ]
+    },
+    "tags": {
+      "$id": "#/properties/tags",
+      "type": "array",
+      "title": "The tags schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": [],
+      "examples": [
+        [
+          "aaa",
+          "bbb"
+        ]
+      ],
+      "additionalItems": true,
+      "items": {
+        "anyOf": [
+          {
+            "$id": "#/properties/tags/items/anyOf/0",
+            "type": "string",
+            "title": "The first anyOf schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+              "aaa",
+              "bbb"
+            ]
+          }
+        ],
+        "$id": "#/properties/tags/items"
+      }
+    },
+    "images": {
+      "$id": "#/properties/images",
+      "type": "array",
+      "title": "The images schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": [],
+      "examples": [
+        [
+          {
+            "index": 0,
+            "src": "uwyeihfuiwue"
+          },
+          {
+            "index": 1,
+            "src": "uwyeihfu2iwue"
+          }
+        ]
+      ],
+      "additionalItems": true,
+      "items": {
+        "anyOf": [
+          {
+            "$id": "#/properties/images/items/anyOf/0",
+            "type": "object",
+            "title": "The first anyOf schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": {},
+            "examples": [
+              {
+                "index": 0,
+                "src": "uwyeihfuiwue"
+              }
+            ],
+            "required": [
+              "index",
+              "src"
+            ],
+            "additionalProperties": true,
+            "properties": {
+              "index": {
+                "$id": "#/properties/images/items/anyOf/0/properties/index",
+                "type": "integer",
+                "title": "The index schema",
+                "description": "An explanation about the purpose of this instance.",
+                "default": 0,
+                "examples": [
+                  0
+                ]
+              },
+              "src": {
+                "$id": "#/properties/images/items/anyOf/0/properties/src",
+                "type": "string",
+                "title": "The src schema",
+                "description": "An explanation about the purpose of this instance.",
+                "default": "",
+                "examples": [
+                  "uwyeihfuiwue"
+                ]
+              }
+            }
+          }
+        ],
+        "$id": "#/properties/images/items"
+      }
+    },
+    "avatar": {
+      "$id": "#/properties/avatar",
+      "type": "integer",
+      "title": "The avatar schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": 0,
+      "examples": [
+        1
+      ]
+    },
+    "location": {
+      "$id": "#/properties/location",
+      "type": "object",
+      "title": "The location schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": {},
+      "examples": [
+        {
+          "x": 55.6634545,
+          "y": 37.5102081
+        }
+      ],
+      "required": [
+        "x",
+        "y"
+      ],
+      "additionalProperties": true,
+      "properties": {
+        "x": {
+          "$id": "#/properties/location/properties/x",
+          "type": "number",
+          "title": "The x schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": 0.0,
+          "examples": [
+            55.6634545
+          ]
+        },
+        "y": {
+          "$id": "#/properties/location/properties/y",
+          "type": "number",
+          "title": "The y schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": 0.0,
+          "examples": [
+            37.5102081
+          ]
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,7 @@
+CREATE TABLE IF NOT EXISTS images (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    index INT NOT NULL,
+    src VARCHAR(255),
+    profileId INT NOT NULL,
+    avatar BOOLEAN NOT NULL
+) ;

@@ -1,0 +1,220 @@
+• You need to provide an author file with your login and a new line in it:
+
+$> cat -e author
+xlogin$
+ylogin <optionnal>$
+$>
+
+• Your application must not have any errors, warning or notice, nor server-side nor client-side.
+• For this project you are free to use the language you want.
+• Clientside, you must use HTML, CSS, and Javascript
+• You can use micro-frameworks, and all the libraries in the world for this project.
+• You are free to use UI librairies (React, Angular, Vue, Bootstrap, Semantic, all of them at once..)
+• No security breaches allowed. You must at least handle what’s in the mandatory part, but we invite you to go even further. Everything depends on it.
+• We will consider that a “micro-framework” has a router, and eventually templating, but no ORM, validators or User Accounts Manager.1
+. As long as you respect these constraints you are free to use what you like.
+• If you need some inspirations, we will suggest as main languages:
+◦ Sinatra for Ruby.
+◦ Express for Node (yes, we consider this to be micro-framwork).
+◦ Flask for Python.
+◦ Scalatra for Scala.
+◦ Slim for PHP (Silex is not authorized because of doctrine integration).
+◦ Nickel for Rust.
+◦ Goji for Golang.
+◦ Spark for Java.
+• ou should use a relational or graph-oriented database. The database to use is free (MySQL, MariaDB, PostgreSQL, Cassandra, InfluxDB, Neo4j ...). You will also have to forge your requests by hand, like grown-ups. But if you are smart, you can make your own library to wrap your queries.
+• You’re free to use the web server you like most may it be Apache, Nginx or a built-in web server.
+• Your whole app must be compatible at least with Firefox (>= 41) and Chrome (>= 46).
+• Your website must have a decent layout: at least a header, a main section and a footer.
+• Your website must be usable on a mobile phone and keep an acceptable layout on small resolutions.
+• All your forms must have correct validations and the whole website must be secure. This part is mandatory and will be checked extensively in defense. To give you an idea, here are a few elements that are not considered secure:
+◦ To have a “plain text” password stored in your database.
+◦ To be able to inject HTML of “user” Javascript code in unprotected variables.
+◦ To be able to upload unwanted content.
+◦ To be able to alter a SQL request.
+• You can ask your questions on the forum, on slack...
+
+
+You will need to create a Web App with the following features:
+
+IV.1 Registration and Signing-in
+
+The app must allow a user to register asking at least an email address, a username, a last name, a first name and a password that is somehow protected. After the registration, an e-mail with an unique link must be sent to the registered user to verify his account.
+
+The user must then be able to connect with his/her username and password. He/She must be able to receive an email allowing him/her to re-initialize his/her password should the first one be forgotten and disconnect with 1 click from any pages on the site.
+
+IV.2 User profile
+
+• Once connected, a user must fill his or her profile, adding the following information:
+◦ The gender.
+◦ Sexual preferences.
+◦ A biography.
+◦ A list of interests with tags (ex: #vegan, #geek, #piercing etc...). These tags must be reusable.
+◦ Pictures, max 5, including 1 as profile picture.
+• At any time, the user must be able to modify these information, as well as the last name, first name and email address.
+• The user must be able to check who looked at his/her profile as well as who “liked” him/her.
+• The user must have a public “fame rating”
+• The user must be located using GPS positionning, up to his/her neighborhood. If the user does not want to be positionned, you must find a way to locate him/her even without his/her knowledge.2 The user must be able to modify his/her GPS position in his/her profile.
+
+IV.3 Browsing
+
+The user must be able to easily get a list of suggestions that match his/her profile.
+• You will only propose “interesting” profiles for example, only men for a heterosexual girls. You must manage bisexuality. If the orientation isn’t specified, the user will be considered bi-sexual.
+• You must cleverly match3 profiles:
+◦ Same geographic area as the user.
+◦ With a maximum of common tags.
+◦ With a maximum “fame rating”.
+• You must show in priority people from the same geographical area.
+• The list must be sortable by age, location, “fame rating” and common tags.
+• The list must be filterable by age, location, “fame rating” and common tags.
+IV.4 Research
+The user must be able to run an advanced research selecting one or a few criterias such as:
+• A age gap.
+• A “fame rating” gap.
+• A location.
+• One or multiple interests tags.
+
+As per the suggestion list, the resulting list must be sortable and filterable by age, location, “fame rating” and tags.
+
+IV.5 Profile of other users
+
+A user must be able to consult the profile of other users. Profiles must contain all the information available about them, except for the email address and the password. When a user consults a profile, it must appear in his/her visit history.
+
+The user must also be able to:
+
+• If he has at least one picture “like” another user. When two people “like” each other, we will say that they are “connected” and are now able to chat. If the current user does not have a picture, he/she cannot complete this action.
+• Check the “fame rating”.
+• See if the user is online, and if not see the date and time of the last connection.
+• Report the user as a “fake account”.
+• Block the user. A blocked user won’t appear anymore in the research results and won’t generate additional notifications.
+
+A user can clearly see if the consulted profile is connected or “like” his/her profile and must be able to “unlike” or be disconnected from that profile.
+
+IV.6 Chat
+
+When two users are connected, they must be able to “chat” in real time.5 How you will implement the chat is totally up to you. The user must be able to see from any page if a new message is received.
+
+IV.7 Notifications
+A user must be notified in real time6 of the following events:
+• The user received a “like”.
+• The user’s profile has been checked.
+• The user received a message.
+• A “liked” user “liked” back.
+• A connected user “unliked” you.
+A user must be able to see, from any page that a notification hasn’t been read.
+
+
+========================================================================================================================================================================================================
+
+
+
+• Вам необходимо предоставить файл автора с вашим логином и новой строкой в ​​нем:
+
+$> cat -e автор
+xlogin $
+ylogin <необязательный> $
+$>
+
+• В вашем приложении не должно быть ошибок, предупреждений или уведомлений, ни на стороне сервера, ни на стороне клиента.
+• Для этого проекта вы можете использовать любой язык, который хотите.
+• На стороне клиента необходимо использовать HTML, CSS и Javascript.
+• Вы можете использовать для этого проекта микросхемы и все библиотеки мира.
+• Вы можете свободно использовать библиотеки пользовательского интерфейса (React, Angular, Vue, Bootstrap, Semantic, все сразу ..)
+• Никаких нарушений безопасности не допускается. Вы должны хотя бы разобраться с тем, что входит в обязательную часть, но мы приглашаем вас пойти еще дальше. Все зависит от этого.
+• Мы будем считать, что «микроструктура» имеет маршрутизатор и, в конечном итоге, шаблон, но не имеет ORM, валидаторы или диспетчер учетных записей пользователей1.
+. Пока вы соблюдаете эти ограничения, вы можете использовать то, что вам нравится.
+• Если вам нужно вдохновение, мы предложим в качестве основных языков:
+◦ Sinatra для Ruby.
+◦ Express for Node (да, мы считаем это микро-фреймворком).
+◦ Flask для Python.
+◦ Scalatra для Scala.
+◦ Slim для PHP (Silex не авторизован из-за интеграции доктрины).
+◦ Никель для ржавчины.
+◦ Годжи для Голанга.
+◦ Spark для Java.
+• Вы должны использовать реляционную или графо-ориентированную базу данных. База данных для использования бесплатна (MySQL, MariaDB, PostgreSQL, Cassandra, InfluxDB, Neo4j ...). Вам также придется подделывать свои просьбы вручную, как взрослым. Но если вы умен, вы можете создать свою собственную библиотеку, чтобы обернуть ваши запросы.
+• Вы можете использовать любой веб-сервер, который вам больше всего нравится, будь то Apache, Nginx или встроенный веб-сервер.
+• Все ваше приложение должно быть совместимо как минимум с Firefox (> = 41) и Chrome (> = 46).
+• Ваш веб-сайт должен иметь приличный макет: как минимум, заголовок, основной раздел и нижний колонтитул.
+• Ваш веб-сайт должен быть доступен для использования на мобильном телефоне и иметь приемлемый макет при небольшом разрешении.
+• Все ваши формы должны иметь правильную проверку, и весь веб-сайт должен быть безопасным. Эта часть является обязательной и будет тщательно проверена в целях защиты. Чтобы дать вам представление, вот несколько элементов, которые не считаются безопасными:
+◦ Хранить в базе данных пароль в виде обычного текста.
+◦ Чтобы иметь возможность вставлять HTML «пользовательского» кода Javascript в незащищенные переменные.
+◦ Чтобы иметь возможность загружать нежелательный контент.
+◦ Чтобы иметь возможность изменять запрос SQL.
+• Вы можете задавать свои вопросы на форуме, на слабине ...
+
+
+Вам нужно будет создать веб-приложение со следующими функциями:
+
+IV.1 Регистрация и вход в систему
+
+Приложение должно позволять пользователю регистрироваться, запрашивая хотя бы адрес электронной почты, имя пользователя, фамилию, имя и пароль, который каким-либо образом защищен. После регистрации зарегистрированному пользователю необходимо отправить электронное письмо с уникальной ссылкой для подтверждения его учетной записи.
+
+Затем пользователь должен иметь возможность подключиться со своим именем пользователя и паролем. Он / она должен иметь возможность получить электронное письмо, позволяющее ему / ей повторно инициализировать свой / ее пароль, если первый из них будет забыт и отключится одним щелчком мыши с любых страниц сайта.
+
+IV.2 Профиль пользователя
+
+• После подключения пользователь должен заполнить свой профиль, добавив следующую информацию:
+◦ Пол.
+◦ Сексуальные предпочтения.
+◦ Биография.
+◦ Список интересов с тегами (например, #vegan, #geek, #piercing и т. Д.). Эти теги должны быть повторно использованы.
+◦ Изображения, не более 5, в том числе 1 в качестве аватара.
+• В любое время пользователь должен иметь возможность изменять эту информацию, а также фамилию, имя и адрес электронной почты.
+• Пользователь должен иметь возможность проверить, кто смотрел его / ее профиль, а также кому он «нравился».
+• Пользователь должен иметь публичный «рейтинг известности».
+• Пользователь должен быть расположен с использованием определения местоположения GPS до его / ее района. Если пользователь не хочет, чтобы его определяли, вы должны найти способ найти его / ее даже без его / ее ведома2. Пользователь должен иметь возможность изменять свое GPS-положение в своем профиле.
+
+IV.3 Просмотр
+
+Пользователь должен иметь возможность легко получить список предложений, соответствующих его / ее профилю.
+• Вы будете предлагать только «интересные» анкеты, например, только мужчины гетеросексуальным девушкам. Вы должны управлять бисексуальностью. Если ориентация не указана, пользователь будет считаться двуполым.
+• Необходимо грамотно сопоставить 3 профиля:
+◦ Тот же географический регион, что и пользователь.
+◦ С максимальным количеством общих тегов.
+◦ С максимальным «рейтингом известности».
+• Вы должны показывать в приоритете людей из той же географической области.
+• Список должен быть отсортирован по возрасту, местоположению, «рейтингу известности» и общим тегам.
+• Список должен быть фильтруемым по возрасту, местоположению, «рейтингу известности» и общим тегам.
+IV.4 Исследования
+Пользователь должен иметь возможность проводить расширенное исследование, выбирая один или несколько критериев, таких как:
+• Разница в возрасте.
+• Пробел в «рейтинге известности».
+• Местоположение.
+• Один или несколько тегов интересов.
+
+Согласно списку предложений, результирующий список должен быть сортированным и фильтруемым по возрасту, местоположению, «рейтингу известности» и тегам.
+
+IV.5 Профиль других пользователей
+
+Пользователь должен иметь возможность просматривать профили других пользователей. Профили должны содержать всю доступную о них информацию, кроме адреса электронной почты и пароля. Когда пользователь просматривает профиль, он должен отображаться в его / ее истории посещений.
+
+Пользователь также должен уметь:
+
+• Если у него есть хотя бы одна фотография, «лайкнувшая» другого пользователя. Когда два человека «нравятся» друг другу, мы говорим, что они «связаны» и теперь могут общаться. Если у текущего пользователя нет изображения, он не может выполнить это действие.
+• Проверьте «рейтинг известности».
+• Посмотрите, находится ли пользователь в сети, и если не видите дату и время последнего подключения.
+• Сообщите о пользователе как о «поддельной учетной записи».
+• Заблокировать пользователя. Заблокированный пользователь больше не будет отображаться в результатах исследования и не будет генерировать дополнительные уведомления.
+
+Пользователь может четко видеть, подключен ли запрашиваемый профиль или «нравится» его / ее профилю, и должен иметь возможность «отличать» или отключаться от этого профиля.
+
+IV.6 Чат
+
+Когда два пользователя подключены, они должны иметь возможность «общаться» в реальном времени.5 Как вы будете реализовывать чат, полностью зависит от вас. Пользователь должен иметь возможность видеть с любой страницы, если получено новое сообщение.
+
+IV.7 Уведомления
+Пользователь должен получать уведомления в режиме реального времени6 о следующих событиях:
+• Пользователь получил отметку «Нравится».
+• Профиль пользователя проверен.
+• Пользователь получил сообщение.
+• «Понравившийся» пользователь ответил «лайком».
+• Подключенный пользователь "не любит" вас.
+Пользователь должен иметь возможность видеть с любой страницы, что уведомление не было прочитано.
+
+
+===========================================================================================================================
+
+
+

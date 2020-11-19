@@ -1,0 +1,48 @@
+spring:
+  h2:
+    console:
+      enabled: true
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: matcha0aamxqo91@gmail.com
+    password: wdih287182g2uheiuhHYATSA
+    properties:
+      mail:
+        smtp:
+          auth: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
+          starttls:
+            enable: true
+  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://localhost:3306/matcha?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+#    username: root
+#    password: root
+    url: jdbc:h2:mem:matcha
+    username: root
+    password: root
+    driver-class-name: org.h2.Driver
+server:
+  port: 8888
+
+schema:
+  folder: json-schemas
+  schemas-list:
+    - registry-schema.json
+    - profile-update-schema.json
+    - profile-get-schema.json
+    - login-schema.json
+options:
+  mail:
+    send: false
+  users:
+    default:
+      init:
+        active: true
+        login: test
+        password: test
+        code: testtest
+      active: true
