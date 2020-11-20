@@ -159,43 +159,43 @@
                     <target>11</target>
                 </configuration>
             </plugin>
-            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <descriptorRefs>
-                        <!-- This tells Maven to include all dependencies -->
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
-                    <archive>
-                        <manifest>
-                            <mainClass>**/Application</mainClass>
-                        </manifest>
-                    </archive>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>com.heroku.sdk</groupId>
-                <artifactId>heroku-maven-plugin</artifactId>
-                <version>0.4.4</version>
-                <configuration>
-                    <jdkVersion>11</jdkVersion>
-                    <!-- Use your own application name -->
-                    <appName>matcha-spark</appName>
-                    <processTypes>
-                        <!-- Tell Heroku how to launch your application -->
-                        <!-- You might have to remove the ./ in front   -->
-                        <web>java -jar ./target/matcha-spark-1.0-SNAPSHOT-jar-with-dependencies.jar--></web>
-                    </processTypes>
-                </configuration>
-            </plugin>
+<!--            <plugin>-->
+<!--                <artifactId>maven-assembly-plugin</artifactId>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <phase>package</phase>-->
+<!--                        <goals>-->
+<!--                            <goal>single</goal>-->
+<!--                        </goals>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--                <configuration>-->
+<!--                    <descriptorRefs>-->
+<!--                        &lt;!&ndash; This tells Maven to include all dependencies &ndash;&gt;-->
+<!--                        <descriptorRef>jar-with-dependencies</descriptorRef>-->
+<!--                    </descriptorRefs>-->
+<!--                    <archive>-->
+<!--                        <manifest>-->
+<!--                            <mainClass>**/Application</mainClass>-->
+<!--                        </manifest>-->
+<!--                    </archive>-->
+<!--                </configuration>-->
+<!--            </plugin>-->
+<!--            <plugin>-->
+<!--                <groupId>com.heroku.sdk</groupId>-->
+<!--                <artifactId>heroku-maven-plugin</artifactId>-->
+<!--                <version>0.4.4</version>-->
+<!--                <configuration>-->
+<!--                    <jdkVersion>11</jdkVersion>-->
+<!--                    &lt;!&ndash; Use your own application name &ndash;&gt;-->
+<!--                    <appName>matcha-spark</appName>-->
+<!--                    <processTypes>-->
+<!--                        &lt;!&ndash; Tell Heroku how to launch your application &ndash;&gt;-->
+<!--                        &lt;!&ndash; You might have to remove the ./ in front   &ndash;&gt;-->
+<!--                        <web>java -jar ./target/matcha-spark-1.0-SNAPSHOT-jar-with-dependencies.jar&ndash;&gt;</web>-->
+<!--                    </processTypes>-->
+<!--                </configuration>-->
+<!--            </plugin>-->
         </plugins>
     </build>
 </project>
