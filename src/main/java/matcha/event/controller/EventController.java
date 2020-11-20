@@ -41,10 +41,17 @@ public class EventController {
         get("/history/:limit/:offset", (req, res) -> {
 
             String token = req.cookie("token");
-//            String limit = "10";
-            String limit = req.params(":limit");
-//            String offset = "0";
-            String offset = req.params(":offset");
+
+            int limit;
+            int offset;
+
+            try {
+                limit = Integer.parseInt(req.params(":limit"));
+                offset = Integer.parseInt(req.params(":offset"));
+            } catch (Exception e) {
+                return validationMessageService.prepareErrorMessage("Некорректные параметры запроса.");
+            }
+
 
             if (token == null || token.isEmpty()) {
                 return validationMessageService.prepareErrorMessage("Вы не авторизованы.");
@@ -68,10 +75,15 @@ public class EventController {
         get("/notification/:limit/:offset", (req, res) -> {
 
             String token = req.cookie("token");
-//            String limit = "10";
-            String limit = req.params(":limit");
-//            String offset = "0";
-            String offset = req.params(":offset");
+            int limit;
+            int offset;
+
+            try {
+                limit = Integer.parseInt(req.params(":limit"));
+                offset = Integer.parseInt(req.params(":offset"));
+            } catch (Exception e) {
+                return validationMessageService.prepareErrorMessage("Некорректные параметры запроса.");
+            }
 
             if (token == null || token.isEmpty()) {
                 return validationMessageService.prepareErrorMessage("Вы не авторизованы.");

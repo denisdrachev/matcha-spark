@@ -48,15 +48,11 @@ public class EventService {
         return eventManipulator.isLikeEvent(fromLogin, toLogin);
     }
 
-    public List<EventWithUserInfo> getHistory(String fromLogin, String limit, String offset) {
-        Integer limitInt = Integer.parseInt(limit);
-        Integer offsetInt = Integer.parseInt(offset);
-        return eventManipulator.getHistory(fromLogin, limitInt, offsetInt);
+    public List<EventWithUserInfo> getHistory(String fromLogin, Integer limit, Integer offset) {
+        return eventManipulator.getHistory(fromLogin, limit, offset);
     }
 
-    public List<EventWithUserInfo> getNotifications(String toLogin, String limit, String offset) {
-        Integer limitInt = Integer.parseInt(limit);
-        Integer offsetInt = Integer.parseInt(offset);
-        return eventManipulator.getNotifications(toLogin, limitInt, offsetInt);
+    public List<EventWithUserInfo> getNotifications(String toLogin, Integer limit, Integer offset) {
+        return eventManipulator.getNotifications(toLogin, limit, offset);
     }
 }
