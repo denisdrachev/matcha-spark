@@ -176,7 +176,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>matcha.Application</mainClass>
+                            <mainClass>**/Application</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
