@@ -6,6 +6,8 @@ import org.slf4j.LoggerFactory;
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 
+import static spark.Spark.port;
+
 @SpringBootApplication
 public class Application {
 
@@ -55,7 +57,7 @@ model.createPost("das", "sdasd", strs);
 //        SpringApplication.run(Application.class, args);
 
 */
-
+        port(8080);
         SingletonControllers.init();
     }
 
