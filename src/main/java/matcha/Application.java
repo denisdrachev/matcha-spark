@@ -57,7 +57,7 @@ model.createPost("das", "sdasd", strs);
 //        SpringApplication.run(Application.class, args);
 
 */
-        port(8080);
+        port(80);
         SingletonControllers.init();
     }
 
