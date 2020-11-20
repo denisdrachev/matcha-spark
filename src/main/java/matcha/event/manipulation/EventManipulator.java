@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import matcha.event.db.EventDB;
 import matcha.event.model.Event;
+import matcha.event.model.EventWithUserInfo;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,5 +37,13 @@ public class EventManipulator {
 
     public boolean isLikeEvent(String fromLogin, String toLogin) {
         return eventDB.isLikeEvent(fromLogin, toLogin);
+    }
+
+    public List<EventWithUserInfo> getHistory(String fromLogin, Integer limit, Integer offset) {
+        return eventDB.getHistory(fromLogin, limit, offset);
+    }
+
+    public List<EventWithUserInfo> getNotifications(String toLogin, Integer limit, Integer offset) {
+        return eventDB.getNotifications(toLogin, limit, offset);
     }
 }

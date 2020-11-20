@@ -38,6 +38,12 @@ public class Select {
     public static String selectBlacklistById = "SELECT * FROM blacklist WHERE id = ? LIMIT 1";
     public static String selectImageLikeEventById = "SELECT * FROM imageLikeEvents WHERE id = ? LIMIT 1";
     public static String selectEventByLogin = "SELECT * FROM events WHERE type = :type AND login = :login AND data = :data ORDER BY time DESC LIMIT 1";
+
+    public static String selectHistoryEvents = "SELECT e.type, e.data as login, e.time, e.active, u.fname, u.lname FROM events e inner join users u " +
+            "WHERE e.login = :login AND e.login = u.login AND e.data <> '' AND e.data <> e.login ORDER BY time DESC LIMIT :limit OFFSET :offset";
+    public static String selectNotificationEvents = "SELECT e.type, e.login as login, e.time, e.active, u.fname, u.lname FROM events e inner join users u " +
+            "WHERE e.data = :data AND e.login = u.login AND e.data <> e.login ORDER BY time DESC LIMIT :limit OFFSET :offset";
+
     public static String selectProfileById = "SELECT * FROM profiles WHERE id = :id LIMIT 1";
     public static String selectUserByLogin = "SELECT * FROM users WHERE login = :login LIMIT 1";
     public static String selectUserById = "SELECT * FROM users WHERE id = ? LIMIT 1";

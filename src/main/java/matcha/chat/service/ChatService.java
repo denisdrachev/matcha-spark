@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 public class ChatService implements ChatInterface {
 
     private ChatManipulator chatManipulator;
-    private UserProfileService userProfileService = ;
+    private UserProfileService userProfileService;
     private ValidationMessageService validationMessageService;
     private EventService eventService;
 

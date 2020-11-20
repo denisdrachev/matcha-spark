@@ -7,6 +7,7 @@ import matcha.Sql2oModel;
 import matcha.db.crud.Insert;
 import matcha.db.crud.Select;
 import matcha.event.model.Event;
+import matcha.event.model.EventWithUserInfo;
 import matcha.exception.db.EventNotFoundDBException;
 import matcha.exception.db.InsertEventDBException;
 import matcha.exception.db.LoadEventsException;
@@ -167,6 +168,24 @@ public class EventDB {
         }
     }
 
+    public List<EventWithUserInfo> getHistory(String fromLogin, Integer limit, Integer offset) {
+        log.info("Get Events [fromLogin:{}]", fromLogin);
+        try (org.sql2o.Connection conn = sql2o.beginTransaction()) {
+
+            List<EventWithUserInfo> events = conn.createQuery(Select.selectHistoryEvents)
+                    .addParameter("login", fromLogin)
+                    .addParameter("limit", limit)
+                    .addParameter("offset", offset)
+                    .executeAndFetch(EventWithUserInfo.class);
+            conn.commit();
+            log.info("Get Events result size: {}", events.size());
+            return events;
+        } catch (Exception e) {
+            log.warn("Exception. getHistory: {}", e.getMessage());
+            throw new EventNotFoundDBException();
+        }
+    }
+
     //Поиск лайка пользователя
     public boolean isLikeEvent(String fromLogin, String toLogin) {
         log.info("Is Like Event: [fromLogin:{}][toLogin:{}]", fromLogin, toLogin);
@@ -186,6 +205,25 @@ public class EventDB {
         } catch (Exception e) {
             log.warn("Exception. isLikeEvent: {}", e.getMessage());
             return false;
+        }
+    }
+
+    public List<EventWithUserInfo> getNotifications(String toLogin, Integer limit, Integer offset) {
+        log.info("Get Notifications [toLogin:{}]", toLogin);
+        try (org.sql2o.Connection conn = sql2o.beginTransaction()) {
+
+            List<EventWithUserInfo> events = conn.createQuery(Select.selectNotificationEvents)
+                    .addParameter("data", toLogin)
+                    .addParameter("limit", limit)
+                    .addParameter("offset", offset)
+                    .executeAndFetch(EventWithUserInfo.class);
+            conn.commit();
+            log.info("Get Notifications result size: {}", events.size());
+            return events;
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.warn("Exception. getNotifications: {}", e.getMessage());
+            throw new EventNotFoundDBException();
         }
     }
 }

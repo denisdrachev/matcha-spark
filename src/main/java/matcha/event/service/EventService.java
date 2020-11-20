@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import matcha.event.manipulation.EventManipulator;
 import matcha.event.model.Event;
+import matcha.event.model.EventWithUserInfo;
 import matcha.reactive.EventUnicastService;
 import matcha.user.service.UserService;
 import org.springframework.stereotype.Service;
@@ -45,5 +46,17 @@ public class EventService {
 
     public boolean isLikeEvent(String fromLogin, String toLogin) {
         return eventManipulator.isLikeEvent(fromLogin, toLogin);
+    }
+
+    public List<EventWithUserInfo> getHistory(String fromLogin, String limit, String offset) {
+        Integer limitInt = Integer.parseInt(limit);
+        Integer offsetInt = Integer.parseInt(offset);
+        return eventManipulator.getHistory(fromLogin, limitInt, offsetInt);
+    }
+
+    public List<EventWithUserInfo> getNotifications(String toLogin, String limit, String offset) {
+        Integer limitInt = Integer.parseInt(limit);
+        Integer offsetInt = Integer.parseInt(offset);
+        return eventManipulator.getNotifications(toLogin, limitInt, offsetInt);
     }
 }

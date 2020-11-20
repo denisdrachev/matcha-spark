@@ -117,7 +117,7 @@ public class UserService implements UserInterface {
         ProfileEntity profileById = profileService.getProfileByIdWithImages(user.getProfileId());
         BlackListMessage blackList = blackListService.getBlackListMessage(userByToken.getLogin(), user.getLogin());
 
-        Event newEvent = new Event(EventType.PROFILE_LOAD, login, false, "");
+        Event newEvent = new Event(EventType.PROFILE_LOAD, userByToken.getLogin(), false, login);
         eventService.saveEvent(newEvent);
 
         boolean likeEventFrom = eventService.isLikeEvent(userByToken.getLogin(), user.getLogin());
