@@ -1,5 +1,6 @@
 package matcha;
 
+import matcha.blacklist.controller.BlackListController;
 import matcha.controller.ImagesController;
 import matcha.controller.LocationsController;
 import matcha.controller.UsersController;
@@ -22,5 +23,7 @@ public class SingletonControllers {
         EventController eventController = new EventController();
 
         ImagesController imagesController = new ImagesController();
+
+        new BlackListController();
     }
 }

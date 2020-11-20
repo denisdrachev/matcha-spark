@@ -1,29 +1,22 @@
 package matcha.event.db;
 
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import matcha.Sql2oModel;
 import matcha.db.crud.Insert;
 import matcha.db.crud.Select;
+import matcha.db.crud.Update;
 import matcha.event.model.Event;
 import matcha.event.model.EventWithUserInfo;
 import matcha.exception.db.EventNotFoundDBException;
 import matcha.exception.db.InsertEventDBException;
 import matcha.exception.db.LoadEventsException;
-import matcha.model.rowMapper.EventRowMapper;
-import matcha.user.model.UserEntity;
+import matcha.exception.db.UpdateEventDBException;
 import matcha.utils.EventType;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.PreparedStatementCreator;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Service;
 import org.sql2o.Sql2o;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -152,7 +145,7 @@ public class EventDB {
         try (org.sql2o.Connection conn = sql2o.beginTransaction()) {
 
             List<Event> event = conn.createQuery(Select.selectEventByLogin)
-                    .addParameter("type", EventType.IMAGE_LIKE)
+                    .addParameter("type", EventType.LIKE)
                     .addParameter("login", fromLogin)
                     .addParameter("data", toLogin)
                     .executeAndFetch(Event.class);
@@ -192,7 +185,7 @@ public class EventDB {
         try (org.sql2o.Connection conn = sql2o.beginTransaction()) {
 
             List<Event> events = conn.createQuery(Select.selectEventByLogin)
-                    .addParameter("type", EventType.IMAGE_LIKE)
+                    .addParameter("type", EventType.LIKE)
                     .addParameter("login", fromLogin)
                     .addParameter("data", toLogin)
                     .executeAndFetch(Event.class);
@@ -224,6 +217,42 @@ public class EventDB {
             e.printStackTrace();
             log.warn("Exception. getNotifications: {}", e.getMessage());
             throw new EventNotFoundDBException();
+        }
+    }
+
+    public List<Event> findActiveLikeOrUnlikeEvents(String login, String data) {
+        log.info("Get findActiveEvents [login:{}] [data:{}]", login, data);
+        try (org.sql2o.Connection conn = sql2o.open()) {
+
+            List<Event> events = conn.createQuery(Select.selectActiveLikes)
+                    .addParameter("data", data)
+                    .addParameter("login", login)
+                    .executeAndFetch(Event.class);
+            conn.commit();
+            log.info("Get findActiveEvents result size: {}", events.size());
+            return events;
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.warn("Exception. findActiveEvents: {}", e.getMessage());
+            throw new EventNotFoundDBException();
+        }
+    }
+
+    public void updateEventActiveById(Event event) {
+        log.info("Update event by ID: {}", event);
+        try (org.sql2o.Connection conn = sql2o.open()) {
+
+            int eventId = conn.createQuery(Update.updateEventActiveById)
+                    .addParameter("active", event.isActive())
+                    .addParameter("id", event.getId())
+                    .executeUpdate().getResult();
+            conn.commit();
+
+            log.info("Update event by ID result: {}", eventId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.warn("Exception. saveEventById: {}", e.getMessage());
+            throw new UpdateEventDBException();
         }
     }
 }

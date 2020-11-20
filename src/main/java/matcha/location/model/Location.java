@@ -15,16 +15,15 @@ import java.util.Date;
 @NoArgsConstructor
 public class Location implements Serializable {
 
-    @Expose
     private int id;
-    @Expose
     private int profileId;
+    @Expose
     @NotNull(message = "Поле location.x не может быть пустым")
     private Double x;
+    @Expose
     @NotNull(message = "Поле location.y не может быть пустым")
     private Double y;
     @ToString.Exclude
-    @Expose
     private boolean active = false;
     private Date time = Calendar.getInstance().getTime();
 

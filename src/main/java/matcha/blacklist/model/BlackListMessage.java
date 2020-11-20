@@ -12,7 +12,7 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 public class BlackListMessage implements MyObject {
 
-    @NotBlank(message = "Поле 'login' не может быть пустым")
+    @NotBlank(message = "Поле 'toLogin' не может быть пустым")
     private String toLogin;
     private String fromLogin;
     private boolean isBlocked;

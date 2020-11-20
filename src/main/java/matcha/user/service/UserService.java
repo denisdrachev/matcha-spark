@@ -70,7 +70,7 @@ public class UserService implements UserInterface {
 //        mailService.sendRegistrationMail(userEntity.getEmail(), userEntity.getActivationCode());
 
         Event newEvent = new Event(EventType.REGISTRATION, userRegistry.getLogin(), false, "");
-        eventService.saveEvent(newEvent);
+        eventService.saveNewEvent(newEvent);
         userRegistry.getLocation().setProfileId(newProfileId);
         locationService.saveLocation(userRegistry.getLocation());
     }
@@ -78,7 +78,7 @@ public class UserService implements UserInterface {
     public Response userLogin(UserInfo user) {
         Response response = userManipulator.userLogin(user);
         Event newEvent = new Event(EventType.LOGIN, user.getLogin(), false, "");
-        eventService.saveEvent(newEvent);
+        eventService.saveNewEvent(newEvent);
         return response;
     }
 
@@ -119,7 +119,7 @@ public class UserService implements UserInterface {
         BlackListMessage blackList = blackListService.getBlackListMessage(userByToken.getLogin(), user.getLogin());
 
         Event newEvent = new Event(EventType.PROFILE_LOAD, userByToken.getLogin(), false, login);
-        eventService.saveEvent(newEvent);
+        eventService.saveNewEvent(newEvent);
 
         boolean likeEventFrom = eventService.isLikeEvent(userByToken.getLogin(), user.getLogin());
         boolean likeEventTo = eventService.isLikeEvent(user.getLogin(), userByToken.getLogin());
@@ -145,7 +145,7 @@ public class UserService implements UserInterface {
         profileService.updateProfile(currentUser.getProfileId(), newProfile);
 
         Event newEvent = new Event(EventType.PROFILE_UPDATE, userInfo.getLogin(), false, "");
-        eventService.saveEvent(newEvent);
+        eventService.saveNewEvent(newEvent);
     }
 
     public void checkUserByLoginAndActivationCode(String login, String token) {
@@ -156,6 +156,7 @@ public class UserService implements UserInterface {
 
         checkUserToToken(token);
         UserEntity userByToken = getUserByToken(token);
+        //TODO нужна ли строчка снизу???
         getUserByLogin(message.getToLogin());
 
         message.setFromLogin(userByToken.getLogin());
@@ -173,7 +174,7 @@ public class UserService implements UserInterface {
             eventType = EventType.USER_UNBLOCK;
         }
         Event newEvent = new Event(eventType, message.getFromLogin(), true, message.getToLogin());
-        eventService.saveEvent(newEvent);
+        eventService.saveNewEvent(newEvent);
 
         return validationMessageService.prepareMessageOkOnlyType();
     }

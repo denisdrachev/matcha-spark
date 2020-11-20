@@ -36,70 +36,40 @@
       request: {
       },
       expect: {
-            "type": "ok",
-            "data": {
-                "login": "test2",
-                "fname": "test",
-                "lname": "test",
-                "age": 111,
-                "gender": 0,
-                "preference": [
-                    0,
-                    1
-                ],
-                "biography": "dasdasdasd",
-                "tags": [
-                    "dasdas",
-                    "dasxzcvxvc"
-                ],
-                "images": [
-                    {
-                        "id": 1,
-                        "index": 0,
-                        "src": "google.com",
-                        "profileId": 1,
-                        "avatar": true
-                    },
-                    {
-                        "id": 2,
-                        "index": 1,
-                        "profileId": 1,
-                        "avatar": false
-                    },
-                    {
-                        "id": 3,
-                        "index": 2,
-                        "profileId": 1,
-                        "avatar": false
-                    },
-                    {
-                        "id": 4,
-                        "index": 3,
-                        "profileId": 1,
-                        "avatar": false
-                    },
-                    {
-                        "id": 5,
-                        "index": 4,
-                        "profileId": 1,
-                        "avatar": false
-                    }
-                ],
-                "time": "Nov 19, 2020, 11:21:28 PM",
-                "location": {
-                    "id": 5,
-                    "profileId": 1,
-                    "x": 1.3,
-                    "y": 2.1,
-                    "active": true,
-                    "time": "Nov 19, 2020, 11:21:28 PM"
-                },
-                "isBlocked": false,
-                "isFilled": true,
-                "likedFrom": false,
-                "likedTo": false
-            }
-        },
+			  "type": "ok",
+			  "data": {
+				  "login": "test2",
+				  "fname": "test",
+				  "lname": "test",
+				  "age": 111,
+				  "gender": 0,
+				  "preference": [
+					  0,
+					  1
+				  ],
+				  "biography": "dasdasdasd",
+				  "tags": [
+					  "dasdas",
+					  "dasxzcvxvc"
+				  ],
+				  "images": [
+					  {
+						  "index": 0,
+						  "src": "google.com",
+						  "avatar": true
+					  }
+				  ],
+				  "time": "Nov 20, 2020, 10:21:14 PM",
+				  "location": {
+					  "x": 1.3,
+					  "y": 2.1,
+				  },
+				  "isBlocked": false,
+				  "isFilled": true,
+				  "likedFrom": false,
+				  "likedTo": false
+			  }
+		  }
     },
 ---------------------------------------------------------------
 {
@@ -134,40 +104,71 @@
 ----------------------------------------------------------------
     {
       type: GET,
-      path: "/history",
+      path: "/history/:limit/:offset",
       desc: "User_1: Смотрит историю",
       cookie: 'token',
       request: {
       },
       expect: {
-        type: 'ok',
-        data: [
-          {
-            action: 'visit',
-            target: users.User_2,
-            // created: ...
-          },
-        ]
-      }
+			  "type": "ok",
+			  "data": [
+				  {
+					  "type": "PROFILE_LOAD",
+					  "login": "test",
+					  "time": "Nov 20, 2020, 10:23:48 PM",
+					  "fname": "test",
+					  "lname": "test"
+				  }
+			  ]
+		  }
     },
 
 ----------------------------------------------------------------
 
     {
       type: GET,
-      path: "/notifications",
+      path: "/notification/:limit/:offset",
       desc: "User_1: Смотрит уведомления",
       cookie: 'token',
       request: {
       },
       expect: {
+			  "type": "ok",
+			  "data": [
+				  {
+					  "type": "PROFILE_LOAD",
+					  "login": "test6",
+					  "time": "Nov 20, 2020, 10:23:48 PM",
+					  "fname": "test6",
+					  "lname": "test6"
+				  }
+			  ]
+		  }
+    },
+
+---------------------------------------------------------------
+    {
+      type: POST,
+      path: "/like-user/:login/:value", //1 - like, 0 - dislike
+      desc: "User_2: User_2 поставил лайк User_3",
+      cookie: 'token',
+      request: {
+      },
+      expect: {
         type: 'ok',
-        data: [
-          {
-            action: 'visit',
-            target: users.User_2,
-            // created: ...
-          },
-        ]
-      }
+      },
+    },
+---------------------------------------------------------------
+ {
+      type: POST,
+      path: "/blacklist/save",
+      desc: "Пользователь token добавляет в черный список пользователя test",
+      cookie: 'token',
+      request: {
+      		toLogin: "test",
+      		isBlocked: true
+      },
+      expect: {
+        type: 'ok',
+      },
     },

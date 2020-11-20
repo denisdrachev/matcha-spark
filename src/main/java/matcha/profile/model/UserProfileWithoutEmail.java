@@ -1,5 +1,6 @@
 package matcha.profile.model;
 
+import com.google.gson.annotations.Expose;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,20 +19,35 @@ import java.util.List;
 @NoArgsConstructor
 public class UserProfileWithoutEmail implements Serializable {
 
+    @Expose
     private String login;
+    @Expose
     private String fname;
+    @Expose
     private String lname;
+    @Expose
     private Integer age;
+    @Expose
     private Integer gender;
+    @Expose
     private List<Integer> preference;
+    @Expose
     private String biography;
+    @Expose
     private List<String> tags;
+    @Expose
     private List<Image> images;
+    @Expose
     private Date time;
+    @Expose
     private Location location;
+    @Expose
     private boolean isBlocked;
+    @Expose
     private boolean isFilled;
+    @Expose
     private boolean likedFrom;
+    @Expose
     private boolean likedTo;
 
     public UserProfileWithoutEmail(UserEntity user, ProfileEntity profile, boolean isBlocked, boolean likedFrom, boolean likedTo) {

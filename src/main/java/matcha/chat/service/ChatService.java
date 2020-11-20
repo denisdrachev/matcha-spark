@@ -29,7 +29,7 @@ public class ChatService implements ChatInterface {
     public Response saveMessage(ChatMessageSave chatMessage) {
         chatManipulator.insertChatMessage(chatMessage);
         Event newEvent = new Event(EventType.SEND_MESSAGE, chatMessage.getFromLogin(), false, chatMessage.getToLogin());
-        eventService.saveEvent(newEvent);
+        eventService.saveNewEvent(newEvent);
 
         return validationMessageService.prepareMessageOkOnlyType();
     }

@@ -1,5 +1,6 @@
 package matcha.image.model;
 
+import com.google.gson.annotations.Expose;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,9 +11,12 @@ import lombok.NoArgsConstructor;
 public class Image {
 
     private int id;
+    @Expose
     private int index;
+    @Expose
     private String src;
     private int profileId;
+    @Expose
     private boolean avatar;
 
     public Image(int index, String src, int profileId, boolean avatar) {

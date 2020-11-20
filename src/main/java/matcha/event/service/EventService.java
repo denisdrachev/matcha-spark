@@ -6,10 +6,11 @@ import matcha.event.manipulation.EventManipulator;
 import matcha.event.model.Event;
 import matcha.event.model.EventWithUserInfo;
 import matcha.reactive.EventUnicastService;
-import matcha.user.service.UserService;
+import matcha.utils.EventType;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -33,11 +34,17 @@ public class EventService {
 //        registration();
     }
 
-    public void saveEvent(Event event) {
+    public void saveNewEvent(Event event) {
         if (event == null)
             return;
         eventManipulator.insertEvent(event);
 //        eventUnicastService.onNext(event);
+    }
+
+    public void updateEventActiveById(Event event) {
+        if (event == null)
+            return;
+        eventManipulator.updateEventActiveById(event);
     }
 
     public List<Event> getAllEvents() {
@@ -54,5 +61,27 @@ public class EventService {
 
     public List<EventWithUserInfo> getNotifications(String toLogin, Integer limit, Integer offset) {
         return eventManipulator.getNotifications(toLogin, limit, offset);
+    }
+
+//    public List<Event> findActiveEvents(String type, String login, String data) {
+//        return eventManipulator.findActiveLikeOrUnlikeEvents(type, login, data);
+//    }
+
+    public void setLikeOrUnlike(String fromLogin, String toLogin, int likeValue) {
+        Event event;
+        List<Event> activeEvents;
+
+        String eventType;
+        if (likeValue == 1) {
+            eventType = EventType.LIKE;
+        } else {
+            eventType = EventType.UNLIKE;
+        }
+
+        event = new Event(eventType, fromLogin, true, toLogin);
+        activeEvents = eventManipulator.findActiveLikeOrUnlikeEvents(fromLogin, toLogin);
+        activeEvents.forEach(event1 -> event1.setActive(false));
+        activeEvents.forEach(this::updateEventActiveById);
+        saveNewEvent(event);
     }
 }

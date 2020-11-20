@@ -1,5 +1,7 @@
 package matcha.db.crud;
 
+import matcha.utils.EventType;
+
 public class Select {
 
     public static String selectImage = "SELECT id, index, src, profileId, avatar FROM images";
@@ -7,7 +9,7 @@ public class Select {
     public static String selectEvents = "SELECT * FROM events";
     public static String selectLocation = "SELECT * FROM locations";
     public static String selectRaiting = "SELECT * FROM rating";
-    public static String selectBlacklist = "SELECT * FROM blacklist WHERE fromLogin = ? AND toLogin = ?";
+    public static String selectBlacklist = "SELECT * FROM blacklist WHERE fromLogin = :fromLogin AND toLogin = :toLogin";
     public static String selectImageLikeEvent = "SELECT * FROM imageLikeEvents";
     public static String selectProfile = "SELECT * FROM profiles";
     public static String selectUsers = "SELECT * FROM users";
@@ -18,7 +20,7 @@ public class Select {
     public static String selectBlacklistCountById = "SELECT COUNT(*) FROM blacklist WHERE id = ?";
     public static String selectImageLikeEventsCountById = "SELECT COUNT(*) FROM imageLikeEvents WHERE id = ?";
     public static String selectProfilesCountById = "SELECT COUNT(*) FROM profiles WHERE id = :id";
-    public static String selectBlackListCount = "SELECT COUNT(*) FROM blacklist WHERE fromLogin = ? AND toLogin = ?";
+    public static String selectBlackListCount = "SELECT COUNT(*) FROM blacklist WHERE fromLogin = :fromLogin AND toLogin = :toLogin";
     public static String selectUsersCountByLogin = "SELECT COUNT(*) FROM users WHERE login = :login";
     public static String selectUsersCountByActivationCode = "SELECT COUNT(*) FROM users WHERE activationCode = :activationCode";
     public static String selectUsersCountByLoginAndActivationCode = "SELECT COUNT(*) FROM users WHERE login = :login AND activationCode = :activationCode";
@@ -43,6 +45,8 @@ public class Select {
             "WHERE e.login = :login AND e.login = u.login AND e.data <> '' AND e.data <> e.login ORDER BY time DESC LIMIT :limit OFFSET :offset";
     public static String selectNotificationEvents = "SELECT e.type, e.login as login, e.time, e.active, u.fname, u.lname FROM events e inner join users u " +
             "WHERE e.data = :data AND e.login = u.login AND e.data <> e.login ORDER BY time DESC LIMIT :limit OFFSET :offset";
+
+    public static String selectActiveLikes = "SELECT * FROM events WHERE (type = " + EventType.LIKE + " OR type = " + EventType.UNLIKE + ") AND active = TRUE AND login = :login AND data = :data";
 
     public static String selectProfileById = "SELECT * FROM profiles WHERE id = :id LIMIT 1";
     public static String selectUserByLogin = "SELECT * FROM users WHERE login = :login LIMIT 1";

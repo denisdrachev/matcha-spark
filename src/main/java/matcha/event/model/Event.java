@@ -16,7 +16,6 @@ public class Event {
     private String type;
     private String login;
     private Date time;
-    @ToString.Exclude
     private boolean active = true;
     private String data;
 

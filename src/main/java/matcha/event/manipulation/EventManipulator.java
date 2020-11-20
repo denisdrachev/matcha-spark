@@ -1,7 +1,6 @@
 package matcha.event.manipulation;
 
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import matcha.event.db.EventDB;
 import matcha.event.model.Event;
@@ -20,6 +19,10 @@ public class EventManipulator {
 
     public void insertEvent(Event event) {
         eventDB.insertEvent(event);
+    }
+
+    public void updateEventActiveById(Event event) {
+        eventDB.updateEventActiveById(event);
     }
 
     public List<Event> getAllEvents() {
@@ -45,5 +48,9 @@ public class EventManipulator {
 
     public List<EventWithUserInfo> getNotifications(String toLogin, Integer limit, Integer offset) {
         return eventDB.getNotifications(toLogin, limit, offset);
+    }
+
+    public List<Event> findActiveLikeOrUnlikeEvents(String login, String data) {
+        return eventDB.findActiveLikeOrUnlikeEvents(login, data);
     }
 }

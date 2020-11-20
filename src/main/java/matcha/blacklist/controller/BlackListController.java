@@ -1,9 +1,12 @@
 package matcha.blacklist.controller;
 
+import com.google.gson.Gson;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import matcha.blacklist.model.BlackListMessage;
 import matcha.response.Response;
+import matcha.user.model.UserEntity;
+import matcha.user.model.UserInfo;
 import matcha.user.service.UserService;
 import matcha.validator.ValidationMessageService;
 import org.springframework.web.bind.annotation.*;
@@ -11,26 +14,41 @@ import static spark.Spark.*;
 
 @Slf4j
 @CrossOrigin(origins = "*", allowedHeaders = "*")
-@RestController
-@AllArgsConstructor
-@RequestMapping
+//@RestController
+//@AllArgsConstructor
+//@RequestMapping
 public class BlackListController {
 
-    private UserService userService;
-    private ValidationMessageService validationMessageService;
+    private UserService userService = UserService.getInstance();
+    private ValidationMessageService validationMessageService = ValidationMessageService.getInstance();
 
-    @PostMapping(value = "/blacklist/save", produces = "application/json")
-    public Response saveBlackListMessage(
-            @CookieValue(value = "token") String token,
-            @RequestBody BlackListMessage message) {
-
-        log.info("Request save chat message: {}", message);
-        Response response = validationMessageService.validateMessage(message);
-        if (response != null) {
-            return response;
-        }
-        return userService.saveBlackList(token, message);
+    public BlackListController() {
+        saveBlackListMessage();
     }
 
+//    @PostMapping(value = "/blacklist/save", produces = "application/json")
+    public void saveBlackListMessage() {
 
+        post("/blacklist/save", (req, res) -> {
+
+            String token = req.cookie("token");
+
+            if (token == null || token.isEmpty()) {
+                return validationMessageService.prepareErrorMessage("Вы не авторизованы.");
+            }
+
+            BlackListMessage blackListMessage = new Gson().fromJson(req.body(), BlackListMessage.class);
+            log.info("Request save to black list: {}", blackListMessage);
+
+            Response response = validationMessageService.validateMessage(blackListMessage);
+            if (response != null) {
+                return response;
+            }
+
+            return userService.saveBlackList(token, blackListMessage);
+        });
+        exception(Exception.class, (exception, request, response) -> {
+            response.body(validationMessageService.prepareErrorMessage(exception.getMessage()).toString());
+        });
+    }
 }

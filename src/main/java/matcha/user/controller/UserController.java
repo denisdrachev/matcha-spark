@@ -27,7 +27,11 @@ public class UserController {
 
     private static UserController userController;
     private ValidationMessageService validationMessageService = ValidationMessageService.getInstance();
-    private Gson gson = new GsonBuilder().setPrettyPrinting().serializeNulls().create();
+    private Gson gson = new GsonBuilder()
+            .setPrettyPrinting()
+            .excludeFieldsWithoutExposeAnnotation()
+            .serializeNulls()
+            .create();
 
     public UserController() {
         registration();
@@ -42,7 +46,7 @@ public class UserController {
 //    //Errors errors,
     public void registration() {
         post("/register", (req, res) -> {
-            UserRegistry user = gson.fromJson(req.body(), UserRegistry.class);
+            UserRegistry user = new Gson().fromJson(req.body(), UserRegistry.class);
             log.info("Income registration request. User: {}", user);
             Response response = validationMessageService.validateMessage(user);
             if (response != null) {
@@ -61,7 +65,7 @@ public class UserController {
 //    @PostMapping(value = "login", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public void login() {
         post("/login", (req, res) -> {
-            UserInfo user = gson.fromJson(req.body(), UserInfo.class);
+            UserInfo user = new Gson().fromJson(req.body(), UserInfo.class);
             log.info("Income registration request. User: {}", user);
 
             Response response = validationMessageService.validateMessage(user);
