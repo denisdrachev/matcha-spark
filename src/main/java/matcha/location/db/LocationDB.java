@@ -106,13 +106,13 @@ public class LocationDB {
         }
     }
 
-    public void updateActiveLocationByLogin(boolean isActive, String login) {
-        log.info("Update active:{} location by login: {}", isActive, login);
+    public void updateActiveLocationByLogin(boolean isActive, int profileId) {
+        log.info("Update active:{} location by login: {}", isActive, profileId);
         try (org.sql2o.Connection conn = sql2o.beginTransaction()) {
 
             Integer update = conn.createQuery(Update.updateLocationByLogin)
                     .addParameter("active", isActive)
-                    .addParameter("login", login)
+                    .addParameter("profileId", profileId)
                     .executeUpdate().getResult();
             conn.commit();
 

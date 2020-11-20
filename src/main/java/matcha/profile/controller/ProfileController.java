@@ -27,7 +27,7 @@ public class ProfileController {
     private UserService userService = UserService.getInstance();
     private ImageService imageService = ImageService.getInstance();
 
-    public void init() {
+    public ProfileController() {
         profileUpdate();
     }
 

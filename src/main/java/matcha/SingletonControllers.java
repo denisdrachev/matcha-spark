@@ -1,5 +1,6 @@
 package matcha;
 
+import matcha.controller.ImagesController;
 import matcha.controller.LocationsController;
 import matcha.controller.UsersController;
 import matcha.event.controller.EventController;
@@ -7,20 +8,19 @@ import matcha.profile.controller.ProfileController;
 import matcha.user.controller.UserController;
 
 public class SingletonControllers {
+
     public static void init() {
-        UserController userController = UserController.getInstance();
-        userController.init();
+
+        UserController userController = new UserController();
 
         UsersController usersController = new UsersController();
-        usersController.init();
 
         LocationsController locationsController = new LocationsController();
-        locationsController.init();
 
         ProfileController profileController = new ProfileController();
-        profileController.init();
 
         EventController eventController = new EventController();
-        eventController.init();
+
+        ImagesController imagesController = new ImagesController();
     }
 }

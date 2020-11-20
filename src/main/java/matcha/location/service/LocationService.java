@@ -37,8 +37,8 @@ public class LocationService {
         return locationManipulator.getAllLocations();
     }
 
-    public void deactivationLocationByLogin(String login) {
-        locationManipulator.deactivationLocationByLogin(login);
+    public void deactivationLocationByLogin(int profileId) {
+        locationManipulator.deactivationLocationByLogin(profileId);
     }
 
     public void saveLocation(Location location) {

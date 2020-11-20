@@ -22,17 +22,19 @@ import static spark.Spark.exception;
 import static spark.Spark.get;
 
 @Slf4j
-@CrossOrigin(origins = "*", allowedHeaders = "*")
-@RestController
-@NoArgsConstructor
-@RequestMapping
+//@CrossOrigin(origins = "*", allowedHeaders = "*")
+//@RestController
+//@NoArgsConstructor
+//@RequestMapping
 public class EventController {
 
     private EventService eventService = EventService.getInstance();
     private UserService userService = UserService.getInstance();
     private ValidationMessageService validationMessageService = ValidationMessageService.getInstance();
 
-    public void init() {
+
+
+    public EventController() {
         getHistory();
         getNotification();
     }

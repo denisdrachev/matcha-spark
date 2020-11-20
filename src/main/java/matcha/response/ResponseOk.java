@@ -11,7 +11,7 @@ import matcha.model.MyObject;
 @RequiredArgsConstructor
 public class ResponseOk implements MyObject, Response {
 
-    private String type = "success";
+    private String type = "ok";
     private final String token;
 //    private final String login;
 

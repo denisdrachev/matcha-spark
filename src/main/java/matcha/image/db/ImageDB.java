@@ -25,11 +25,11 @@ import java.sql.SQLException;
 import java.util.List;
 
 @Slf4j
-@Service
+//@Service
 //@RequiredArgsConstructor
 public class ImageDB {
 
-    private final JdbcTemplate jdbcTemplate = new JdbcTemplate();
+//    private final JdbcTemplate jdbcTemplate = new JdbcTemplate();
     private final Sql2o sql2o = Sql2oModel.getSql2o();
 
     public Integer getImageCountById(int imageId) {
@@ -104,6 +104,7 @@ public class ImageDB {
     public void updateImageById(Image image) {
         log.info("Update image by id: {}", image);
         try (org.sql2o.Connection conn = sql2o.beginTransaction()) {
+            System.err.println(image);
             int result = conn.createQuery(Update.updateImageById)
                     .addParameter("avatar", image.isAvatar())
                     .addParameter("src", image.getSrc())
@@ -151,7 +152,7 @@ public class ImageDB {
     public List<Image> getAllImages() {
         log.info("Get all images");
         try (org.sql2o.Connection conn = sql2o.beginTransaction()) {
-            List<Image> images = conn.createQuery(Select.selectImageByProfileId)
+            List<Image> images = conn.createQuery(Select.selectImages)
                     .executeAndFetch(Image.class);
             conn.commit();
 //            List<Image> images = jdbcTemplate.query(Select.selectImages, new ImageRowMapper());

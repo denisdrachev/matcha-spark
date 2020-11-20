@@ -9,6 +9,7 @@ import matcha.profile.service.ProfileService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -46,7 +47,7 @@ public class ImageService implements ImageInterface {
 
     public void createNewImages(int profileId) {
         for (int i = 0; i < 5; i++)
-            insertImage(new Image(i, null, profileId, i == 0));
+            insertImage(new Image(i, "", profileId, i == 0));
     }
 
     public void saveImages(List<Image> images) {

@@ -24,12 +24,14 @@ public class LocationManipulator {
 
     public Location getLocationByUserIdAndActive(Integer userId) {
 
-        Location locationByUserIdAndActive = locationDB.getLocationByUserIdAndActive(userId);
-        if (locationByUserIdAndActive == null) {
-            return new Location();
-        } else {
-            return locationByUserIdAndActive;
-        }
+        return locationDB.getLocationByUserIdAndActive(userId);
+
+//        Location locationByUserIdAndActive = locationDB.getLocationByUserIdAndActive(userId);
+//        if (locationByUserIdAndActive == null) {
+//            return new Location();
+//        } else {
+//            return locationByUserIdAndActive;
+//        }
 
 
 //        try {
@@ -47,8 +49,8 @@ public class LocationManipulator {
         return locationDB.updateLocation(location);
     }
 
-    public void deactivationLocationByLogin(String login) {
-        locationDB.updateActiveLocationByLogin(false, login);
+    public void deactivationLocationByLogin(int profileId) {
+        locationDB.updateActiveLocationByLogin(false, profileId);
     }
 
     public List<Location> getAllLocations() {

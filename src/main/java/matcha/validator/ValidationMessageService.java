@@ -85,7 +85,7 @@ public class ValidationMessageService {
     }
 
     public ResponseDataList prepareMessageOkDataList(List list) {
-        return new ResponseDataList("success", list);
+        return new ResponseDataList("ok", list);
     }
 //    public boolean validateJsonBySchema(String schemaName, String json) {
 ////        try {

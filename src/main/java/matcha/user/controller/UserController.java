@@ -1,6 +1,7 @@
 package matcha.user.controller;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import matcha.profile.model.UserProfileWithoutEmail;
@@ -26,24 +27,13 @@ public class UserController {
 
     private static UserController userController;
     private ValidationMessageService validationMessageService = ValidationMessageService.getInstance();
+    private Gson gson = new GsonBuilder().setPrettyPrinting().serializeNulls().create();
 
-    private UserController() {
-    }
-
-    public static UserController getInstance() {
-        if (userController == null) {
-            userController = new UserController();
-        }
-        return userController;
-    }
-
-    public void init() {
-//        validationMessageService = ValidationMessageService.getInstance();
+    public UserController() {
         registration();
         login();
         getUserProfile();
     }
-
 
     private UserService userService = UserService.getInstance();
 
@@ -52,7 +42,7 @@ public class UserController {
 //    //Errors errors,
     public void registration() {
         post("/register", (req, res) -> {
-            UserRegistry user = new Gson().fromJson(req.body(), UserRegistry.class);
+            UserRegistry user = gson.fromJson(req.body(), UserRegistry.class);
             log.info("Income registration request. User: {}", user);
             Response response = validationMessageService.validateMessage(user);
             if (response != null) {
@@ -71,7 +61,7 @@ public class UserController {
 //    @PostMapping(value = "login", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public void login() {
         post("/login", (req, res) -> {
-            UserInfo user = new Gson().fromJson(req.body(), UserInfo.class);
+            UserInfo user = gson.fromJson(req.body(), UserInfo.class);
             log.info("Income registration request. User: {}", user);
 
             Response response = validationMessageService.validateMessage(user);
@@ -103,7 +93,7 @@ public class UserController {
 
             log.info("Request get user profile by login: {}", login);
             UserProfileWithoutEmail userProfile = userService.getUserProfile(token, login);
-            return validationMessageService.prepareMessageOkData(new Gson().toJsonTree(userProfile));
+            return validationMessageService.prepareMessageOkData(gson.toJsonTree(userProfile));
         });
         exception(Exception.class, (exception, request, response) -> {
             response.body(validationMessageService.prepareErrorMessage(exception.getMessage()).toString());

@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 import static spark.Spark.*;
 
-@Controller
+//@Controller
 //@RequiredArgsConstructor
 public class UsersController {
 
@@ -32,7 +32,7 @@ public class UsersController {
 //        return userController;
 //    }
 
-    public void init() {
+    public UsersController() {
         registration();
     }
 

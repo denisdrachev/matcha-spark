@@ -97,8 +97,9 @@ public class UserService implements UserInterface {
         return userManipulator.getUserByToken(token);
     }
 
-    public void saveUser(UserUpdateEntity user) {
-        locationService.deactivationLocationByLogin(user.getLogin());
+    public void saveUser(UserUpdateEntity user, int profileId) {
+        //TODO ВМЕСТО ЛОГИНА НУЖНО ПРОФИЛЬ_ИД кидать
+        locationService.deactivationLocationByLogin(profileId);
         userManipulator.userUpdate(user);
     }
 
@@ -131,7 +132,7 @@ public class UserService implements UserInterface {
 
         UserEntity currentUser = getUserByLogin(userInfo.getLogin());
 
-        saveUser(new UserUpdateEntity(userInfo));
+        saveUser(new UserUpdateEntity(userInfo), currentUser.getProfileId());
 
         userInfo.getLocation().setProfileId(currentUser.getId());
         userInfo.getLocation().setActive(true);

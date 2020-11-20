@@ -14,12 +14,12 @@ import java.util.stream.Collectors;
 import static spark.Spark.get;
 
 @Controller
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 public class LocationsController {
 
     private final LocationService locationService = LocationService.getInstance();
 
-    public void init() {
+    public LocationsController() {
         registration();
     }
 
@@ -37,11 +37,6 @@ public class LocationsController {
         get("/locations", (req, res) -> {
 
             List<Location> allLocations = locationService.getAllLocations();
-//            if (allUsers != null)
-//                model.addAttribute("name", allUsers.stream().map(location -> "<p>" + location + "</p>").collect(Collectors.joining()));
-//            else
-//                model.addAttribute("name", String.join("", "Filed to load users"));
-//            return "greeting";
             if (allLocations != null)
                 return allLocations.stream().map(location -> "<p>" + location + "</p>").collect(Collectors.joining());
             else
