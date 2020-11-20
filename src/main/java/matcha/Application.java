@@ -8,6 +8,8 @@ import ch.qos.logback.classic.Logger;
 
 import static spark.Spark.port;
 import static spark.Spark.get;
+import static spark.Spark.options;
+import static spark.Spark.before;
 
 @SpringBootApplication
 public class Application {
@@ -60,6 +62,28 @@ model.createPost("das", "sdasd", strs);
 */
         port(getHerokuAssignedPort());
         get("/hello", (req, res) -> "Hello Heroku World");
+        options("/*",
+                (request, response) -> {
+
+                    String accessControlRequestHeaders = request
+                            .headers("Access-Control-Request-Headers");
+                    if (accessControlRequestHeaders != null) {
+                        response.header("Access-Control-Allow-Headers",
+                                accessControlRequestHeaders);
+                    }
+
+                    String accessControlRequestMethod = request
+                            .headers("Access-Control-Request-Method");
+                    if (accessControlRequestMethod != null) {
+                        response.header("Access-Control-Allow-Methods",
+                                accessControlRequestMethod);
+                    }
+
+                    return "OK";
+                });
+
+        before((request, response) -> response.header("Access-Control-Allow-Origin", "*"));
+
         SingletonControllers.init();
     }
 
