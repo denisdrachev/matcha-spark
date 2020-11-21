@@ -13,6 +13,7 @@ public class Select {
     public static String selectConnectedElement = "SELECT * FROM connected WHERE (fromLogin = :fromLogin OR fromLogin = :fromLogin2) AND (toLogin = :toLogin OR toLogin = :toLogin2) LIMIT 1";
     public static String selectBlacklists = "SELECT * FROM blacklist";
     public static String selectConnectedList = "SELECT * FROM connected";
+    public static String selectConnectedWithUser = "SELECT * FROM connected WHERE (fromLogin = :login OR toLogin = :login)";
     public static String selectImageLikeEvent = "SELECT * FROM imageLikeEvents";
     public static String selectProfile = "SELECT * FROM profiles";
     public static String selectUsers = "SELECT * FROM users";

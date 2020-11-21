@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Locale;
+import java.util.Map;
 
 import static spark.Spark.*;
 
@@ -37,6 +38,7 @@ public class UserController {
         registration();
         login();
         getUserProfile();
+        getUserProfileSelf();
     }
 
     private UserService userService = UserService.getInstance();
@@ -73,7 +75,9 @@ public class UserController {
                 return response;
             }
 
-            return userService.userLogin(user);
+            Response response1 = userService.userLogin(user);
+            res.cookie("/", "token", "TEST_TEST_TEST", 3600, false, true);
+            return response1;
         });
 
         exception(Exception.class, (exception, request, response) -> {
@@ -87,8 +91,15 @@ public class UserController {
 
 
         get("/profile-get/:login", (req, res) -> {
-
-            String token = req.cookie("token");
+            log.info("Request /profile-get/:login");
+//            String token = req.cookie("token");
+            String token = req.headers("Authorization");
+//            req.headers("Auth")
+//            Map<String, String> cookies = req.cookies();
+//
+//            for (Map.Entry<String, String> entry : cookies.entrySet()) {
+//                System.err.println("Key: " + entry.getKey() + " Value: " + entry.getValue());
+//            }
 
             String login = req.params(":login");
 
@@ -105,14 +116,44 @@ public class UserController {
             response.body(validationMessageService.prepareErrorMessage(exception.getMessage()).toString());
         });
     }
+
+    public void getUserProfileSelf() {
+
+
+        get("/profile-get", (req, res) -> {
+            log.info("Request /profile-get");
+//            String token = req.cookie("token");
+            String token = req.headers("Authorization");
+//            req.headers("Auth")
+//            Map<String, String> cookies = req.cookies();
 //
+//            for (Map.Entry<String, String> entry : cookies.entrySet()) {
+//                System.err.println("Key: " + entry.getKey() + " Value: " + entry.getValue());
+//            }
+
+            if (token == null || token.isEmpty()) {
+                log.info("Token: {} Пользователь не авторизован.", token);
+                return validationMessageService.prepareErrorMessage("Вы не авторизованы.");
+            }
+
+            log.info("Request get self user profile");
+            UserProfileWithoutEmail userProfile = userService.getUserProfile(token, null);
+            return validationMessageService.prepareMessageOkData(gson.toJsonTree(userProfile));
+        });
+        exception(Exception.class, (exception, request, response) -> {
+            response.body(validationMessageService.prepareErrorMessage(exception.getMessage()).toString());
+        });
+    }
+
+    //
 //    @GetMapping("/regitrationConfirm.html")
     //TODO переделать в рабочую форму. Пока не работает
     public void confirmRegistration(/*WebRequest request, Model model, @RequestParam("token") String token*/) {
 
         get("/regitrationConfirm.html", (req, res) -> {
 
-            String token = req.cookie("token");
+//            String token = req.cookie("token");
+            String token = req.headers("Authorization");
 
             if (token == null || token.isEmpty()) {
                 log.info("Token: {} Пользователь не авторизован.", token);

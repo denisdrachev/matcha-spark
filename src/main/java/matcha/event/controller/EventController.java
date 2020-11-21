@@ -40,7 +40,8 @@ public class EventController {
     public void getHistory() {
         get("/history/:limit/:offset", (req, res) -> {
 
-            String token = req.cookie("token");
+//            String token = req.cookie("token");
+            String token = req.headers("Authorization");
 
             int limit;
             int offset;
@@ -75,7 +76,8 @@ public class EventController {
     public void getNotification() {
         get("/notification/:limit/:offset", (req, res) -> {
 
-            String token = req.cookie("token");
+//            String token = req.cookie("token");
+            String token = req.headers("Authorization");
             int limit;
             int offset;
 
@@ -105,7 +107,9 @@ public class EventController {
     public void setUserLikeOrDislike() {
         post("/like-user/:login/:value", (req, res) -> {
 
-            String token = req.cookie("token");
+//            String token = req.cookie("token");
+            String token = req.headers("Authorization");
+
             String toLogin = req.params(":login");
             int value;
 

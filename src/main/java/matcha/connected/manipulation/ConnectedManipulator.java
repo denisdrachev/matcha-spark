@@ -4,6 +4,7 @@ import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import matcha.connected.db.ConnectedDB;
 import matcha.connected.model.ConnectedEntity;
+import matcha.connected.model.ConnectedWithUserInfo;
 import matcha.exception.db.NotFoundBlackListMessageDBException;
 import org.springframework.stereotype.Service;
 
@@ -36,5 +37,9 @@ public class ConnectedManipulator {
 
     public List<ConnectedEntity> getAllConnected() {
         return connectedDB.getAllConnected();
+    }
+
+    public List<ConnectedWithUserInfo> getAllConnectedWithUser(String login) {
+        return connectedDB.getAllConnectedWithUser(login);
     }
 }

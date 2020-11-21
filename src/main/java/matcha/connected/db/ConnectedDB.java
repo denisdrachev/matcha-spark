@@ -4,6 +4,7 @@ import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import matcha.Sql2oModel;
 import matcha.connected.model.ConnectedEntity;
+import matcha.connected.model.ConnectedWithUserInfo;
 import matcha.db.crud.Insert;
 import matcha.db.crud.Select;
 import matcha.db.crud.Update;
@@ -99,7 +100,7 @@ public class ConnectedDB {
 //    }
 //
     public List<ConnectedEntity> getAllConnected() {
-        log.info("Get all connected");
+        log.info("Get all Connected");
         try (org.sql2o.Connection conn = sql2o.open()) {
 
             List<ConnectedEntity> result = conn.createQuery(Select.selectConnectedList)
@@ -108,10 +109,26 @@ public class ConnectedDB {
 
 //            BlackListMessage result = jdbcTemplate.queryForObject(Select.selectBlacklist,
 //                    new BlackListMessageRowMapper(), fromLogin, toLogin);
-            log.info("Get all connected result size: {}", result.size());
+            log.info("Get all Connected result size: {}", result.size());
             return result;
         } catch (Exception e) {
-            log.warn("Failed to load all connected. Exception message: {}", e.getMessage());
+            log.warn("Failed to load all Connected. Exception message: {}", e.getMessage());
+            throw new NotFoundBlackListMessageDBException();
+        }
+    }
+//
+    public List<ConnectedWithUserInfo> getAllConnectedWithUser(String login) {
+        log.info("Get all Connected with user");
+        try (org.sql2o.Connection conn = sql2o.open()) {
+
+            List<ConnectedWithUserInfo> result = conn.createQuery(Select.selectConnectedWithUser)
+                    .addParameter("login", login)
+                    .executeAndFetch(ConnectedWithUserInfo.class);
+            conn.commit();
+            log.info("Get all Connected with user result size: {}", result.size());
+            return result;
+        } catch (Exception e) {
+            log.warn("Failed to load all Connected with user. Exception message: {}", e.getMessage());
             throw new NotFoundBlackListMessageDBException();
         }
     }

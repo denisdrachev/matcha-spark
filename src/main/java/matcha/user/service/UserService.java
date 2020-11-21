@@ -1,9 +1,13 @@
 package matcha.user.service;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import matcha.blacklist.model.BlackListMessage;
 import matcha.blacklist.service.BlackListService;
+import matcha.connected.model.ConnectedWithUserInfo;
 import matcha.connected.service.ConnectedService;
 import matcha.converter.Utils;
 import matcha.event.model.Event;
@@ -31,6 +35,7 @@ import java.util.List;
 @Service
 @NoArgsConstructor
 @AllArgsConstructor
+@Slf4j
 public class UserService implements UserInterface {
 
     private static UserService userService;
@@ -41,6 +46,12 @@ public class UserService implements UserInterface {
         }
         return userService;
     }
+
+    private Gson gson = new GsonBuilder()
+            .setPrettyPrinting()
+            .excludeFieldsWithoutExposeAnnotation()
+            .serializeNulls()
+            .create();
 
     public void init() {
 //        registration();
@@ -114,7 +125,7 @@ public class UserService implements UserInterface {
         checkUserToToken(token);
         UserEntity userByToken = getUserByToken(token);
 
-        UserEntity user = getUserByLogin(login);
+        UserEntity user = getUserByLogin(login != null ? login : userByToken.getLogin());
         Location activeUserLocation = locationService.getLocationByUserId(user.getId());
         user.setLocation(activeUserLocation);
         ProfileEntity profileById = profileService.getProfileByIdWithImages(user.getProfileId());
@@ -183,5 +194,17 @@ public class UserService implements UserInterface {
 
     public List<UserEntity> getAllUsers() {
         return userManipulator.getAllUsers();
+    }
+
+    public Object getUserConnected(String token) {
+        log.info("Request get user connecteds...");
+
+        if (token == null || token.isEmpty()) {
+            log.info("Token: {} Пользователь не авторизован.", token);
+            return validationMessageService.prepareErrorMessage("Вы не авторизованы.");
+        }
+        UserEntity userByToken = getUserByToken(token);
+        List<ConnectedWithUserInfo> allConnectedWithUser = connectedService.getAllConnectedWithUser(userByToken.getLogin());
+        return validationMessageService.prepareMessageOkData(gson.toJsonTree(allConnectedWithUser));
     }
 }

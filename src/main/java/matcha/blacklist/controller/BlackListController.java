@@ -31,7 +31,8 @@ public class BlackListController {
 
         post("/blacklist/save", (req, res) -> {
 
-            String token = req.cookie("token");
+//            String token = req.cookie("token");
+            String token = req.headers("Authorization");
 
             if (token == null || token.isEmpty()) {
                 log.info("Token: {} Пользователь не авторизован.", token);

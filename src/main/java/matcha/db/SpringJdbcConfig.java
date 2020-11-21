@@ -36,8 +36,9 @@ public class SpringJdbcConfig {
 
 //        Properties.getAllTablesPath().stream().forEach(s -> createTableBySql(s));
 
-        createUsers(500);
+//        createUsers(500);
 
+        createUser();
 //        jdbcTemplate.update(Insert.insertImage, 0, "ABCD");
 //        jdbcTemplate.update(Insert.insertUser, "loginnnn", "password".getBytes(), null, "Artur", "Kamnev", "fermer@gmail.com", 1, 0, new Date(), "salt_test".getBytes(), null);
 //        jdbcTemplate.update(Insert.insertProfile, 22, 1, 0, "Simple fermer", "fermer", null, 1);
@@ -48,6 +49,17 @@ public class SpringJdbcConfig {
 
 //        jdbcTemplate.query(Select.selectImage, new BeanPropertyRowMapper(ImageModel.class)).forEach(System.out::println);
 //        jdbcTemplate.query(Select.selectProfile, new BeanPropertyRowMapper(ProfileModel.class)).forEach(System.out::println);
+    }
+
+    private void createUser() {
+        String value = "-1";
+        Location location = new Location();
+        location.setX(1.1);
+        location.setY(1.1);
+        UserRegistry userRegistry = new UserRegistry(
+                "User_1", "123", value, value, value + "@mail.ru", Calendar.getInstance().getTime(), location
+        );
+        userService.userRegistration(userRegistry);
     }
 
     private void createUsers(Integer usersCount) {

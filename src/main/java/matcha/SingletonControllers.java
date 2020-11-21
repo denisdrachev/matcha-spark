@@ -30,6 +30,6 @@ public class SingletonControllers {
 
         new EventsController();
 
-//        new SpringJdbcConfig();
+        new SpringJdbcConfig();
     }
 }

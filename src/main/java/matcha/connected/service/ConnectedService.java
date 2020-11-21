@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import matcha.connected.manipulation.ConnectedManipulator;
 import matcha.connected.model.ConnectedEntity;
+import matcha.connected.model.ConnectedWithUserInfo;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -50,5 +51,9 @@ public class ConnectedService {
 
     public List<ConnectedEntity> getAllConnected() {
         return connectedManipulator.getAllConnected();
+    }
+
+    public List<ConnectedWithUserInfo> getAllConnectedWithUser(String login) {
+        return connectedManipulator.getAllConnectedWithUser(login);
     }
 }

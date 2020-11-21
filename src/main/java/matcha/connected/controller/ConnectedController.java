@@ -8,45 +8,20 @@ import matcha.user.service.UserService;
 import matcha.validator.ValidationMessageService;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
-import static spark.Spark.exception;
-import static spark.Spark.post;
+import static spark.Spark.*;
 
-@Slf4j
-@CrossOrigin(origins = "*", allowedHeaders = "*")
-//@RestController
-//@AllArgsConstructor
-//@RequestMapping
 public class ConnectedController {
 
     private UserService userService = UserService.getInstance();
     private ValidationMessageService validationMessageService = ValidationMessageService.getInstance();
 
     public ConnectedController() {
-        saveBlackListMessage();
+        getUserConnected();
     }
 
-//    @PostMapping(value = "/blacklist/save", produces = "application/json")
-    public void saveBlackListMessage() {
+    public void getUserConnected() {
 
-        post("/blacklist/save", (req, res) -> {
-
-            String token = req.cookie("token");
-
-            if (token == null || token.isEmpty()) {
-                log.info("Token: {} Пользователь не авторизован.", token);
-                return validationMessageService.prepareErrorMessage("Вы не авторизованы.");
-            }
-
-            BlackListMessage blackListMessage = new Gson().fromJson(req.body(), BlackListMessage.class);
-            log.info("Request save to black list: {}", blackListMessage);
-
-            Response response = validationMessageService.validateMessage(blackListMessage);
-            if (response != null) {
-                return response;
-            }
-
-            return userService.saveBlackList(token, blackListMessage);
-        });
+        get("/connected", (req, res) -> userService.getUserConnected(req.headers("Authorization")));
         exception(Exception.class, (exception, request, response) -> {
             response.body(validationMessageService.prepareErrorMessage(exception.getMessage()).toString());
         });

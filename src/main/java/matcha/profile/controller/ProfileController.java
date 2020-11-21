@@ -18,8 +18,8 @@ import static spark.Spark.post;
 
 @Slf4j
 //@AllArgsConstructor
-@CrossOrigin(origins = "*", allowedHeaders = "*")
-@RestController
+//@CrossOrigin(origins = "*", allowedHeaders = "*")
+//@RestController
 public class ProfileController {
 
     private ValidationMessageService validationMessageService = ValidationMessageService.getInstance();
@@ -38,7 +38,8 @@ public class ProfileController {
 
         post("/profile-update", (req, res) -> {
 
-            String token = req.cookie("token");
+//            String token = req.cookie("token");
+            String token = req.headers("Authorization");
 
             if (token == null || token.isEmpty()) {
                 log.info("Token: {} Пользователь не авторизован.", token);
