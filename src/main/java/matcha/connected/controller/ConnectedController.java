@@ -1,28 +1,27 @@
-package matcha.blacklist.controller;
+package matcha.connected.controller;
 
 import com.google.gson.Gson;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import matcha.blacklist.model.BlackListMessage;
 import matcha.response.Response;
-import matcha.user.model.UserEntity;
-import matcha.user.model.UserInfo;
 import matcha.user.service.UserService;
 import matcha.validator.ValidationMessageService;
-import org.springframework.web.bind.annotation.*;
-import static spark.Spark.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+
+import static spark.Spark.exception;
+import static spark.Spark.post;
 
 @Slf4j
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 //@RestController
 //@AllArgsConstructor
 //@RequestMapping
-public class BlackListController {
+public class ConnectedController {
 
     private UserService userService = UserService.getInstance();
     private ValidationMessageService validationMessageService = ValidationMessageService.getInstance();
 
-    public BlackListController() {
+    public ConnectedController() {
         saveBlackListMessage();
     }
 

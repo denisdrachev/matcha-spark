@@ -54,6 +54,7 @@ public class EventController {
 
 
             if (token == null || token.isEmpty()) {
+                log.info("Token: {} Пользователь не авторизован.", token);
                 return validationMessageService.prepareErrorMessage("Вы не авторизованы.");
             }
 
@@ -86,6 +87,7 @@ public class EventController {
             }
 
             if (token == null || token.isEmpty()) {
+                log.info("Token: {} Пользователь не авторизован.", token);
                 return validationMessageService.prepareErrorMessage("Вы не авторизованы.");
             }
 
@@ -114,6 +116,7 @@ public class EventController {
             }
 
             if (token == null || token.isEmpty()) {
+                log.info("Token: {} Пользователь не авторизован.", token);
                 return validationMessageService.prepareErrorMessage("Вы не авторизованы.");
             }
 

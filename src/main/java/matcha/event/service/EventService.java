@@ -2,6 +2,8 @@ package matcha.event.service;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import matcha.connected.model.ConnectedEntity;
+import matcha.connected.service.ConnectedService;
 import matcha.event.manipulation.EventManipulator;
 import matcha.event.model.Event;
 import matcha.event.model.EventWithUserInfo;
@@ -18,6 +20,7 @@ public class EventService {
 
     //TODO тут добавить реактивщину
     private EventUnicastService eventUnicastService;
+    private ConnectedService connectedService = ConnectedService.getInstance();
     private EventManipulator eventManipulator = new EventManipulator();
 
     private static EventService eventService;
@@ -72,22 +75,31 @@ public class EventService {
             saveNewEvent(eventLike);
             boolean isBackLike = eventManipulator.isLikeEvent(toLogin, fromLogin);
             if (isBackLike) {
+                ConnectedEntity connected = connectedService.getConnected(fromLogin, toLogin);
+                connected.setConnected(true);
+                connectedService.saveConnected(connected);
+
                 Event eventConnectedTo = new Event(EventType.CONNECTED, fromLogin, true, toLogin);
                 Event eventConnectedFrom = new Event(EventType.CONNECTED, toLogin, true, fromLogin);
                 saveNewEvent(eventConnectedFrom);
                 saveNewEvent(eventConnectedTo);
             }
         } else {
-            boolean isConnected = eventManipulator.isConnectedEvent(fromLogin, toLogin);
+//            boolean isConnected = eventManipulator.isConnectedEvent(fromLogin, toLogin);
             Event event = new Event(EventType.UNLIKE, fromLogin, true, toLogin);
+            saveNewEvent(event);
 
-            if (isConnected) {
+            ConnectedEntity connected = connectedService.getConnected(fromLogin, toLogin);
+
+            if (connected.isConnected()) {
+                connected.setConnected(false);
+                connectedService.saveConnected(connected);
+
                 Event eventDisconnectedTo = new Event(EventType.DISCONNECTED, fromLogin, true, toLogin);
                 Event eventDisconnectedFrom = new Event(EventType.DISCONNECTED, toLogin, true, fromLogin);
                 saveNewEvent(eventDisconnectedTo);
                 saveNewEvent(eventDisconnectedFrom);
             }
-            saveNewEvent(event);
         }
 
 //        List event = new Event(eventType, fromLogin, true, toLogin);

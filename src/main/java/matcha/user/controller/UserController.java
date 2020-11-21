@@ -89,9 +89,11 @@ public class UserController {
         get("/profile-get/:login", (req, res) -> {
 
             String token = req.cookie("token");
+
             String login = req.params(":login");
 
             if (token == null || token.isEmpty()) {
+                log.info("Token: {} Пользователь не авторизован.", token);
                 return validationMessageService.prepareErrorMessage("Вы не авторизованы.");
             }
 
@@ -113,6 +115,7 @@ public class UserController {
             String token = req.cookie("token");
 
             if (token == null || token.isEmpty()) {
+                log.info("Token: {} Пользователь не авторизован.", token);
                 return validationMessageService.prepareErrorMessage("Вы не авторизованы.");
             }
 

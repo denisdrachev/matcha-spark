@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import matcha.blacklist.model.BlackListMessage;
 import matcha.blacklist.service.BlackListService;
+import matcha.connected.service.ConnectedService;
 import matcha.converter.Utils;
 import matcha.event.model.Event;
 import matcha.event.service.EventService;
@@ -52,6 +53,7 @@ public class UserService implements UserInterface {
     private final ProfileService profileService = new ProfileService();
     private EventService eventService = EventService.getInstance();
     private BlackListService blackListService = BlackListService.getInstance();
+    private ConnectedService connectedService = ConnectedService.getInstance();
     private ValidationMessageService validationMessageService = ValidationMessageService.getInstance();
 
     public void userRegistration(UserRegistry userRegistry) {

@@ -82,7 +82,10 @@ model.createPost("das", "sdasd", strs);
                     return "OK";
                 });
 
-        before((request, response) -> response.header("Access-Control-Allow-Origin", "*"));
+        before((request, response) -> {
+            response.header("Access-Control-Allow-Origin", "http://192.168.29.15:3000");
+            response.header("Access-Control-Allow-Credentials", "true");
+        });
 
         SingletonControllers.init();
     }

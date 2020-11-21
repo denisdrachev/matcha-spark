@@ -41,6 +41,7 @@ public class ProfileController {
             String token = req.cookie("token");
 
             if (token == null || token.isEmpty()) {
+                log.info("Token: {} Пользователь не авторизован.", token);
                 return validationMessageService.prepareErrorMessage("Вы не авторизованы.");
             }
 
@@ -61,8 +62,5 @@ public class ProfileController {
         exception(Exception.class, (exception, request, response) -> {
             response.body(validationMessageService.prepareErrorMessage(exception.getMessage()).toString());
         });
-
-
-
     }
 }
