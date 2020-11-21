@@ -50,6 +50,16 @@ public class Select {
             "WHERE e.login = :login AND e.login = u.login AND e.data <> '' AND e.data <> e.login ORDER BY time DESC LIMIT :limit OFFSET :offset";
     public static String selectNotificationEvents = "SELECT e.type, e.login as login, e.time, e.active, u.fname, u.lname FROM events e inner join users u " +
             "WHERE e.data = :data AND e.login = u.login AND e.data <> e.login ORDER BY time DESC LIMIT :limit OFFSET :offset";
+
+//    public static String selectHistoryEvents = "SELECT e.type, e.data as login, e.time, e.active, u.fname, u.lname, i.id as image.id FROM events e inner join users u inner join images i " +
+//            "WHERE e.login = :login AND e.login = u.login AND e.data <> '' AND e.data <> e.login AND u.profileId = i.profileId AND i.avatar = TRUE " +
+//            "ORDER BY time DESC LIMIT :limit OFFSET :offset";
+//    public static String selectNotificationEvents = "SELECT e.type, e.login as login, e.time, e.active, u.fname, u.lname FROM events e inner join users u " +
+//            "WHERE e.data = :data AND e.login = u.login AND e.data <> e.login AND u.profileId = i.profileId AND i.avatar = TRUE " +
+//            "ORDER BY time DESC LIMIT :limit OFFSET :offset";
+
+
+
 public static String selectUserEventsCount = "SELECT COUNT(*) FROM events WHERE login = :login OR data = :login";
 
     public static String selectActiveLikes = "SELECT * FROM events WHERE (type = :type1 OR type = :type2) AND active = TRUE AND login = :login AND data = :data";

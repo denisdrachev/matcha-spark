@@ -176,6 +176,7 @@ public class EventDB {
             log.info("Get Events result size: {}", events.size());
             return events;
         } catch (Exception e) {
+            e.printStackTrace();
             log.warn("Exception. getHistory: {}", e.getMessage());
             throw new EventNotFoundDBException();
         }
