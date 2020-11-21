@@ -42,9 +42,9 @@ public class UserManipulator {
 
             if (user.isActive() && !user.isBlocked()) {
                 if (Utils.checkPassword(userLogin.getPassword(), user.getSalt(), user.getPasswordBytes())) {
-                    user.setActivationCode("TEST_TEST_TEST");
+//                    user.setActivationCode("TEST_TEST_TEST");
                     //TODO первнуть строку
-//                    user.setActivationCode(UUID.randomUUID().toString());
+                    user.setActivationCode(UUID.randomUUID().toString());
                     user.setTime(Calendar.getInstance().getTime());
                     userDB.updateUserById(user);
                     return new ResponseOk(user.getActivationCode()/*, user.getLogin()*/);

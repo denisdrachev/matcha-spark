@@ -50,6 +50,7 @@ public class Select {
             "WHERE e.login = :login AND e.login = u.login AND e.data <> '' AND e.data <> e.login ORDER BY time DESC LIMIT :limit OFFSET :offset";
     public static String selectNotificationEvents = "SELECT e.type, e.login as login, e.time, e.active, u.fname, u.lname FROM events e inner join users u " +
             "WHERE e.data = :data AND e.login = u.login AND e.data <> e.login ORDER BY time DESC LIMIT :limit OFFSET :offset";
+public static String selectUserEventsCount = "SELECT COUNT(*) FROM events WHERE login = :login OR data = :login";
 
     public static String selectActiveLikes = "SELECT * FROM events WHERE (type = :type1 OR type = :type2) AND active = TRUE AND login = :login AND data = :data";
 

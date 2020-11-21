@@ -34,7 +34,7 @@ public class ProfileDB {
 
             Integer profileId = conn.createQuery(Insert.insertProfile)
                     .addParameter("age", 0)
-                    .addParameter("gender", 0)
+                    .addParameter("gender", 1)
                     .addParameter("preference", "")
                     .addParameter("biography", "")
                     .addParameter("tags", "")

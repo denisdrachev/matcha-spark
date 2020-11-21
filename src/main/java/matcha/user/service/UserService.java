@@ -2,8 +2,6 @@ package matcha.user.service;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import matcha.blacklist.model.BlackListMessage;
 import matcha.blacklist.service.BlackListService;
@@ -16,6 +14,7 @@ import matcha.location.model.Location;
 import matcha.location.service.LocationService;
 import matcha.mail.MailService;
 import matcha.profile.model.ProfileEntity;
+import matcha.profile.model.UserProfileWithEmail;
 import matcha.profile.model.UserProfileWithoutEmail;
 import matcha.profile.service.ProfileService;
 import matcha.properties.ConfigProperties;
@@ -28,13 +27,9 @@ import matcha.user.model.UserUpdateEntity;
 import matcha.userprofile.model.UserInfoModel;
 import matcha.utils.EventType;
 import matcha.validator.ValidationMessageService;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
-@NoArgsConstructor
-@AllArgsConstructor
 @Slf4j
 public class UserService implements UserInterface {
 
@@ -120,7 +115,7 @@ public class UserService implements UserInterface {
         return userManipulator.activationUserByToken(token);
     }
 
-    public UserProfileWithoutEmail getUserProfile(String token, String login) {
+    public Object getUserProfile(String token, String login) {
 
         checkUserToToken(token);
         UserEntity userByToken = getUserByToken(token);
@@ -128,16 +123,21 @@ public class UserService implements UserInterface {
         UserEntity user = getUserByLogin(login != null ? login : userByToken.getLogin());
         Location activeUserLocation = locationService.getLocationByUserId(user.getId());
         user.setLocation(activeUserLocation);
-        ProfileEntity profileById = profileService.getProfileByIdWithImages(user.getProfileId());
+        ProfileEntity profileById = profileService.getProfileByIdWithImagesNotEmpty(user.getProfileId());
         BlackListMessage blackList = blackListService.getBlackListMessage(userByToken.getLogin(), user.getLogin());
 
         Event newEvent = new Event(EventType.PROFILE_LOAD, userByToken.getLogin(), false, login);
         eventService.saveNewEvent(newEvent);
 
+        Integer userRating = eventService.getUserRatingByLogin(user.getLogin());
+
+        if (login == null)
+            return new UserProfileWithEmail(user, profileById, blackList.isBlocked(), userRating);
+
         boolean likeEventFrom = eventService.isLikeEvent(userByToken.getLogin(), user.getLogin());
         boolean likeEventTo = eventService.isLikeEvent(user.getLogin(), userByToken.getLogin());
 
-        return new UserProfileWithoutEmail(user, profileById, blackList.isBlocked(), likeEventFrom, likeEventTo);
+        return new UserProfileWithoutEmail(user, profileById, blackList.isBlocked(), likeEventFrom, likeEventTo, userRating);
     }
 
     //TODO рефакторинг
@@ -147,9 +147,11 @@ public class UserService implements UserInterface {
 
         saveUser(new UserUpdateEntity(userInfo), currentUser.getProfileId());
 
-        userInfo.getLocation().setProfileId(currentUser.getId());
-        userInfo.getLocation().setActive(true);
-        locationService.saveLocation(userInfo.getLocation());
+        if (userInfo.getLocation() != null) {
+            userInfo.getLocation().setProfileId(currentUser.getId());
+            userInfo.getLocation().setActive(true);
+            locationService.saveLocation(userInfo.getLocation());
+        }
 
 //        Integer userProfileId = userManipulator.getUserProfileId(userInfo.getLogin());
         ProfileEntity newProfile = new ProfileEntity(currentUser.getProfileId(), userInfo);

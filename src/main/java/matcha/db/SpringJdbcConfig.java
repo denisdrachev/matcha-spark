@@ -1,21 +1,18 @@
 package matcha.db;
 
-import lombok.AllArgsConstructor;
-import matcha.db.crud.Drop;
+import matcha.image.model.Image;
 import matcha.location.model.Location;
+import matcha.profile.model.ProfileEntity;
+import matcha.profile.service.ProfileService;
 import matcha.properties.ConfigProperties;
-import matcha.properties.Properties;
+import matcha.user.model.UserEntity;
 import matcha.user.model.UserRegistry;
 import matcha.user.service.UserService;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.annotation.PreDestroy;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Calendar;
+import java.util.List;
 
 //@Configuration
 //@AllArgsConstructor
@@ -24,6 +21,7 @@ public class SpringJdbcConfig {
     JdbcTemplate jdbcTemplate;
     ConfigProperties properties;
     UserService userService = UserService.getInstance();
+    ProfileService profileService = ProfileService.getInstance();
 
     public SpringJdbcConfig() {
         createAllTables();
@@ -57,9 +55,25 @@ public class SpringJdbcConfig {
         location.setX(1.1);
         location.setY(1.1);
         UserRegistry userRegistry = new UserRegistry(
-                "User_1", "123", value, value, value + "@mail.ru", Calendar.getInstance().getTime(), location
+                "User_1", "123", "fname", "lname", value + "@mail.ru", Calendar.getInstance().getTime(), location
         );
         userService.userRegistration(userRegistry);
+
+
+        UserEntity user_1 = userService.getUserByLogin("User_1");
+        ProfileEntity profileByIdWithImages = profileService.getProfileByIdWithImages(user_1.getProfileId());
+        profileByIdWithImages.setAge(22);
+        profileByIdWithImages.setGender(1);
+        profileByIdWithImages.setPreference(List.of(3));
+        profileByIdWithImages.setTags(List.of("123"));
+        profileByIdWithImages.setFilled(true);
+        profileByIdWithImages.setBiography("asdasdasd");
+        System.err.println(profileByIdWithImages.getImages().size());
+
+        Image image = profileByIdWithImages.getImages().get(0);
+        image.setAvatar(true);
+        image.setSrc("https://i.ibb.co/cw9TnX9/0f6339673fed.jpg");
+        profileService.updateProfile(profileByIdWithImages.getId(), profileByIdWithImages);
     }
 
     private void createUsers(Integer usersCount) {

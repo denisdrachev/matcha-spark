@@ -286,4 +286,21 @@ public class EventDB {
             return false;
         }
     }
+
+    public Integer getCountUserEventsByLogin(String login) {
+        log.info("Get count user events [login:{}]", login);
+        try (org.sql2o.Connection conn = sql2o.beginTransaction()) {
+
+            List<Integer> events = conn.createQuery(Select.selectUserEventsCount)
+                    .addParameter("login", login)
+                    .executeAndFetch(Integer.class);
+            conn.commit();
+            log.info("Get count user events result: {}", events);
+            return events.get(0);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.warn("Exception. getNotifications: {}", e.getMessage());
+            throw new EventNotFoundDBException();
+        }
+    }
 }

@@ -57,4 +57,8 @@ public class EventManipulator {
     public boolean isConnectedEvent(String fromLogin, String toLogin) {
         return eventDB.isConnectedEvent(fromLogin, toLogin);
     }
+
+    public Integer getUserActivityByLogin(String login) {
+        return eventDB.getCountUserEventsByLogin(login);
+    }
 }

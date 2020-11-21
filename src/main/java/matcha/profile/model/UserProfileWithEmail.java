@@ -17,7 +17,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserProfileWithoutEmail implements Serializable {
+public class UserProfileWithEmail implements Serializable {
 
     @Expose
     private String login;
@@ -46,13 +46,11 @@ public class UserProfileWithoutEmail implements Serializable {
     @Expose
     private boolean isFilled;
     @Expose
-    private boolean likedFrom;
-    @Expose
-    private boolean likedTo;
+    private String email;
     @Expose
     private Integer rating;
 
-    public UserProfileWithoutEmail(UserEntity user, ProfileEntity profile, boolean isBlocked, boolean likedFrom, boolean likedTo, Integer rating) {
+    public UserProfileWithEmail(UserEntity user, ProfileEntity profile, boolean isBlocked, Integer rating) {
         this.login = user.getLogin();
         this.fname = user.getFname();
         this.lname = user.getLname();
@@ -66,8 +64,7 @@ public class UserProfileWithoutEmail implements Serializable {
         this.location = user.getLocation();
         this.isBlocked = isBlocked;
         this.isFilled = profile.isFilled();
-        this.likedFrom = likedFrom;
-        this.likedTo = likedTo;
+        this.email = user.getEmail();
         this.rating = rating;
     }
 }

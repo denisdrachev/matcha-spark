@@ -17,9 +17,6 @@ import static spark.Spark.exception;
 import static spark.Spark.post;
 
 @Slf4j
-//@AllArgsConstructor
-//@CrossOrigin(origins = "*", allowedHeaders = "*")
-//@RestController
 public class ProfileController {
 
     private ValidationMessageService validationMessageService = ValidationMessageService.getInstance();
@@ -31,14 +28,10 @@ public class ProfileController {
         profileUpdate();
     }
 
-    //    @PostMapping(value = "profile-update", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void profileUpdate(/*@RequestBody UserInfoModel userProfile,
-                                  @CookieValue(value = "token") String token*/
-    ) {
+    public void profileUpdate() {
 
         post("/profile-update", (req, res) -> {
 
-//            String token = req.cookie("token");
             String token = req.headers("Authorization");
 
             if (token == null || token.isEmpty()) {

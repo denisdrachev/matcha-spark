@@ -113,4 +113,8 @@ public class EventService {
 //
 //        }
     }
+
+    public Integer getUserRatingByLogin(String login) {
+        return eventManipulator.getUserActivityByLogin(login);
+    }
 }

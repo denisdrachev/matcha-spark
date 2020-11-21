@@ -46,7 +46,14 @@ public class ProfileService {
 
     public ProfileEntity getProfileByIdWithImages(int id) {
         ProfileEntity profileById = profileManipulator.getProfileById(id);
-        List<Image> imagesByProfileId = imageService.getImagesByProfileId(profileById.getId()).
+        List<Image> imagesByProfileId = imageService.getImagesByProfileId(id);
+        profileById.setImages(imagesByProfileId);
+        return profileById;
+    }
+
+    public ProfileEntity getProfileByIdWithImagesNotEmpty(int id) {
+        ProfileEntity profileById = profileManipulator.getProfileById(id);
+        List<Image> imagesByProfileId = imageService.getImagesByProfileId(id).
                 stream()
                 .filter(image -> !image.getSrc().isEmpty())
                 .collect(Collectors.toList());

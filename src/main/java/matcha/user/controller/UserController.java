@@ -21,12 +21,8 @@ import static spark.Spark.*;
 
 
 @Slf4j
-@AllArgsConstructor
-@CrossOrigin(origins = "*", allowedHeaders = "*")
-@RestController
 public class UserController {
 
-    private static UserController userController;
     private ValidationMessageService validationMessageService = ValidationMessageService.getInstance();
     private Gson gson = new GsonBuilder()
             .setPrettyPrinting()
@@ -39,13 +35,11 @@ public class UserController {
         login();
         getUserProfile();
         getUserProfileSelf();
+        getUsers();
     }
 
     private UserService userService = UserService.getInstance();
 
-    //
-//    @PostMapping(value = "register", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-//    //Errors errors,
     public void registration() {
         post("/register", (req, res) -> {
             UserRegistry user = new Gson().fromJson(req.body(), UserRegistry.class);
@@ -64,7 +58,6 @@ public class UserController {
     }
 
     //
-//    @PostMapping(value = "login", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public void login() {
         post("/login", (req, res) -> {
             UserInfo user = new Gson().fromJson(req.body(), UserInfo.class);
@@ -75,9 +68,7 @@ public class UserController {
                 return response;
             }
 
-            Response response1 = userService.userLogin(user);
-            res.cookie("/", "token", "TEST_TEST_TEST", 3600, false, true);
-            return response1;
+            return userService.userLogin(user);
         });
 
         exception(Exception.class, (exception, request, response) -> {
@@ -85,22 +76,12 @@ public class UserController {
         });
     }
 
-    //
-//    @GetMapping(value = "profile-get/{login}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public void getUserProfile() {
 
 
         get("/profile-get/:login", (req, res) -> {
             log.info("Request /profile-get/:login");
-//            String token = req.cookie("token");
             String token = req.headers("Authorization");
-//            req.headers("Auth")
-//            Map<String, String> cookies = req.cookies();
-//
-//            for (Map.Entry<String, String> entry : cookies.entrySet()) {
-//                System.err.println("Key: " + entry.getKey() + " Value: " + entry.getValue());
-//            }
-
             String login = req.params(":login");
 
             if (token == null || token.isEmpty()) {
@@ -109,8 +90,7 @@ public class UserController {
             }
 
             log.info("Request get user profile by login: {}", login);
-            UserProfileWithoutEmail userProfile = userService.getUserProfile(token, login);
-            return validationMessageService.prepareMessageOkData(gson.toJsonTree(userProfile));
+            return validationMessageService.prepareMessageOkData(gson.toJsonTree(userService.getUserProfile(token, login)));
         });
         exception(Exception.class, (exception, request, response) -> {
             response.body(validationMessageService.prepareErrorMessage(exception.getMessage()).toString());
@@ -122,14 +102,9 @@ public class UserController {
 
         get("/profile-get", (req, res) -> {
             log.info("Request /profile-get");
-//            String token = req.cookie("token");
+
             String token = req.headers("Authorization");
-//            req.headers("Auth")
-//            Map<String, String> cookies = req.cookies();
-//
-//            for (Map.Entry<String, String> entry : cookies.entrySet()) {
-//                System.err.println("Key: " + entry.getKey() + " Value: " + entry.getValue());
-//            }
+
 
             if (token == null || token.isEmpty()) {
                 log.info("Token: {} Пользователь не авторизован.", token);
@@ -137,8 +112,27 @@ public class UserController {
             }
 
             log.info("Request get self user profile");
-            UserProfileWithoutEmail userProfile = userService.getUserProfile(token, null);
-            return validationMessageService.prepareMessageOkData(gson.toJsonTree(userProfile));
+            return validationMessageService.prepareMessageOkData(gson.toJsonTree(userService.getUserProfile(token, null)));
+        });
+        exception(Exception.class, (exception, request, response) -> {
+            response.body(validationMessageService.prepareErrorMessage(exception.getMessage()).toString());
+        });
+    }
+
+    public void getUsers() {
+
+        get("/get-users", (req, res) -> {
+            log.info("Request /get-users");
+
+            String token = req.headers("Authorization");
+
+            if (token == null || token.isEmpty()) {
+                log.info("Token: {} Пользователь не авторизован.", token);
+                return validationMessageService.prepareErrorMessage("Вы не авторизованы.");
+            }
+
+            log.info("Request get users");
+            return validationMessageService.prepareMessageOkData(gson.toJsonTree(userService.getAllUsers()));
         });
         exception(Exception.class, (exception, request, response) -> {
             response.body(validationMessageService.prepareErrorMessage(exception.getMessage()).toString());
@@ -146,13 +140,11 @@ public class UserController {
     }
 
     //
-//    @GetMapping("/regitrationConfirm.html")
     //TODO переделать в рабочую форму. Пока не работает
-    public void confirmRegistration(/*WebRequest request, Model model, @RequestParam("token") String token*/) {
+    public void confirmRegistration() {
 
         get("/regitrationConfirm.html", (req, res) -> {
 
-//            String token = req.cookie("token");
             String token = req.headers("Authorization");
 
             if (token == null || token.isEmpty()) {

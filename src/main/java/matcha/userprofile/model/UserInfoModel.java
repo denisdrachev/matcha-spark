@@ -25,7 +25,7 @@ public class UserInfoModel implements Serializable, MyObject {
 
     @NotBlank(message = "Значение поля 'login' не может быть пустым.")
     private String login;
-    @NotBlank(message = "Значение поля 'password' не может быть пустым.")
+//    @NotBlank(message = "Значение поля 'password' не может быть пустым.")
     private String password;
     @NotBlank(message = "Значение поля 'fname' не может быть пустым.")
     private String fname;
@@ -38,6 +38,8 @@ public class UserInfoModel implements Serializable, MyObject {
     @Min(value = 1, message = "Значение поля 'age' не может быть меньше 1.")
     @Max(value = 120, message = "Значение поля 'age' не может быть больше 120.")
     private Integer age;
+    @Min(value = 1, message = "Указан не верный гендер.")
+    @Max(value = 3, message = "Указан не верный гендер.")
     @NotNull(message = "Значение поля 'gender' не может быть пустым.")
     private Integer gender;
     @NotNull(message = "Значение поля 'preference' не может быть пустым.")
@@ -52,7 +54,7 @@ public class UserInfoModel implements Serializable, MyObject {
     private Integer avatar = -1;
     private Date time = Calendar.getInstance().getTime();
     @Valid
-    @NotNull(message = "Поле 'location' не может быть пустым")
+//    @NotNull(message = "Поле 'location' не может быть пустым")
     private Location location;
     private String activationCode;
 
