@@ -8,6 +8,8 @@ import matcha.blacklist.model.BlackListMessage;
 import matcha.exception.db.NotFoundBlackListMessageDBException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Slf4j
 @Service
 //@RequiredArgsConstructor
@@ -34,5 +36,9 @@ public class BlackListManipulator {
 
     public boolean isBlackListExists(String fromLogin, String toLogin) {
         return blackListDB.isBlackListExists(fromLogin, toLogin);
+    }
+
+    public List<BlackListMessage> getAllBlackList() {
+        return blackListDB.getAllBlackList();
     }
 }

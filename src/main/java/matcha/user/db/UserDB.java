@@ -164,7 +164,7 @@ public class UserDB {
 
     //TODO рефакторинг метода
     public UserEntity getUserByToken(String activationCode) {
-        log.info("Get user by Activation Code. activationCode: {}", activationCode);
+        log.info("Get user by Activation Code");
         try (org.sql2o.Connection conn = sql2o.beginTransaction()) {
 
             List<UserEntity> users = conn.createQuery(Select.selectUserByActivationCode)

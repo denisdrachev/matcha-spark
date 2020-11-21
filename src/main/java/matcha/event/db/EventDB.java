@@ -17,6 +17,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.sql2o.Sql2o;
 
+import javax.lang.model.element.TypeElement;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -145,7 +146,8 @@ public class EventDB {
         try (org.sql2o.Connection conn = sql2o.beginTransaction()) {
 
             List<Event> event = conn.createQuery(Select.selectEventByLogin)
-                    .addParameter("type", EventType.LIKE)
+                    .addParameter("type1", EventType.LIKE)
+                    .addParameter("type2", EventType.UNLIKE)
                     .addParameter("login", fromLogin)
                     .addParameter("data", toLogin)
                     .executeAndFetch(Event.class);
@@ -185,7 +187,8 @@ public class EventDB {
         try (org.sql2o.Connection conn = sql2o.beginTransaction()) {
 
             List<Event> events = conn.createQuery(Select.selectEventByLogin)
-                    .addParameter("type", EventType.LIKE)
+                    .addParameter("type1", EventType.LIKE)
+                    .addParameter("type2", EventType.UNLIKE)
                     .addParameter("login", fromLogin)
                     .addParameter("data", toLogin)
                     .executeAndFetch(Event.class);
@@ -194,7 +197,9 @@ public class EventDB {
 //            Event event = jdbcTemplate.queryForObject(Select.selectEventByLogin, new EventRowMapper(),
 //                    EventType.IMAGE_LIKE, fromLogin, toLogin);
             log.info("Is Like Event result count: {}", events.size());
-            return events.size() != 0;
+            if (events.size() == 0)
+                return false;
+            return events.get(0).getType().equals(EventType.LIKE);
         } catch (Exception e) {
             log.warn("Exception. isLikeEvent: {}", e.getMessage());
             return false;
@@ -225,6 +230,8 @@ public class EventDB {
         try (org.sql2o.Connection conn = sql2o.open()) {
 
             List<Event> events = conn.createQuery(Select.selectActiveLikes)
+                    .addParameter("type1", EventType.LIKE)
+                    .addParameter("type2", EventType.UNLIKE)
                     .addParameter("data", data)
                     .addParameter("login", login)
                     .executeAndFetch(Event.class);
@@ -253,6 +260,30 @@ public class EventDB {
             e.printStackTrace();
             log.warn("Exception. saveEventById: {}", e.getMessage());
             throw new UpdateEventDBException();
+        }
+    }
+
+    public boolean isConnectedEvent(String fromLogin, String toLogin) {
+        log.info("Is CONNECTED Event: [fromLogin:{}][toLogin:{}]", fromLogin, toLogin);
+        try (org.sql2o.Connection conn = sql2o.open()) {
+
+            List<Event> events = conn.createQuery(Select.selectEventConnectedOrUnlike)
+                    .addParameter("type1", EventType.CONNECTED)
+                    .addParameter("type2", EventType.UNLIKE)
+                    .addParameter("login", fromLogin)
+                    .addParameter("data", toLogin)
+                    .executeAndFetch(Event.class);
+            conn.commit();
+
+//            Event event = jdbcTemplate.queryForObject(Select.selectEventByLogin, new EventRowMapper(),
+//                    EventType.IMAGE_LIKE, fromLogin, toLogin);
+            log.info("Is CONNECTED Event result count: {}", events.size());
+            if (events.size() == 0)
+                return false;
+            return events.get(0).getType().equals(EventType.CONNECTED);
+        } catch (Exception e) {
+            log.warn("Exception. isConnectedEvent: {}", e.getMessage());
+            return false;
         }
     }
 }

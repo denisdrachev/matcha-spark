@@ -10,6 +10,7 @@ public class Select {
     public static String selectLocation = "SELECT * FROM locations";
     public static String selectRaiting = "SELECT * FROM rating";
     public static String selectBlacklist = "SELECT * FROM blacklist WHERE fromLogin = :fromLogin AND toLogin = :toLogin";
+    public static String selectBlacklists = "SELECT * FROM blacklist";
     public static String selectImageLikeEvent = "SELECT * FROM imageLikeEvents";
     public static String selectProfile = "SELECT * FROM profiles";
     public static String selectUsers = "SELECT * FROM users";
@@ -39,14 +40,15 @@ public class Select {
     public static String selectRatingById = "SELECT * FROM rating WHERE id = ? LIMIT 1";
     public static String selectBlacklistById = "SELECT * FROM blacklist WHERE id = ? LIMIT 1";
     public static String selectImageLikeEventById = "SELECT * FROM imageLikeEvents WHERE id = ? LIMIT 1";
-    public static String selectEventByLogin = "SELECT * FROM events WHERE type = :type AND login = :login AND data = :data ORDER BY time DESC LIMIT 1";
+    public static String selectEventByLogin = "SELECT * FROM events WHERE (type = :type1 OR type = :type2) AND login = :login AND data = :data ORDER BY time DESC LIMIT 1";
+    public static String selectEventConnectedOrUnlike = "SELECT * FROM events WHERE (type = :type1 OR type = :type2) AND login = :login AND data = :data ORDER BY time DESC LIMIT 1";
 
     public static String selectHistoryEvents = "SELECT e.type, e.data as login, e.time, e.active, u.fname, u.lname FROM events e inner join users u " +
             "WHERE e.login = :login AND e.login = u.login AND e.data <> '' AND e.data <> e.login ORDER BY time DESC LIMIT :limit OFFSET :offset";
     public static String selectNotificationEvents = "SELECT e.type, e.login as login, e.time, e.active, u.fname, u.lname FROM events e inner join users u " +
             "WHERE e.data = :data AND e.login = u.login AND e.data <> e.login ORDER BY time DESC LIMIT :limit OFFSET :offset";
 
-    public static String selectActiveLikes = "SELECT * FROM events WHERE (type = " + EventType.LIKE + " OR type = " + EventType.UNLIKE + ") AND active = TRUE AND login = :login AND data = :data";
+    public static String selectActiveLikes = "SELECT * FROM events WHERE (type = :type1 OR type = :type2) AND active = TRUE AND login = :login AND data = :data";
 
     public static String selectProfileById = "SELECT * FROM profiles WHERE id = :id LIMIT 1";
     public static String selectUserByLogin = "SELECT * FROM users WHERE login = :login LIMIT 1";

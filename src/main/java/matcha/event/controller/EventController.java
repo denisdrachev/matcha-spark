@@ -117,7 +117,7 @@ public class EventController {
                 return validationMessageService.prepareErrorMessage("Вы не авторизованы.");
             }
 
-            log.info("Request set user like or dislike token: {} login: {} value: {}", token, toLogin, value);
+            log.info("Request set user like or dislike login: {} value: {}", toLogin, value);
 
             UserEntity userByToken = userService.getUserByToken(token);
             eventService.setLikeOrUnlike(userByToken.getLogin(), toLogin, value);

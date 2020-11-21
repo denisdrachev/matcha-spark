@@ -45,11 +45,9 @@ CREATE TABLE IF NOT EXISTS rating
 
 CREATE TABLE IF NOT EXISTS blacklist
 (
-    toLogin   INT,
-    fromLogin INT,
-    isBlock   BOOLEAN,
-    FOREIGN KEY (toLogin) REFERENCES users (id),
-    FOREIGN KEY (fromLogin) REFERENCES users (id)
+    toLogin   VARCHAR(255)   NOT NULL,
+    fromLogin VARCHAR(255)   NOT NULL,
+    isBlocked   BOOLEAN
 );
 
 CREATE TABLE IF NOT EXISTS locations

@@ -34,7 +34,7 @@ public class BlackListDB {
             int result = conn.createQuery(Insert.insertBlacklist)
                     .addParameter("fromLogin", message.getFromLogin())
                     .addParameter("toLogin", message.getToLogin())
-                    .addParameter("isBlock", message.isBlocked())
+                    .addParameter("isBlocked", message.isBlocked())
                     .executeUpdate().getResult();
             conn.commit();
 
@@ -54,7 +54,7 @@ public class BlackListDB {
             int result = conn.createQuery(Update.updateBlacklistById)
                     .addParameter("fromLogin", message.getFromLogin())
                     .addParameter("toLogin", message.getToLogin())
-                    .addParameter("isBlock", message.isBlocked())
+                    .addParameter("isBlocked", message.isBlocked())
                     .executeUpdate().getResult();
             conn.commit();
 
@@ -105,6 +105,24 @@ public class BlackListDB {
         } catch (Exception e) {
             log.warn("Exception. isBlackListExists: {}", e.getMessage());
             return false;
+        }
+    }
+
+    public List<BlackListMessage> getAllBlackList() {
+        log.info("Get all BlackList");
+        try (org.sql2o.Connection conn = sql2o.open()) {
+
+            List<BlackListMessage> result = conn.createQuery(Select.selectBlacklists)
+                    .executeAndFetch(BlackListMessage.class);
+            conn.commit();
+
+//            BlackListMessage result = jdbcTemplate.queryForObject(Select.selectBlacklist,
+//                    new BlackListMessageRowMapper(), fromLogin, toLogin);
+            log.info("Get all BlackList result size: {}", result.size());
+            return result;
+        } catch (Exception e) {
+            log.warn("Failed to load all BlackList messages. Exception message: {}", e.getMessage());
+            throw new NotFoundBlackListMessageDBException();
         }
     }
 }

@@ -5,7 +5,10 @@ import lombok.NoArgsConstructor;
 import matcha.blacklist.manipulation.BlackListManipulator;
 import matcha.blacklist.model.BlackListMessage;
 import matcha.image.service.ImageService;
+import matcha.location.model.Location;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -37,5 +40,9 @@ public class BlackListService {
 
     public void insertBlackListMessage(BlackListMessage message) {
         blackListManipulator.insertBlackListMessage(message);
+    }
+
+    public List<BlackListMessage> getAllBlackList() {
+        return blackListManipulator.getAllBlackList();
     }
 }

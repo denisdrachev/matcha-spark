@@ -17,22 +17,26 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Calendar;
 
-@Configuration
-@AllArgsConstructor
+//@Configuration
+//@AllArgsConstructor
 public class SpringJdbcConfig {
 
     JdbcTemplate jdbcTemplate;
     ConfigProperties properties;
-    UserService userService;
+    UserService userService = UserService.getInstance();
 
-    @Bean
+    public SpringJdbcConfig() {
+        createAllTables();
+    }
+
+    //    @Bean
     public void createAllTables() {
 
-        Drop.getAll().stream().forEach(s -> jdbcTemplate.execute(s));
+//        Drop.getAll().stream().forEach(s -> jdbcTemplate.execute(s));
 
-        Properties.getAllTablesPath().stream().forEach(s -> createTableBySql(s));
+//        Properties.getAllTablesPath().stream().forEach(s -> createTableBySql(s));
 
-//        createUsers(250);
+        createUsers(500);
 
 //        jdbcTemplate.update(Insert.insertImage, 0, "ABCD");
 //        jdbcTemplate.update(Insert.insertUser, "loginnnn", "password".getBytes(), null, "Artur", "Kamnev", "fermer@gmail.com", 1, 0, new Date(), "salt_test".getBytes(), null);
@@ -69,13 +73,13 @@ public class SpringJdbcConfig {
 //        }
     }
 
-    private void createTableBySql(String pathToSql) {
-        try {
-            String content = Files.readString(Paths.get(pathToSql));
-            jdbcTemplate.execute(content);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+//    private void createTableBySql(String pathToSql) {
+//        try {
+//            String content = Files.readString(Paths.get(pathToSql));
+//            jdbcTemplate.execute(content);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
 }
 

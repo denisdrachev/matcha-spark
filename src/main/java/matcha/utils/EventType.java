@@ -5,6 +5,8 @@ public class EventType {
     public static String PROFILE_UPDATE = "PROFILE_UPDATE";
     public static String UNLIKE = "UNLIKE";
     public static String LIKE = "LIKE";
+    public static String CONNECTED = "CONNECTED";
+    public static String DISCONNECTED = "DISCONNECTED";
     public static String PROFILE_LOAD = "PROFILE_LOAD";
     public static String PROFILE_LOADED = "PROFILE_LOADED";
     public static String SEND_MESSAGE = "SEND_MESSAGE";

@@ -53,4 +53,8 @@ public class EventManipulator {
     public List<Event> findActiveLikeOrUnlikeEvents(String login, String data) {
         return eventDB.findActiveLikeOrUnlikeEvents(login, data);
     }
+
+    public boolean isConnectedEvent(String fromLogin, String toLogin) {
+        return eventDB.isConnectedEvent(fromLogin, toLogin);
+    }
 }
