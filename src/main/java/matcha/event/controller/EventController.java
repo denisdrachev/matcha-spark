@@ -39,11 +39,10 @@ public class EventController {
     }
 
     public void likeUser() {
-        post("/like-user/:login/:value", (req, res) ->
+        post("/like-user", (req, res) ->
                 userService.likeUser(
                         req.headers("Authorization"),
-                        req.params(":login"),
-                        req.params(":value")
+                        req.body()
                 )
         );
     }

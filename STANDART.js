@@ -32,7 +32,7 @@
       type: GET,
       path: "/profile-get/:login",
       desc: "User_2: Запрос пользователя по токену",
-      cookie: 'Authorization',
+      header: 'Authorization',
       request: {
       },
       expect: {
@@ -76,7 +76,7 @@
       type: POST,
       path: "/profile-update",
       desc: "User_1: Обновление информации пользователя User_1",
-      cookie: 'Authorization',
+      header: 'Authorization',
       request: {
         login: "test",
         age: 22,
@@ -106,7 +106,7 @@
       type: GET,
       path: "/history/:limit/:offset",
       desc: "User_1: Смотрит историю",
-      cookie: 'Authorization',
+      header: 'Authorization',
       request: {
       },
       expect: {
@@ -129,7 +129,7 @@
       type: GET,
       path: "/notification/:limit/:offset",
       desc: "User_1: Смотрит уведомления",
-      cookie: 'Authorization',
+      header: 'Authorization',
       request: {
       },
       expect: {
@@ -151,7 +151,7 @@
       type: POST,
       path: "/like-user/:login/:value", //1 - like, 0 - dislike
       desc: "User_2: User_2 поставил лайк User_3",
-      cookie: 'Authorization',
+      header: 'Authorization',
       request: {
       },
       expect: {
@@ -163,7 +163,7 @@
       type: POST,
       path: "/blacklist/save",
       desc: "Пользователь token добавляет в черный список пользователя test",
-      cookie: 'Authorization',
+      header: 'Authorization',
       request: {
       		toLogin: "test",
       		isBlocked: true
@@ -177,7 +177,7 @@
       type: GET,
       path: "/connected",
       desc: "Получить список всех пользователей, которых лайнул Authorization и которые лайкнули его",
-      cookie: 'Authorization',
+      header: 'Authorization',
       request: {
       },
       expect: {
@@ -190,4 +190,30 @@
 				  }
 			  ]
       },
+},
+---------------------------------------------------------------
+ {
+      type: GET,
+      path: "/new-notifications",
+      desc: "Получить количествво непрочитанны нотификаций",
+      header: 'Authorization',
+      request: {
+      },
+      expect: {
+        type: 'ok',
+        data: 11
+      }
+},
+---------------------------------------------------------------
+ {
+      type: POST,
+      path: "/fake-user",
+      desc: "Сообщить о фейковом пользователе",
+      header: 'Authorization',
+      request: {
+      	login: "User_3"
+      },
+      expect: {
+        type: 'ok'
+      }
 },

@@ -2,6 +2,7 @@ package matcha.user.service;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import matcha.blacklist.model.BlackListMessage;
@@ -30,6 +31,7 @@ import matcha.userprofile.model.UserInfoModel;
 import matcha.utils.EventType;
 import matcha.validator.ValidationMessageService;
 
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
 
@@ -290,24 +292,40 @@ public class UserService implements UserInterface {
         return validationMessageService.prepareMessageOkData(gson.toJsonTree(history));
     }
 
-    public Response likeUser(String token, String loginParam, String valueParam) {
+    public Response likeUser(String token, String body) {
 
-        log.info("Request /like-user/{}/{}", loginParam, valueParam);
-
-        int value;
-
-        try {
-            value = Integer.parseInt(valueParam);
-        } catch (Exception e) {
-            return validationMessageService.prepareErrorMessage("Некорректные параметры запроса.");
-        }
+        log.info("Request /like-user body: {}", body);
+        Integer value;
+        String loginParam;
 
         if (token == null || token.isEmpty()) {
             log.info("Token: {} Пользователь не авторизован.", token);
             return validationMessageService.prepareErrorMessage("Вы не авторизованы.");
         }
 
+        try {
+            Type empMapType = new TypeToken<Map<String, String>>() {}.getType();
+            Map<String, String> map = gson.fromJson(body, empMapType);
+            value = Integer.parseInt(map.get("value"));
+            loginParam = map.get("login");
+
+            if (loginParam == null || loginParam.isEmpty() || value < 0 || value > 1) {
+                return validationMessageService.prepareErrorMessage("Некорректные параметры запроса.");
+            }
+        } catch (Exception e) {
+            return validationMessageService.prepareErrorMessage("Некорректные параметры запроса.");
+        }
+
         UserEntity userByToken = getUserByToken(token);
+
+        if (!userManipulator.isUserExistByLogin(loginParam)) {
+            return validationMessageService.prepareErrorMessage("Указанный пользователь не найден.");
+        }
+
+        if (userByToken.getLogin().equals(loginParam)) {
+            return validationMessageService.prepareErrorMessage("Себя лайкнут нельзя :)");
+        }
+
         eventService.setLikeOrUnlike(userByToken.getLogin(), loginParam, value);
 
         return validationMessageService.prepareMessageOkOnlyType();
@@ -339,8 +357,8 @@ public class UserService implements UserInterface {
         String fakeLogin;
 
         try {
-            Map map = gson.fromJson(body, Map.class);
-            fakeLogin = (String) map.get("login");
+            Map<String, String> map = gson.fromJson(body, Map.class);
+            fakeLogin = map.get("login");
             if (fakeLogin == null || fakeLogin.isEmpty()) {
                 return validationMessageService.prepareErrorMessage("Некорректные параметры запроса.");
             }
