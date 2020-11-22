@@ -3,7 +3,7 @@ package matcha.db.crud;
 public class Insert {
 
     public static String insertImage = "INSERT INTO images (index, src, profileId, avatar) VALUES (:index, :src, :profileId, :avatar)";
-    public static String insertEvent = "INSERT INTO events (type, login, time, active, data) VALUES (:type, :login, :time, :active, :data)";
+    public static String insertEvent = "INSERT INTO events (type, login, time, active, data, needShow) VALUES (:type, :login, :time, :active, :data, :needShow)";
     public static String insertLocation = "INSERT INTO locations (profileId, x, y, time, active) VALUES (:profileId, :x, :y, :time, :active)";
     public static String insertRaiting = "INSERT INTO rating (rating, profile) VALUES (?, ?)";
     public static String insertBlacklist = "INSERT INTO blacklist (fromLogin, toLogin, isBlocked) VALUES (:fromLogin, :toLogin, :isBlocked)";

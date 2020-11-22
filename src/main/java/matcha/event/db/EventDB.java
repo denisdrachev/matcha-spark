@@ -1,6 +1,5 @@
 package matcha.event.db;
 
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import matcha.Sql2oModel;
 import matcha.db.crud.Insert;
@@ -14,17 +13,15 @@ import matcha.exception.db.LoadEventsException;
 import matcha.exception.db.UpdateEventDBException;
 import matcha.utils.EventType;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Service;
 import org.sql2o.Sql2o;
 
-import javax.lang.model.element.TypeElement;
 import java.sql.Timestamp;
 import java.util.List;
 
 @Slf4j
-@Service
+//@Service
 //@RequiredArgsConstructor
-@NoArgsConstructor
+//@NoArgsConstructor
 public class EventDB {
 
     private final JdbcTemplate jdbcTemplate = new JdbcTemplate();
@@ -65,6 +62,7 @@ public class EventDB {
                     .addParameter("active", event.isActive())
                     .addParameter("time", new Timestamp(System.currentTimeMillis()))
                     .addParameter("data", event.getData())
+                    .addParameter("needShow", event.isNeedShow())
                     .executeUpdate().getKey(Integer.class);
             conn.commit();
 
@@ -172,8 +170,15 @@ public class EventDB {
                     .addParameter("limit", limit)
                     .addParameter("offset", offset)
                     .executeAndFetch(EventWithUserInfo.class);
+
+            int updateResult = conn.createQuery(Update.updateHistoryNeedShowEvents)
+                    .addParameter("login", fromLogin)
+                    .addParameter("limit", limit)
+                    .addParameter("offset", offset)
+                    .executeUpdate().getResult();
+
             conn.commit();
-            log.info("Get Events result size: {}", events.size());
+            log.info("Get history Events result size: {} updateResult: {}", events.size(), updateResult);
             return events;
         } catch (Exception e) {
             e.printStackTrace();
@@ -216,8 +221,14 @@ public class EventDB {
                     .addParameter("limit", limit)
                     .addParameter("offset", offset)
                     .executeAndFetch(EventWithUserInfo.class);
+
+            int updateResult = conn.createQuery(Update.updateNotificationNeedShowEvents)
+                    .addParameter("data", toLogin)
+                    .addParameter("limit", limit)
+                    .addParameter("offset", offset)
+                    .executeUpdate().getResult();
             conn.commit();
-            log.info("Get Notifications result size: {}", events.size());
+            log.info("Get Notifications result size: {} updateResult: {}", events.size(), updateResult);
             return events;
         } catch (Exception e) {
             e.printStackTrace();

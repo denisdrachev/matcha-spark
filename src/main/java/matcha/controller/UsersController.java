@@ -1,20 +1,12 @@
 package matcha.controller;
 
-import com.google.gson.Gson;
-import lombok.RequiredArgsConstructor;
-import matcha.response.Response;
-import matcha.user.controller.UserController;
 import matcha.user.model.UserEntity;
-import matcha.user.model.UserRegistry;
 import matcha.user.service.UserService;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static spark.Spark.*;
+import static spark.Spark.get;
 
 //@Controller
 //@RequiredArgsConstructor
@@ -62,9 +54,5 @@ public class UsersController {
             else
                 return "<p>Filed to load users</p>";
         });
-
-//        exception(Exception.class, (exception, request, response) -> {
-//            response.body(validationMessageService.prepareErrorMessage(exception.getMessage()).toString());
-//        });
     }
 }

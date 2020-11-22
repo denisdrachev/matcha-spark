@@ -8,7 +8,6 @@ import matcha.exception.db.UpdateUserByIdDBException;
 import matcha.exception.db.location.InsertLocationException;
 import matcha.exception.user.*;
 import matcha.location.manipulation.LocationManipulator;
-import matcha.profile.manipulation.ProfileManipulator;
 import matcha.response.Response;
 import matcha.response.ResponseOk;
 import matcha.user.db.UserDB;
@@ -44,9 +43,7 @@ public class UserManipulator {
                 if (Utils.checkPassword(userLogin.getPassword(), user.getSalt(), user.getPasswordBytes())) {
 //                    user.setActivationCode("TEST_TEST_TEST");
                     //TODO первнуть строку
-                    user.setActivationCode(UUID.randomUUID().toString());
-                    user.setTime(Calendar.getInstance().getTime());
-                    userDB.updateUserById(user);
+                    userUpdateToken(user);
                     return new ResponseOk(user.getActivationCode()/*, user.getLogin()*/);
                 } else {
                     log.info("Логин или пароль неверны. User: {}", userLogin);
@@ -65,6 +62,11 @@ public class UserManipulator {
         }
     }
 
+    public void userUpdateToken(UserEntity user) {
+        user.setActivationCode(UUID.randomUUID().toString());
+        user.setTime(Calendar.getInstance().getTime());
+        userDB.updateUserById(user);
+    }
 
     //TODO подумать, мб переделать, чтобы изолировать от получения пользователя из бд
     public void userUpdate(UserUpdateEntity user) {

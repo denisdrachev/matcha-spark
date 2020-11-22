@@ -3,7 +3,6 @@ package matcha.event.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import java.util.Date;
 
@@ -18,6 +17,7 @@ public class Event {
     private Date time;
     private boolean active = true;
     private String data;
+    private boolean needShow = true;
 
     public Event(String type, String login, Date time, boolean active, String data) {
         this.type = type;

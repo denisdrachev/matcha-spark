@@ -2,6 +2,7 @@ package matcha.user.service;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import matcha.blacklist.model.BlackListMessage;
 import matcha.blacklist.service.BlackListService;
@@ -9,6 +10,7 @@ import matcha.connected.model.ConnectedWithUserInfo;
 import matcha.connected.service.ConnectedService;
 import matcha.converter.Utils;
 import matcha.event.model.Event;
+import matcha.event.model.EventWithUserInfo;
 import matcha.event.service.EventService;
 import matcha.location.model.Location;
 import matcha.location.service.LocationService;
@@ -30,6 +32,8 @@ import matcha.validator.ValidationMessageService;
 
 import java.util.List;
 
+import static spark.Spark.exception;
+
 @Slf4j
 public class UserService implements UserInterface {
 
@@ -49,7 +53,9 @@ public class UserService implements UserInterface {
             .create();
 
     public void init() {
-//        registration();
+        exception(Exception.class, (exception, request, response) -> {
+            response.body(validationMessageService.prepareErrorMessage(exception.getMessage()).toString());
+        });
     }
 
     private UserManipulator userManipulator = new UserManipulator();
@@ -88,6 +94,22 @@ public class UserService implements UserInterface {
         Event newEvent = new Event(EventType.LOGIN, user.getLogin(), false, "");
         eventService.saveNewEvent(newEvent);
         return response;
+    }
+
+    public Response userLogout(String token) {
+        log.info("Request /logout");
+        if (token == null || token.isEmpty()) {
+            log.info("Token: {} Пользователь не авторизован.", token);
+            return validationMessageService.prepareErrorMessage("Вы не авторизованы.");
+        }
+
+        UserEntity user = getUserByToken(token);
+        userManipulator.userUpdateToken(user);
+
+        Event newEvent = new Event(EventType.LOGOUT, user.getLogin(), false, "");
+        eventService.saveNewEvent(newEvent);
+
+        return validationMessageService.prepareMessageOkOnlyType();
     }
 
     public void checkUserToToken(String token) {
@@ -208,5 +230,85 @@ public class UserService implements UserInterface {
         UserEntity userByToken = getUserByToken(token);
         List<ConnectedWithUserInfo> allConnectedWithUser = connectedService.getAllConnectedWithUser(userByToken.getLogin());
         return validationMessageService.prepareMessageOkData(gson.toJsonTree(allConnectedWithUser));
+    }
+
+    @SneakyThrows
+    public Response getNotifications(String token, String limitParam, String offsetParam) {
+
+        log.info("Request /notification?limit={}?offset={}", limitParam, offsetParam);
+
+        int limit;
+        int offset;
+
+        try {
+            limit = Integer.parseInt(limitParam);
+            offset = Integer.parseInt(offsetParam);
+            if (limit <= 0 || limit > 50 || offset < 0)
+                return validationMessageService.prepareErrorMessage("Некорректные параметры запроса.");
+        } catch (Exception e) {
+            return validationMessageService.prepareErrorMessage("Некорректные параметры запроса.");
+        }
+
+        if (token == null || token.isEmpty()) {
+            log.info("Token: {} Пользователь не авторизован.", token);
+            return validationMessageService.prepareErrorMessage("Вы не авторизованы.");
+        }
+
+        UserEntity userByToken = getUserByToken(token);
+        List<EventWithUserInfo> notifications = eventService.getNotifications(userByToken.getLogin(), limit, offset);
+        return validationMessageService.prepareMessageOkData(gson.toJsonTree(notifications));
+    }
+
+    public Response getHistory(String token, String limitParam, String offsetParam) {
+
+        log.info("Request /history?limit={}?offset={}", limitParam, offsetParam);
+
+        int limit;
+        int offset;
+
+        try {
+            limit = Integer.parseInt(limitParam);
+            offset = Integer.parseInt(offsetParam);
+            if (limit <= 0 || limit > 50 || offset < 0)
+                return validationMessageService.prepareErrorMessage("Некорректные параметры запроса.");
+        } catch (Exception e) {
+            return validationMessageService.prepareErrorMessage("Некорректные параметры запроса.");
+        }
+
+
+        if (token == null || token.isEmpty()) {
+            log.info("Token: {} Пользователь не авторизован.", token);
+            return validationMessageService.prepareErrorMessage("Вы не авторизованы.");
+        }
+
+        log.info("Request get history by token: {}", token);
+
+        UserEntity userByToken = userService.getUserByToken(token);
+        List<EventWithUserInfo> history = eventService.getHistory(userByToken.getLogin(), limit, offset);
+
+        return validationMessageService.prepareMessageOkData(gson.toJsonTree(history));
+    }
+
+    public Response likeUser(String token, String loginParam, String valueParam) {
+
+        log.info("Request /like-user/{}/{}", loginParam, valueParam);
+
+        int value;
+
+        try {
+            value = Integer.parseInt(valueParam);
+        } catch (Exception e) {
+            return validationMessageService.prepareErrorMessage("Некорректные параметры запроса.");
+        }
+
+        if (token == null || token.isEmpty()) {
+            log.info("Token: {} Пользователь не авторизован.", token);
+            return validationMessageService.prepareErrorMessage("Вы не авторизованы.");
+        }
+
+        UserEntity userByToken = getUserByToken(token);
+        eventService.setLikeOrUnlike(userByToken.getLogin(), loginParam, value);
+
+        return validationMessageService.prepareMessageOkOnlyType();
     }
 }

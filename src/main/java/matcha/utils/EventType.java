@@ -2,6 +2,7 @@ package matcha.utils;
 
 public class EventType {
 
+    public static String LOGOUT = "LOGOUT";
     public static String PROFILE_UPDATE = "PROFILE_UPDATE";
     public static String UNLIKE = "UNLIKE";
     public static String LIKE = "LIKE";

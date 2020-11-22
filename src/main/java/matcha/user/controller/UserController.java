@@ -2,22 +2,15 @@ package matcha.user.controller;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import matcha.profile.model.UserProfileWithoutEmail;
 import matcha.response.Response;
 import matcha.user.model.UserInfo;
 import matcha.user.model.UserRegistry;
 import matcha.user.service.UserService;
 import matcha.validator.ValidationMessageService;
-import org.ietf.jgss.GSSContext;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Locale;
-import java.util.Map;
-
-import static spark.Spark.*;
+import static spark.Spark.get;
+import static spark.Spark.post;
 
 
 @Slf4j
@@ -36,6 +29,7 @@ public class UserController {
         getUserProfile();
         getUserProfileSelf();
         getUsers();
+        logout();
     }
 
     private UserService userService = UserService.getInstance();
@@ -51,10 +45,6 @@ public class UserController {
             userService.userRegistration(user);
             return validationMessageService.prepareMessageOkOnlyType();
         });
-
-        exception(Exception.class, (exception, request, response) -> {
-            response.body(validationMessageService.prepareErrorMessage(exception.getMessage()).toString());
-        });
     }
 
     //
@@ -69,10 +59,6 @@ public class UserController {
             }
 
             return userService.userLogin(user);
-        });
-
-        exception(Exception.class, (exception, request, response) -> {
-            response.body(validationMessageService.prepareErrorMessage(exception.getMessage()).toString());
         });
     }
 
@@ -91,9 +77,6 @@ public class UserController {
 
             log.info("Request get user profile by login: {}", login);
             return validationMessageService.prepareMessageOkData(gson.toJsonTree(userService.getUserProfile(token, login)));
-        });
-        exception(Exception.class, (exception, request, response) -> {
-            response.body(validationMessageService.prepareErrorMessage(exception.getMessage()).toString());
         });
     }
 
@@ -114,9 +97,6 @@ public class UserController {
             log.info("Request get self user profile");
             return validationMessageService.prepareMessageOkData(gson.toJsonTree(userService.getUserProfile(token, null)));
         });
-        exception(Exception.class, (exception, request, response) -> {
-            response.body(validationMessageService.prepareErrorMessage(exception.getMessage()).toString());
-        });
     }
 
     public void getUsers() {
@@ -134,9 +114,10 @@ public class UserController {
             log.info("Request get users");
             return validationMessageService.prepareMessageOkData(gson.toJsonTree(userService.getAllUsers()));
         });
-        exception(Exception.class, (exception, request, response) -> {
-            response.body(validationMessageService.prepareErrorMessage(exception.getMessage()).toString());
-        });
+    }
+
+    public void logout() {
+        get("/logout", (req, res) -> userService.userLogout(req.headers("Authorization")));
     }
 
     //
@@ -165,9 +146,6 @@ public class UserController {
             res.redirect("/redirect:?lang=ru");
             return "";
 //            return "redirect:?lang=" + request.getLocale().getLanguage();
-        });
-        exception(Exception.class, (exception, request, response) -> {
-            response.body(validationMessageService.prepareErrorMessage(exception.getMessage()).toString());
         });
     }
 }

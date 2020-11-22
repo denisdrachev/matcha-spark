@@ -4,8 +4,6 @@ import com.google.gson.annotations.Expose;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
-import matcha.image.model.Image;
 
 import java.util.Date;
 
@@ -24,5 +22,6 @@ public class EventWithUserInfo {
     private String fname;
     @Expose
     private String lname;
-//    private Image image;
+    @Expose
+    private String src;
 }
