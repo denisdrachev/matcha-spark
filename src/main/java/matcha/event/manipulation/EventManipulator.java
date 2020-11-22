@@ -61,4 +61,8 @@ public class EventManipulator {
     public Integer getUserActivityByLogin(String login) {
         return eventDB.getCountUserEventsByLogin(login);
     }
+
+    public Integer getUnreadUserActivityByLogin(String login) {
+        return eventDB.getCountUnreadUserEventsByLogin(login);
+    }
 }

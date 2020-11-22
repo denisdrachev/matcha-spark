@@ -14,7 +14,7 @@ import org.json.JSONObject;
 public class ResponseOkData implements MyObject, Response {
 
     private String type;
-    private JSONObject data;
+    private Object data;
 
     @Override
     public String toString() {

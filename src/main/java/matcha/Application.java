@@ -1,15 +1,13 @@
 package matcha;
 
+import matcha.validator.ValidationMessageService;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import org.slf4j.LoggerFactory;
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 
-import static spark.Spark.port;
-import static spark.Spark.get;
-import static spark.Spark.options;
-import static spark.Spark.before;
+import static spark.Spark.*;
 
 @SpringBootApplication
 public class Application {
@@ -60,6 +58,8 @@ model.createPost("das", "sdasd", strs);
 //        SpringApplication.run(Application.class, args);
 
 */
+        ValidationMessageService validationMessageService = ValidationMessageService.getInstance();
+
         port(getHerokuAssignedPort());
         get("/hello", (req, res) -> "Hello Heroku World");
         options("/*",
@@ -86,7 +86,9 @@ model.createPost("das", "sdasd", strs);
             response.header("Access-Control-Allow-Origin", "http://192.168.29.15:3000");
             response.header("Access-Control-Allow-Credentials", "true");
         });
-
+        exception(Exception.class, (exception, request, response) -> {
+            response.body(validationMessageService.prepareErrorMessage(exception.getMessage()).toString());
+        });
         SingletonControllers.init();
     }
 

@@ -58,7 +58,7 @@ public class ValidationMessageService {
         return new ResponseOnlyType("ok");
     }
 
-    public ResponseOkData prepareMessageOkData(JSONObject o) {
+    public ResponseOkData prepareMessageOkData(Object o) {
         return new ResponseOkData("ok", o);
     }
 

@@ -36,6 +36,7 @@ public class UserController {
 
     public void registration() {
         post("/register", (req, res) -> {
+            log.info("Request /register Body: {}", req.body());
             UserRegistry user = new Gson().fromJson(req.body(), UserRegistry.class);
             log.info("Income registration request. User: {}", user);
             Response response = validationMessageService.validateMessage(user);

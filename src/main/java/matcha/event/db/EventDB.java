@@ -27,31 +27,6 @@ public class EventDB {
     private final JdbcTemplate jdbcTemplate = new JdbcTemplate();
     private final Sql2o sql2o = Sql2oModel.getSql2o();
 
-    //    public Integer getImageCountById(int imageId) {
-//        log.info("Get image count by id: {}", imageId);
-//        try {
-//            Integer imagesCount = jdbcTemplate.queryForObject(Select.selectImagesCountById,
-//                    Integer.class, imageId);
-//            log.info("Get image count by id {} result: {}", imageId, imagesCount);
-//            return imagesCount;
-//        } catch (Exception e) {
-//            log.warn("Exception. getImageCountById: {}", e.getMessage());
-//            throw new GetImageCountByIdDBException();
-//        }
-//    }
-//
-//    public Image getImageById(String imageId) {
-//        log.info("Get image by id: {}", imageId);
-//        try {
-//            Image image = jdbcTemplate.queryForObject(Select.selectImageById, new ImageRowMapper(), imageId);
-//            log.info("Get image by id {} result: {}", imageId, image);
-//            return image;
-//        } catch (Exception e) {
-//            log.warn("Exception. getImageById: {}", e.getMessage());
-//            throw new GetImageByIdDBException();
-//        }
-//    }
-//
     public Integer insertEvent(Event event) {
         log.info("Insert event: {}", event);
         try (org.sql2o.Connection conn = sql2o.beginTransaction()) {
@@ -66,19 +41,6 @@ public class EventDB {
                     .executeUpdate().getKey(Integer.class);
             conn.commit();
 
-            /*KeyHolder keyHolder = new GeneratedKeyHolder();
-            jdbcTemplate.update(new PreparedStatementCreator() {
-                @Override
-                public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-                    PreparedStatement ps = connection.prepareStatement(Insert.insertEvent, new String[]{"id"});
-                    ps.setString(1, event.getType());
-                    ps.setString(2, event.getLogin());
-                    ps.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
-                    ps.setBoolean(4, event.isActive());
-                    ps.setString(5, event.getData());
-                    return ps;
-                }
-            }, keyHolder);*/
             log.info("Insert event result: {}", eventId);
             return eventId;
         } catch (Exception e) {
@@ -87,41 +49,6 @@ public class EventDB {
         }
     }
 
-    //
-//    public void updateImageById(Image image) {
-//        log.info("Update image by id: {}", image);
-//        try {
-//            int update = jdbcTemplate.update(Update.updateImageById, image.getSrc(), image.isAvatar(), image.getId());
-//            log.info("Update image by id result: {}", update);
-//        } catch (Exception e) {
-//            log.warn("Exception. updateImageById: {}", e.getMessage());
-//            throw new UpdateImageByIdDBException();
-//        }
-//    }
-//
-//    public void dropImageById(String id) {
-//        try {
-//            log.info("Drop image by id: ".concat(id));
-//            int drop = jdbcTemplate.update(Drop.deleteImageById, id);
-//            log.info("Drop image by id result: ".concat(String.valueOf(drop)));
-//        } catch (Exception e) {
-//            log.warn("Exception. insertImage: {}", e.getMessage());
-//            throw new DropImageByIdDBException();
-//        }
-//    }
-//
-//    public List<Image> getImagesByProfileId(int profileId) {
-//        log.info("Get images by profile id: {}", profileId);
-//        try {
-//            List<Image> images = jdbcTemplate.query(Select.selectImageByProfileId, new ImageRowMapper(), profileId);
-//            log.info("Get images by id profile: {}", images);
-//            return images;
-//        } catch (Exception e) {
-//            log.warn("Exception. getImagesByProfileId: {}", e.getMessage());
-//            throw new LoadImageException();
-//        }
-//    }
-//
     public List<Event> getAllEvents() {
         log.info("Get all events");
         try (org.sql2o.Connection conn = sql2o.beginTransaction()) {
@@ -130,7 +57,6 @@ public class EventDB {
                     .executeAndFetch(Event.class);
             conn.commit();
 
-//            List<Event> events = jdbcTemplate.query(Select.selectEvents, new EventRowMapper());
             log.info("Get all events count: {}", events.size());
             return events;
         } catch (Exception e) {
@@ -151,8 +77,6 @@ public class EventDB {
                     .executeAndFetch(Event.class);
             conn.commit();
 
-//            Event event = jdbcTemplate.queryForObject(Select.selectEventByLogin, new EventRowMapper(),
-//                    EventType.IMAGE_LIKE, fromLogin, toLogin);
             log.info("Get Event by login result: {}", event.get(0));
             return event.get(0);
         } catch (Exception e) {
@@ -200,8 +124,6 @@ public class EventDB {
                     .executeAndFetch(Event.class);
             conn.commit();
 
-//            Event event = jdbcTemplate.queryForObject(Select.selectEventByLogin, new EventRowMapper(),
-//                    EventType.IMAGE_LIKE, fromLogin, toLogin);
             log.info("Is Like Event result count: {}", events.size());
             if (events.size() == 0)
                 return false;
@@ -240,7 +162,7 @@ public class EventDB {
     public List<Event> findActiveLikeOrUnlikeEvents(String login, String data) {
         log.info("Get findActiveEvents [login:{}] [data:{}]", login, data);
         try (org.sql2o.Connection conn = sql2o.open()) {
-
+//TODO если прменять этот метод, надо переделать - искать не активные, а последние
             List<Event> events = conn.createQuery(Select.selectActiveLikes)
                     .addParameter("type1", EventType.LIKE)
                     .addParameter("type2", EventType.UNLIKE)
@@ -287,8 +209,6 @@ public class EventDB {
                     .executeAndFetch(Event.class);
             conn.commit();
 
-//            Event event = jdbcTemplate.queryForObject(Select.selectEventByLogin, new EventRowMapper(),
-//                    EventType.IMAGE_LIKE, fromLogin, toLogin);
             log.info("Is CONNECTED Event result count: {}", events.size());
             if (events.size() == 0)
                 return false;
@@ -309,6 +229,23 @@ public class EventDB {
             conn.commit();
             log.info("Get count user events result: {}", events);
             return events.get(0);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.warn("Exception. getNotifications: {}", e.getMessage());
+            throw new EventNotFoundDBException();
+        }
+    }
+
+    public Integer getCountUnreadUserEventsByLogin(String login) {
+        log.info("Get count user events [login:{}]", login);
+        try (org.sql2o.Connection conn = sql2o.beginTransaction()) {
+
+            List<Integer> eventsCount = conn.createQuery(Select.selectUnreadUserEventsCount)
+                    .addParameter("login", login)
+                    .executeAndFetch(Integer.class);
+            conn.commit();
+            log.info("Get count user events result: {}", eventsCount);
+            return eventsCount.get(0);
         } catch (Exception e) {
             e.printStackTrace();
             log.warn("Exception. getNotifications: {}", e.getMessage());

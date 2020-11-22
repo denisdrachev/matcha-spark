@@ -15,6 +15,7 @@ public class EventController {
         getHistory();
         getNotifications();
         likeUser();
+        getUnreadUserEvents();
     }
 
     public void getHistory() {
@@ -44,5 +45,9 @@ public class EventController {
                         req.params(":value")
                 )
         );
+    }
+
+    public void getUnreadUserEvents() {
+        get("/new-notifications", (req, res) -> userService.getUnreadUserEvents(req.headers("Authorization")));
     }
 }

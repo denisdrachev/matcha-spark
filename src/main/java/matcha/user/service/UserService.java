@@ -148,7 +148,7 @@ public class UserService implements UserInterface {
         ProfileEntity profileById = profileService.getProfileByIdWithImagesNotEmpty(user.getProfileId());
         BlackListMessage blackList = blackListService.getBlackListMessage(userByToken.getLogin(), user.getLogin());
 
-        Event newEvent = new Event(EventType.PROFILE_LOAD, userByToken.getLogin(), false, login);
+        Event newEvent = new Event(EventType.PROFILE_LOAD, userByToken.getLogin(), true, login);
         eventService.saveNewEvent(newEvent);
 
         Integer userRating = eventService.getUserRatingByLogin(user.getLogin());
@@ -181,7 +181,7 @@ public class UserService implements UserInterface {
 
         profileService.updateProfile(currentUser.getProfileId(), newProfile);
 
-        Event newEvent = new Event(EventType.PROFILE_UPDATE, userInfo.getLogin(), false, "");
+        Event newEvent = new Event(EventType.PROFILE_UPDATE, userInfo.getLogin(), true, "");
         eventService.saveNewEvent(newEvent);
     }
 
@@ -310,5 +310,19 @@ public class UserService implements UserInterface {
         eventService.setLikeOrUnlike(userByToken.getLogin(), loginParam, value);
 
         return validationMessageService.prepareMessageOkOnlyType();
+    }
+
+    public Response getUnreadUserEvents(String token) {
+        log.info("Request /new-notifications");
+
+        if (token == null || token.isEmpty()) {
+            log.info("Token: {} Пользователь не авторизован.", token);
+            return validationMessageService.prepareErrorMessage("Вы не авторизованы.");
+        }
+
+        UserEntity userByToken = getUserByToken(token);
+        Integer unreadEventsCount = eventService.getUnreadUserActivityByLogin(userByToken.getLogin());
+
+        return validationMessageService.prepareMessageOkData(unreadEventsCount);
     }
 }

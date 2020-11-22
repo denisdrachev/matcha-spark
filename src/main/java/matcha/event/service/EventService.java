@@ -86,7 +86,7 @@ public class EventService {
             }
         } else {
 //            boolean isConnected = eventManipulator.isConnectedEvent(fromLogin, toLogin);
-            Event event = new Event(EventType.UNLIKE, fromLogin, true, toLogin);
+            Event event = new Event(EventType.UNLIKE, fromLogin, false, toLogin);
             saveNewEvent(event);
 
             ConnectedEntity connected = connectedService.getConnected(fromLogin, toLogin);
@@ -116,5 +116,9 @@ public class EventService {
 
     public Integer getUserRatingByLogin(String login) {
         return eventManipulator.getUserActivityByLogin(login);
+    }
+
+    public Integer getUnreadUserActivityByLogin(String login) {
+        return eventManipulator.getUnreadUserActivityByLogin(login);
     }
 }

@@ -61,6 +61,8 @@ public class SpringJdbcConfig {
 
 
         UserEntity user_1 = userService.getUserByLogin("User_1");
+        System.err.println(user_1.getActivationCode());
+
         ProfileEntity profileByIdWithImages = profileService.getProfileByIdWithImages(user_1.getProfileId());
         profileByIdWithImages.setAge(22);
         profileByIdWithImages.setGender(1);

@@ -28,7 +28,7 @@ public class ChatService implements ChatInterface {
     @Override
     public Response saveMessage(ChatMessageSave chatMessage) {
         chatManipulator.insertChatMessage(chatMessage);
-        Event newEvent = new Event(EventType.SEND_MESSAGE, chatMessage.getFromLogin(), false, chatMessage.getToLogin());
+        Event newEvent = new Event(EventType.SEND_MESSAGE, chatMessage.getFromLogin(), true, chatMessage.getToLogin());
         eventService.saveNewEvent(newEvent);
 
         return validationMessageService.prepareMessageOkOnlyType();
