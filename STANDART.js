@@ -149,10 +149,12 @@
 ---------------------------------------------------------------
     {
       type: POST,
-      path: "/like-user/:login/:value", //1 - like, 0 - dislike
+      path: "/like-user", //1 - like, 0 - dislike
       desc: "User_2: User_2 поставил лайк User_3",
       header: 'Authorization',
       request: {
+      	login: "User_3",
+      	value: 1
       },
       expect: {
         type: 'ok',
