@@ -16,4 +16,5 @@ public class EventType {
     public static String LOGIN = "LOGIN";
     public static String USER_BLOCK = "USER_BLOCK";
     public static String USER_UNBLOCK = "USER_UNBLOCK";
+    public static String FAKE_USER = "FAKE_USER";
 }

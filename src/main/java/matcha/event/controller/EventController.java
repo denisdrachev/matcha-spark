@@ -16,6 +16,7 @@ public class EventController {
         getNotifications();
         likeUser();
         getUnreadUserEvents();
+        fakeUser();
     }
 
     public void getHistory() {
@@ -49,5 +50,9 @@ public class EventController {
 
     public void getUnreadUserEvents() {
         get("/new-notifications", (req, res) -> userService.getUnreadUserEvents(req.headers("Authorization")));
+    }
+
+    public void fakeUser() {
+        post("/fake-user", (req, res) -> userService.fakeUserMessage(req.headers("Authorization"), req.body()));
     }
 }

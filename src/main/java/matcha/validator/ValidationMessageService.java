@@ -47,7 +47,9 @@ public class ValidationMessageService {
     }
 
     public ResponseError prepareErrorMessage(String message) {
-        return new ResponseError("error", message);
+        ResponseError error = new ResponseError("error", message);
+        log.info("Response: {}", error);
+        return error;
     }
 
     public ResponseError prepareErrorMessage(StringBuilder message) {
@@ -55,15 +57,21 @@ public class ValidationMessageService {
     }
 
     public ResponseOnlyType prepareMessageOkOnlyType() {
-        return new ResponseOnlyType("ok");
+        ResponseOnlyType ok = new ResponseOnlyType("ok");
+        log.info("Response: {}", ok);
+        return ok;
     }
 
     public ResponseOkData prepareMessageOkData(Object o) {
-        return new ResponseOkData("ok", o);
+        ResponseOkData ok = new ResponseOkData("ok", o);
+        log.info("Response: {}", ok);
+        return ok;
     }
 
     public ResponseOkDataObject prepareMessageOkData(JsonElement o) {
-        return new ResponseOkDataObject("ok", o);
+        ResponseOkDataObject ok = new ResponseOkDataObject("ok", o);
+        log.info("Response: {}", ok);
+        return ok;
     }
 
     public Response validateMessage(MyObject myObject) {
@@ -85,7 +93,9 @@ public class ValidationMessageService {
     }
 
     public ResponseDataList prepareMessageOkDataList(List list) {
-        return new ResponseDataList("ok", list);
+        ResponseDataList ok = new ResponseDataList("ok", list);
+        log.info("Response: {}", ok);
+        return ok;
     }
 //    public boolean validateJsonBySchema(String schemaName, String json) {
 ////        try {

@@ -112,6 +112,13 @@ public class UserManipulator {
 
     }
 
+    public boolean isUserExistByLogin(String login) {
+        Integer userCountByLogin = userDB.getUserCountByLogin(login);
+        if (userCountByLogin != 0)
+            return true;
+        return false;
+    }
+
     public Integer getUserProfileId(String login) {
         return userDB.getUserProfileIdByLogin(login);
     }

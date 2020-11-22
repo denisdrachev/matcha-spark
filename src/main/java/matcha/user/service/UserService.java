@@ -31,6 +31,7 @@ import matcha.utils.EventType;
 import matcha.validator.ValidationMessageService;
 
 import java.util.List;
+import java.util.Map;
 
 import static spark.Spark.exception;
 
@@ -324,5 +325,41 @@ public class UserService implements UserInterface {
         Integer unreadEventsCount = eventService.getUnreadUserActivityByLogin(userByToken.getLogin());
 
         return validationMessageService.prepareMessageOkData(unreadEventsCount);
+    }
+
+    public Object fakeUserMessage(String token, String body) {
+        log.info("Request /fake-user body: {}", body);
+
+        if (token == null || token.isEmpty()) {
+            log.info("Token: {} Пользователь не авторизован.", token);
+            return validationMessageService.prepareErrorMessage("Вы не авторизованы.");
+        }
+
+
+        String fakeLogin;
+
+        try {
+            Map map = gson.fromJson(body, Map.class);
+            fakeLogin = (String) map.get("login");
+            if (fakeLogin == null || fakeLogin.isEmpty()) {
+                return validationMessageService.prepareErrorMessage("Некорректные параметры запроса.");
+            }
+        } catch (Exception e) {
+            return validationMessageService.prepareErrorMessage("Некорректные параметры запроса.");
+        }
+
+        UserEntity userByToken = getUserByToken(token);
+
+        if (!userManipulator.isUserExistByLogin(fakeLogin)) {
+            return validationMessageService.prepareErrorMessage("Указанный пользователь не найден.");
+        }
+
+        if (userByToken.getLogin().equals(fakeLogin)) {
+            return validationMessageService.prepareErrorMessage("Перестаньте, вы не фейк!");
+        }
+
+        Event event = new Event(EventType.FAKE_USER, userByToken.getLogin(), false, fakeLogin);
+        eventService.saveNewEvent(event);
+        return validationMessageService.prepareMessageOkOnlyType();
     }
 }
