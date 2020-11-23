@@ -35,7 +35,7 @@ public class ProfileDB {
                     .addParameter("gender", 1)
                     .addParameter("preference", "")
                     .addParameter("biography", "")
-                    .addParameter("tags", "")
+//                    .addParameter("tags", "")
                     .addParameter("isFilled", false)
                     .executeUpdate().getKey(Integer.class);
             conn.commit();
@@ -113,7 +113,7 @@ public class ProfileDB {
                     .addParameter("gender", profile.getGender())
                     .addParameter("preference", profile.getPreferenceAsString())
                     .addParameter("biography", profile.getBiography())
-                    .addParameter("tags", profile.getTagsAsString())
+//                    .addParameter("tags", profile.getTagsAsString())
                     .addParameter("isFilled", profile.isFilled())
                     .addParameter("id", profile.getId())
                     .executeUpdate().getResult();

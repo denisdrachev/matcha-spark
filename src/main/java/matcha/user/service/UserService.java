@@ -23,6 +23,7 @@ import matcha.profile.model.UserProfileWithoutEmail;
 import matcha.profile.service.ProfileService;
 import matcha.properties.ConfigProperties;
 import matcha.response.Response;
+import matcha.tag.service.TagService;
 import matcha.user.manipulation.UserManipulator;
 import matcha.user.model.UserEntity;
 import matcha.user.model.UserInfo;
@@ -71,6 +72,7 @@ public class UserService implements UserInterface {
     private BlackListService blackListService = BlackListService.getInstance();
     private ConnectedService connectedService = ConnectedService.getInstance();
     private ImageService imageService = ImageService.getInstance();
+    private TagService tagService = TagService.getInstance();
     private ValidationMessageService validationMessageService = ValidationMessageService.getInstance();
 
     public void userRegistration(UserRegistry userRegistry) {
@@ -161,14 +163,16 @@ public class UserService implements UserInterface {
         eventService.saveNewEvent(newEventLoaded);
 
         Integer userRating = eventService.getUserRatingByLogin(user.getLogin());
+        List<String> userTags = tagService.getUserTags(user.getLogin());
 
         if (login == null)
-            return new UserProfileWithEmail(user, profileById, blackList.isBlocked(), userRating);
+            return new UserProfileWithEmail(user, profileById, blackList.isBlocked(), userRating, userTags);
 
         boolean likeEventFrom = eventService.isLikeEvent(userByToken.getLogin(), user.getLogin());
         boolean likeEventTo = eventService.isLikeEvent(user.getLogin(), userByToken.getLogin());
 
-        return new UserProfileWithoutEmail(user, profileById, blackList.isBlocked(), likeEventFrom, likeEventTo, userRating);
+
+        return new UserProfileWithoutEmail(user, profileById, blackList.isBlocked(), likeEventFrom, likeEventTo, userRating, userTags);
     }
 
     //TODO рефакторинг
@@ -188,6 +192,7 @@ public class UserService implements UserInterface {
         ProfileEntity newProfile = new ProfileEntity(currentUser.getProfileId(), userInfo);
         newProfile.setFilled(true);
 
+        tagService.saveTags(userInfo.getLogin(), String.join(",", userInfo.getTags()));
         profileService.updateProfile(currentUser.getProfileId(), newProfile);
 
         Event newEvent = new Event(EventType.PROFILE_UPDATE, userInfo.getLogin(), true, "");
@@ -410,6 +415,12 @@ public class UserService implements UserInterface {
 
         Event event = new Event(EventType.FAKE_USER, userByToken.getLogin(), false, fakeLogin);
         eventService.saveNewEvent(event);
+        return validationMessageService.prepareMessageOkOnlyType();
+    }
+
+    public Response getTestExecute() {
+        log.info("Request /test");
+        tagService.getUsersWithCommonTags(List.of(1, 2));
         return validationMessageService.prepareMessageOkOnlyType();
     }
 }

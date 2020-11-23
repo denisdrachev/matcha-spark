@@ -28,7 +28,7 @@ public class UserProfileService implements UserProfileInterface {
                 .fname(userByLogin.getFname())
                 .lname(userByLogin.getLname())
                 .gender(profileById.getGender())
-                .tags(profileById.getTags())
+//                .tags(profileById.getTags())
                 .images(profileById.getImages())
                 .build();
     }

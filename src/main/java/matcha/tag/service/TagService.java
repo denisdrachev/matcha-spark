@@ -1,6 +1,9 @@
 package matcha.tag.service;
 
 import matcha.tag.manipulation.TagManipulator;
+import matcha.tag.model.Tag;
+
+import java.util.List;
 
 public class TagService {
 
@@ -15,6 +18,8 @@ public class TagService {
     }
 
     public void saveTags(String login, String tags) {
+        System.err.println("LOGIN: " + login);
+        System.err.println("TAGS: " + tags);
         tagManipulator.clearUserTags(login);
         if (tags == null || tags.isEmpty())
             return;
@@ -25,7 +30,15 @@ public class TagService {
         }
     }
 
-    public String getUserTags(String login) {
-        return tagManipulator.getUserTags(login);
+    public List<String> getUserTags(String login) {
+        return tagManipulator.getUserTagsAsList(login);
+    }
+
+    public List<Tag> getAllTags() {
+        return tagManipulator.getAllTags();
+    }
+
+    public Object getUsersWithCommonTags(List<Integer> tags) {
+        return tagManipulator.getUsersWithCommonTags(tags);
     }
 }

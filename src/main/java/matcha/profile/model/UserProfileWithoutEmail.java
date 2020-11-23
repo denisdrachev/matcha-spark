@@ -52,7 +52,8 @@ public class UserProfileWithoutEmail implements Serializable {
     @Expose
     private Integer rating;
 
-    public UserProfileWithoutEmail(UserEntity user, ProfileEntity profile, boolean isBlocked, boolean likedFrom, boolean likedTo, Integer rating) {
+    public UserProfileWithoutEmail(UserEntity user, ProfileEntity profile, boolean isBlocked,
+                                   boolean likedFrom, boolean likedTo, Integer rating, List<String> tags) {
         this.login = user.getLogin();
         this.fname = user.getFname();
         this.lname = user.getLname();
@@ -60,7 +61,7 @@ public class UserProfileWithoutEmail implements Serializable {
         this.gender = profile.getGender();
         this.preference = profile.getPreference();
         this.biography = profile.getBiography();
-        this.tags = profile.getTags();
+        this.tags = tags;
         this.images = profile.getImages();
         this.time = user.getTime();
         this.location = user.getLocation();

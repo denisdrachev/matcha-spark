@@ -50,7 +50,7 @@ public class UserProfileWithEmail implements Serializable {
     @Expose
     private Integer rating;
 
-    public UserProfileWithEmail(UserEntity user, ProfileEntity profile, boolean isBlocked, Integer rating) {
+    public UserProfileWithEmail(UserEntity user, ProfileEntity profile, boolean isBlocked, Integer rating, List<String> tags) {
         this.login = user.getLogin();
         this.fname = user.getFname();
         this.lname = user.getLname();
@@ -58,7 +58,7 @@ public class UserProfileWithEmail implements Serializable {
         this.gender = profile.getGender();
         this.preference = profile.getPreference();
         this.biography = profile.getBiography();
-        this.tags = profile.getTags();
+        this.tags = tags;
         this.images = profile.getImages();
         this.time = user.getTime();
         this.location = user.getLocation();

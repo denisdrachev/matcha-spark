@@ -15,6 +15,8 @@ public class Select {
     public static String selectImageLikeEvent = "SELECT * FROM imageLikeEvents";
     public static String selectProfile = "SELECT * FROM profiles";
     public static String selectUsers = "SELECT * FROM users";
+    public static String selectAllTags = "SELECT * FROM tags";
+    public static String selectAllTagRelations = "SELECT * FROM tagRelations";
 
     public static String selectImagesCountById = "SELECT COUNT(*) FROM images WHERE id = :id";
     public static String selectLocationsCountById = "SELECT COUNT(*) FROM locations WHERE id = ?";
@@ -24,6 +26,8 @@ public class Select {
     public static String selectProfilesCountById = "SELECT COUNT(*) FROM profiles WHERE id = :id";
     public static String selectTagIdByName = "SELECT id FROM tags WHERE name = :name";
     public static String selectUserTags = "SELECT t.name FROM tagRelations r inner join tags t WHERE r.login = :login AND r.tagId = t.id";
+    public static String selectUserTagsOnluIds = "SELECT t.id FROM tagRelations r inner join tags t WHERE r.login = :login AND r.tagId = t.id";
+    public static String selectUsersWithCommonTags = "SELECT r.login as name, COUNT(r.login) as count FROM tagRelations r WHERE r.tagId IN (:tagIds) GROUP BY r.login";
     public static String selectBlackListCount = "SELECT COUNT(*) FROM blacklist WHERE fromLogin = :fromLogin AND toLogin = :toLogin";
     public static String selectUsersCountByLogin = "SELECT COUNT(*) FROM users WHERE login = :login";
     public static String selectUsersCountByActivationCode = "SELECT COUNT(*) FROM users WHERE activationCode = :activationCode";

@@ -30,6 +30,7 @@ public class UserController {
         getUserProfileSelf();
         getUsers();
         logout();
+        testExecute();
     }
 
     private UserService userService = UserService.getInstance();
@@ -61,6 +62,10 @@ public class UserController {
 
             return userService.userLogin(user);
         });
+    }
+
+    public void testExecute() {
+        post("/test", (req, res) -> userService.getTestExecute());
     }
 
     public void getUserProfile() {

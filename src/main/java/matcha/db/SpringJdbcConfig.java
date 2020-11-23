@@ -8,6 +8,7 @@ import matcha.properties.ConfigProperties;
 import matcha.user.model.UserEntity;
 import matcha.user.model.UserRegistry;
 import matcha.user.service.UserService;
+import matcha.userprofile.model.UserInfoModel;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.annotation.PreDestroy;
@@ -37,6 +38,8 @@ public class SpringJdbcConfig {
 //        createUsers(500);
 
         createUser();
+        createUser2();
+        createUser3();
 //        jdbcTemplate.update(Insert.insertImage, 0, "ABCD");
 //        jdbcTemplate.update(Insert.insertUser, "loginnnn", "password".getBytes(), null, "Artur", "Kamnev", "fermer@gmail.com", 1, 0, new Date(), "salt_test".getBytes(), null);
 //        jdbcTemplate.update(Insert.insertProfile, 22, 1, 0, "Simple fermer", "fermer", null, 1);
@@ -63,19 +66,107 @@ public class SpringJdbcConfig {
         UserEntity user_1 = userService.getUserByLogin("User_1");
         System.err.println(user_1.getActivationCode());
 
-        ProfileEntity profileByIdWithImages = profileService.getProfileByIdWithImages(user_1.getProfileId());
-        profileByIdWithImages.setAge(22);
-        profileByIdWithImages.setGender(1);
-        profileByIdWithImages.setPreference(List.of(3));
-        profileByIdWithImages.setTags(List.of("123"));
-        profileByIdWithImages.setFilled(true);
-        profileByIdWithImages.setBiography("asdasdasd");
-        System.err.println(profileByIdWithImages.getImages().size());
+        UserInfoModel userInfo = new UserInfoModel();
+        userInfo.setLogin(user_1.getLogin());
+        userInfo.setLocation(user_1.getLocation());
+        userInfo.setEmail(user_1.getEmail());
+        userInfo.setLname(user_1.getLname());
+        userInfo.setFname(user_1.getFname());
+//        ProfileEntity profileByIdWithImages = profileService.getProfileByIdWithImages(user_1.getProfileId());
+        userInfo.setAge(22);
+        userInfo.setGender(1);
+        userInfo.setPreference(List.of(3));
+        userInfo.setTags(List.of("tag2", "tag3"));
+        userInfo.setBiography("asdasdasd");
 
-        Image image = profileByIdWithImages.getImages().get(0);
+        Image image = new Image();
         image.setAvatar(true);
         image.setSrc("https://i.ibb.co/cw9TnX9/0f6339673fed.jpg");
-        profileService.updateProfile(profileByIdWithImages.getId(), profileByIdWithImages);
+        image.setIndex(1);
+
+        userInfo.setImages(List.of(image));
+
+        userService.saveUserInfo(userInfo);
+
+//        profileService.updateProfile(profileByIdWithImages.getId(), profileByIdWithImages);
+    }
+
+    private void createUser2() {
+        String value = "-1";
+        Location location = new Location();
+        location.setX(1.1);
+        location.setY(1.1);
+        UserRegistry userRegistry = new UserRegistry(
+                "User_2", "123", "fname", "lname", value + "@mail.ru", Calendar.getInstance().getTime(), location
+        );
+        userService.userRegistration(userRegistry);
+
+
+        UserEntity user_1 = userService.getUserByLogin("User_2");
+        System.err.println(user_1.getActivationCode());
+
+        UserInfoModel userInfo = new UserInfoModel();
+        userInfo.setLogin(user_1.getLogin());
+        userInfo.setLocation(user_1.getLocation());
+        userInfo.setEmail(user_1.getEmail());
+        userInfo.setLname(user_1.getLname());
+        userInfo.setFname(user_1.getFname());
+//        ProfileEntity profileByIdWithImages = profileService.getProfileByIdWithImages(user_1.getProfileId());
+        userInfo.setAge(22);
+        userInfo.setGender(1);
+        userInfo.setPreference(List.of(3));
+        userInfo.setTags(List.of("tag2", "tag1"));
+        userInfo.setBiography("asdasdasd");
+
+        Image image = new Image();
+        image.setAvatar(true);
+        image.setSrc("https://i.ibb.co/cw9TnX9/0f6339673fed.jpg");
+        image.setIndex(1);
+
+        userInfo.setImages(List.of(image));
+
+        userService.saveUserInfo(userInfo);
+
+//        profileService.updateProfile(profileByIdWithImages.getId(), profileByIdWithImages);
+    }
+
+    private void createUser3() {
+        String value = "-1";
+        Location location = new Location();
+        location.setX(1.1);
+        location.setY(1.1);
+        UserRegistry userRegistry = new UserRegistry(
+                "User_3", "123", "fname", "lname", value + "@mail.ru", Calendar.getInstance().getTime(), location
+        );
+        userService.userRegistration(userRegistry);
+
+
+        UserEntity user_1 = userService.getUserByLogin("User_3");
+        System.err.println(user_1.getActivationCode());
+
+        UserInfoModel userInfo = new UserInfoModel();
+        userInfo.setLogin(user_1.getLogin());
+        userInfo.setLocation(user_1.getLocation());
+        userInfo.setEmail(user_1.getEmail());
+        userInfo.setLname(user_1.getLname());
+        userInfo.setFname(user_1.getFname());
+//        ProfileEntity profileByIdWithImages = profileService.getProfileByIdWithImages(user_1.getProfileId());
+        userInfo.setAge(22);
+        userInfo.setGender(1);
+        userInfo.setPreference(List.of(3));
+        userInfo.setTags(List.of("tag4", "tag5"));
+        userInfo.setBiography("asdasdasd");
+
+        Image image = new Image();
+        image.setAvatar(true);
+        image.setSrc("https://i.ibb.co/cw9TnX9/0f6339673fed.jpg");
+        image.setIndex(1);
+
+        userInfo.setImages(List.of(image));
+
+        userService.saveUserInfo(userInfo);
+
+//        profileService.updateProfile(profileByIdWithImages.getId(), profileByIdWithImages);
     }
 
     private void createUsers(Integer usersCount) {

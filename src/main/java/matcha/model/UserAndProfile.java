@@ -42,7 +42,7 @@ public class UserAndProfile implements Serializable {
         gender = profile.getGender();
         preference = profile.getPreference();
         biography = profile.getBiography();
-        tags = profile.getTags();
+//        tags = profile.getTags();
         images = profile.getImages();
         time = user.getTime();
         location = user.getLocation();

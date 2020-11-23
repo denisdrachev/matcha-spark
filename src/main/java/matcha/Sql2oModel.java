@@ -5,8 +5,6 @@ import org.sql2o.Connection;
 import org.sql2o.Sql2o;
 import org.sql2o.converters.UUIDConverter;
 import org.sql2o.quirks.NoQuirks;
-import org.sql2o.quirks.OracleQuirks;
-import org.sql2o.quirks.PostgresQuirks;
 
 import java.sql.Timestamp;
 import java.util.Date;

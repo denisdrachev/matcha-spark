@@ -5,6 +5,8 @@ import matcha.blacklist.model.BlackListMessage;
 import matcha.blacklist.service.BlackListService;
 import matcha.location.model.Location;
 import matcha.location.service.LocationService;
+import matcha.tag.model.Tag;
+import matcha.tag.service.TagService;
 import matcha.user.model.UserEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,11 +23,13 @@ public class LocationsController {
 
     private final LocationService locationService = LocationService.getInstance();
     private final BlackListService blackListService = BlackListService.getInstance();
+    private final TagService tagService = TagService.getInstance();
 
 
     public LocationsController() {
         registration();
         getAllBlackList();
+        getAllTags();
     }
 
 //    @GetMapping("/locations")
@@ -55,6 +59,17 @@ public class LocationsController {
                 return allBlackList.stream().map(location -> "<p>" + location + "</p>").collect(Collectors.joining());
             else
                 return "<p>Filed to load blacklist</p>";
+        });
+    }
+
+    public void getAllTags() {
+        get("/tags", (req, res) -> {
+            System.err.println("/tags");
+            List<Tag> allTags = tagService.getAllTags();
+            if (allTags != null)
+                return allTags.stream().map(location -> "<p>" + location + "</p>").collect(Collectors.joining());
+            else
+                return "<p>Filed to load tags</p>";
         });
     }
 }

@@ -20,8 +20,8 @@ public class ProfileRowMapper implements RowMapper<ProfileEntity> {
         if (rs.getString("preference") != null)
             profile.setPreference(Stream.of(rs.getString("preference").split(","))
                     .map(Integer::parseInt).collect(Collectors.toList()));
-        if (rs.getString("tags") != null)
-            profile.setTags(Arrays.asList(rs.getString("tags").split(",")));
+//        if (rs.getString("tags") != null)
+//            profile.setTags(Arrays.asList(rs.getString("tags").split(",")));
         profile.setFilled(rs.getBoolean("isFilled"));
         return profile;
     }
