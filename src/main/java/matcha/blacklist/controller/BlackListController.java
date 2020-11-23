@@ -24,12 +24,9 @@ public class BlackListController {
         saveBlackListMessage();
     }
 
-//    @PostMapping(value = "/blacklist/save", produces = "application/json")
     public void saveBlackListMessage() {
 
         post("/blacklist/save", (req, res) -> {
-
-//            String token = req.cookie("token");
             String token = req.headers("Authorization");
 
             if (token == null || token.isEmpty()) {

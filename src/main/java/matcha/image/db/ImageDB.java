@@ -1,27 +1,16 @@
 package matcha.image.db;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import matcha.Sql2oModel;
-import matcha.db.crud.Drop;
+import matcha.db.crud.Delete;
 import matcha.db.crud.Insert;
 import matcha.db.crud.Select;
 import matcha.db.crud.Update;
 import matcha.exception.context.image.LoadImageException;
 import matcha.exception.db.image.*;
 import matcha.image.model.Image;
-import matcha.location.model.Location;
-import matcha.model.rowMapper.ImageRowMapper;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.PreparedStatementCreator;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
-import org.springframework.stereotype.Service;
 import org.sql2o.Sql2o;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.List;
 
 @Slf4j
@@ -122,7 +111,7 @@ public class ImageDB {
     public void dropImageById(String id) {
         log.info("Drop image by id: {}", id);
         try (org.sql2o.Connection conn = sql2o.beginTransaction()) {
-            int result = conn.createQuery(Drop.deleteImageById)
+            int result = conn.createQuery(Delete.deleteImageById)
                     .addParameter("id", id)
                     .executeUpdate().getResult();
 //            int drop = jdbcTemplate.update(Drop.deleteImageById, id);

@@ -1,0 +1,6 @@
+CREATE TABLE IF NOT EXISTS tagRelations
+(
+    id    INT AUTO_INCREMENT PRIMARY KEY,
+    login VARCHAR(255) NOT NULL,
+    tagId INT          NOT NULL
+);

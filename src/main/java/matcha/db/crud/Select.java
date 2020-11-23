@@ -22,6 +22,8 @@ public class Select {
     public static String selectBlacklistCountById = "SELECT COUNT(*) FROM blacklist WHERE id = ?";
     public static String selectImageLikeEventsCountById = "SELECT COUNT(*) FROM imageLikeEvents WHERE id = ?";
     public static String selectProfilesCountById = "SELECT COUNT(*) FROM profiles WHERE id = :id";
+    public static String selectTagIdByName = "SELECT id FROM tags WHERE name = :name";
+    public static String selectUserTags = "SELECT t.name FROM tagRelations r inner join tags t WHERE r.login = :login AND r.tagId = t.id";
     public static String selectBlackListCount = "SELECT COUNT(*) FROM blacklist WHERE fromLogin = :fromLogin AND toLogin = :toLogin";
     public static String selectUsersCountByLogin = "SELECT COUNT(*) FROM users WHERE login = :login";
     public static String selectUsersCountByActivationCode = "SELECT COUNT(*) FROM users WHERE activationCode = :activationCode";

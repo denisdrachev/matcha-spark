@@ -3,7 +3,7 @@ package matcha.user.db;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import matcha.Sql2oModel;
-import matcha.db.crud.Drop;
+import matcha.db.crud.Delete;
 import matcha.db.crud.Insert;
 import matcha.db.crud.Select;
 import matcha.db.crud.Update;
@@ -26,7 +26,6 @@ import org.springframework.stereotype.Service;
 import org.sql2o.Sql2o;
 
 import java.sql.Timestamp;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
@@ -154,7 +153,7 @@ public class UserDB {
     public void dropUserByLogin(String login) {
         log.info("Drop user by login: {}", login);
         try {
-            int drop = jdbcTemplate.update(Drop.deleteUserById, login);
+            int drop = jdbcTemplate.update(Delete.deleteUserById, login);
             log.info("Drop user by login result: {}", drop);
         } catch (Exception e) {
             log.warn("Exception. dropUserByLogin: {}", e.getMessage());

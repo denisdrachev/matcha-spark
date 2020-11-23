@@ -1,12 +1,9 @@
 package matcha.profile.controller;
 
-import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import matcha.image.service.ImageService;
 import matcha.profile.service.ProfileService;
-import matcha.response.Response;
 import matcha.user.service.UserService;
-import matcha.userprofile.model.UserInfoModel;
 import matcha.validator.ValidationMessageService;
 
 import static spark.Spark.post;
@@ -25,27 +22,6 @@ public class ProfileController {
 
     public void profileUpdate() {
 
-        post("/profile-update", (req, res) -> {
-
-            String token = req.headers("Authorization");
-
-            if (token == null || token.isEmpty()) {
-                log.info("Token: {} Пользователь не авторизован.", token);
-                return validationMessageService.prepareErrorMessage("Вы не авторизованы.");
-            }
-
-            UserInfoModel userProfile = new Gson().fromJson(req.body(), UserInfoModel.class);
-            log.info("Request update user profile:{} token:{}", userProfile, token);
-
-            Response response = validationMessageService.validateMessage(userProfile);
-            if (response != null) {
-                return response;
-            }
-
-            userService.checkUserByLoginAndActivationCode(userProfile.getLogin(), token);
-            imageService.checkImagesIsCorrect(userProfile.getImages());
-            userService.saveUserInfo(userProfile);
-            return validationMessageService.prepareMessageOkOnlyType();
-        });
+        post("/profile-update", (req, res) -> userService.profileUpdate(req.headers("Authorization"), req.body()));
     }
 }

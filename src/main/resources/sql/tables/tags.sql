@@ -1,0 +1,6 @@
+CREATE TABLE IF NOT EXISTS tags
+(
+    id    INT AUTO_INCREMENT PRIMARY KEY,
+    name  VARCHAR(50) NOT NULL,
+    count INT         NOT NULL
+);

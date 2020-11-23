@@ -2,6 +2,8 @@ package matcha.event.service;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import matcha.blacklist.model.BlackListMessage;
+import matcha.blacklist.service.BlackListService;
 import matcha.connected.model.ConnectedEntity;
 import matcha.connected.service.ConnectedService;
 import matcha.event.manipulation.EventManipulator;
@@ -24,6 +26,7 @@ public class EventService {
     private EventManipulator eventManipulator = new EventManipulator();
 
     private static EventService eventService;
+    private BlackListService blackListService = BlackListService.getInstance();
 
     public static EventService getInstance() {
         if (eventService == null) {
@@ -70,6 +73,9 @@ public class EventService {
 //    }
 
     public void setLikeOrUnlike(String fromLogin, String toLogin, int likeValue) {
+
+        BlackListMessage blackListFrom = blackListService.getBlackListMessage(toLogin, fromLogin);
+
         if (likeValue == 1) {
             Event eventLike = new Event(EventType.LIKE, fromLogin, true, toLogin);
             saveNewEvent(eventLike);
@@ -80,7 +86,8 @@ public class EventService {
                 connectedService.saveConnected(connected);
 
                 Event eventConnectedTo = new Event(EventType.CONNECTED, fromLogin, true, toLogin);
-                Event eventConnectedFrom = new Event(EventType.CONNECTED, toLogin, true, fromLogin);
+                Event eventConnectedFrom = new Event(EventType.CONNECTED, toLogin, !blackListFrom.isBlocked(),
+                        fromLogin, !blackListFrom.isBlocked());
                 saveNewEvent(eventConnectedFrom);
                 saveNewEvent(eventConnectedTo);
             }
@@ -96,11 +103,22 @@ public class EventService {
                 connectedService.saveConnected(connected);
 
                 Event eventDisconnectedTo = new Event(EventType.DISCONNECTED, fromLogin, true, toLogin);
-                Event eventDisconnectedFrom = new Event(EventType.DISCONNECTED, toLogin, true, fromLogin);
+                Event eventDisconnectedFrom = new Event(EventType.DISCONNECTED, toLogin, !blackListFrom.isBlocked(),
+                        fromLogin, !blackListFrom.isBlocked());
                 saveNewEvent(eventDisconnectedTo);
                 saveNewEvent(eventDisconnectedFrom);
             }
         }
+
+        Event newEventLoaded = new Event(
+                likeValue == 1 ? EventType.LIKED : EventType.UNLIKED,
+                toLogin,
+                likeValue == 1 && !blackListFrom.isBlocked(),
+                fromLogin,
+                likeValue == 1 && !blackListFrom.isBlocked()
+        );
+        eventService.saveNewEvent(newEventLoaded);
+
 
 //        List event = new Event(eventType, fromLogin, true, toLogin);
         //TODO надо ли это? мб можно просто смотреть последний лайк или дислайк

@@ -13,6 +13,7 @@ import matcha.converter.Utils;
 import matcha.event.model.Event;
 import matcha.event.model.EventWithUserInfo;
 import matcha.event.service.EventService;
+import matcha.image.service.ImageService;
 import matcha.location.model.Location;
 import matcha.location.service.LocationService;
 import matcha.mail.MailService;
@@ -69,6 +70,7 @@ public class UserService implements UserInterface {
     private EventService eventService = EventService.getInstance();
     private BlackListService blackListService = BlackListService.getInstance();
     private ConnectedService connectedService = ConnectedService.getInstance();
+    private ImageService imageService = ImageService.getInstance();
     private ValidationMessageService validationMessageService = ValidationMessageService.getInstance();
 
     public void userRegistration(UserRegistry userRegistry) {
@@ -151,8 +153,12 @@ public class UserService implements UserInterface {
         ProfileEntity profileById = profileService.getProfileByIdWithImagesNotEmpty(user.getProfileId());
         BlackListMessage blackList = blackListService.getBlackListMessage(userByToken.getLogin(), user.getLogin());
 
-        Event newEvent = new Event(EventType.PROFILE_LOAD, userByToken.getLogin(), true, login);
-        eventService.saveNewEvent(newEvent);
+        Event newEventLoad = new Event(EventType.PROFILE_LOAD, userByToken.getLogin(), true, login);
+        eventService.saveNewEvent(newEventLoad);
+
+        BlackListMessage blackListMessage = blackListService.getBlackListMessage(user.getLogin(), login);
+        Event newEventLoaded = new Event(EventType.PROFILE_LOADED, userByToken.getLogin(), !blackListMessage.isBlocked(), login, !blackListMessage.isBlocked());
+        eventService.saveNewEvent(newEventLoaded);
 
         Integer userRating = eventService.getUserRatingByLogin(user.getLogin());
 
@@ -188,6 +194,31 @@ public class UserService implements UserInterface {
         eventService.saveNewEvent(newEvent);
     }
 
+
+    public Response profileUpdate(String token, String body) {
+
+        log.info("Request /profile-update body: {}", body);
+
+        if (token == null || token.isEmpty()) {
+            log.info("Token: {} Пользователь не авторизован.", token);
+            return validationMessageService.prepareErrorMessage("Вы не авторизованы.");
+        }
+
+        UserInfoModel userProfile = new Gson().fromJson(body, UserInfoModel.class);
+
+        log.info("Request update user profile:{}", userProfile);
+
+        Response response = validationMessageService.validateMessage(userProfile);
+        if (response != null) {
+            return response;
+        }
+
+        userService.checkUserByLoginAndActivationCode(userProfile.getLogin(), token);
+        imageService.checkImagesIsCorrect(userProfile.getImages());
+        userService.saveUserInfo(userProfile);
+        return validationMessageService.prepareMessageOkOnlyType();
+    }
+
     public void checkUserByLoginAndActivationCode(String login, String token) {
         userManipulator.checkUserByLoginAndActivationCode(login, token);
     }
@@ -213,7 +244,7 @@ public class UserService implements UserInterface {
         } else {
             eventType = EventType.USER_UNBLOCK;
         }
-        Event newEvent = new Event(eventType, message.getFromLogin(), true, message.getToLogin());
+        Event newEvent = new Event(eventType, message.getFromLogin(), false, message.getToLogin(), false);
         eventService.saveNewEvent(newEvent);
 
         return validationMessageService.prepareMessageOkOnlyType();
@@ -304,7 +335,8 @@ public class UserService implements UserInterface {
         }
 
         try {
-            Type empMapType = new TypeToken<Map<String, String>>() {}.getType();
+            Type empMapType = new TypeToken<Map<String, String>>() {
+            }.getType();
             Map<String, String> map = gson.fromJson(body, empMapType);
             value = Integer.parseInt(map.get("value"));
             loginParam = map.get("login");

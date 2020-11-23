@@ -1,9 +1,8 @@
 package matcha.profile.db;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import matcha.Sql2oModel;
-import matcha.db.crud.Drop;
+import matcha.db.crud.Delete;
 import matcha.db.crud.Insert;
 import matcha.db.crud.Select;
 import matcha.db.crud.Update;
@@ -15,14 +14,13 @@ import matcha.exception.db.UpdateProfileByIdDBException;
 import matcha.profile.model.ProfileEntity;
 import matcha.profile.model.ProfileEntityWithoutImages;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Service;
 import org.sql2o.Sql2o;
 
 import java.util.List;
 
 @Slf4j
-@Service
-@RequiredArgsConstructor
+//@Service
+//@RequiredArgsConstructor
 public class ProfileDB {
 
     private final JdbcTemplate jdbcTemplate = new JdbcTemplate();
@@ -136,7 +134,7 @@ public class ProfileDB {
         log.info("Drop profile by id. id: {}", id);
         try (org.sql2o.Connection conn = sql2o.beginTransaction()) {
 
-            int result = conn.createQuery(Drop.deleteProfileById)
+            int result = conn.createQuery(Delete.deleteProfileById)
                     .addParameter("id", id)
                     .executeUpdate().getResult();
             conn.commit();

@@ -45,9 +45,9 @@ CREATE TABLE IF NOT EXISTS rating
 
 CREATE TABLE IF NOT EXISTS blacklist
 (
-    toLogin   VARCHAR(255)   NOT NULL,
-    fromLogin VARCHAR(255)   NOT NULL,
-    isBlocked   BOOLEAN
+    toLogin   VARCHAR(255) NOT NULL,
+    fromLogin VARCHAR(255) NOT NULL,
+    isBlocked BOOLEAN
 );
 
 CREATE TABLE IF NOT EXISTS locations
@@ -95,8 +95,23 @@ CREATE TABLE IF NOT EXISTS events
     needShow BOOLEAN
 );
 
-CREATE TABLE IF NOT EXISTS connected(
-                                        toLogin   VARCHAR(255)   NOT NULL,
-                                        fromLogin VARCHAR(255)   NOT NULL,
-                                        isConnected   BOOLEAN
+CREATE TABLE IF NOT EXISTS connected
+(
+    toLogin     VARCHAR(255) NOT NULL,
+    fromLogin   VARCHAR(255) NOT NULL,
+    isConnected BOOLEAN
+);
+
+CREATE TABLE IF NOT EXISTS tags
+(
+    id    INT AUTO_INCREMENT PRIMARY KEY,
+    name  VARCHAR(50) NOT NULL,
+    count INT         NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS tagRelations
+(
+    id    INT AUTO_INCREMENT PRIMARY KEY,
+    login VARCHAR(255) NOT NULL,
+    tagId INT          NOT NULL
 );

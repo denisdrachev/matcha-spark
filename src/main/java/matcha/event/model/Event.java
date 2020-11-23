@@ -33,4 +33,12 @@ public class Event {
         this.active = active;
         this.data = data;
     }
+
+    public Event(String type, String login, boolean active, String data, boolean needShow) {
+        this.type = type;
+        this.login = login;
+        this.active = active;
+        this.data = data;
+        this.needShow = needShow;
+    }
 }
