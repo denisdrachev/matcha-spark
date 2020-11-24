@@ -1,7 +1,6 @@
 package matcha.image.manipulation;
 
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import matcha.image.db.ImageDB;
 import matcha.image.model.Image;
@@ -39,5 +38,9 @@ public class ImageManipulator {
 
     public List<Image> getAllImages() {
         return imageDB.getAllImages();
+    }
+
+    public void updateClearAvatarByProfileId(Integer profileId) {
+        imageDB.updateClearAvatarByProfileId(profileId);
     }
 }

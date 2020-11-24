@@ -35,7 +35,10 @@ public class ProfileService {
 
     public void saveProfile(ProfileEntity profile) {
         profileManipulator.updateProfile(profile);
-        imageService.saveImages(profile.getImages());
+        if (profile.getImages().size() > 0) {
+            imageService.clearAvatarValueBoProfileId(profile.getId());
+            imageService.saveImages(profile.getImages());
+        }
     }
 
     public ProfileEntity getProfileById(int id) {
@@ -67,13 +70,13 @@ public class ProfileService {
 
 
         newProfile.getImages().forEach(image -> {
-            System.err.println("IN CYCLE");
+//            System.err.println("IN CYCLE");
             for (Image img : images) {
-                System.err.println("image.getIndex() == img.getIndex(): " + (image.getIndex() == img.getIndex()));
+//                System.err.println("image.getIndex() == img.getIndex(): " + (image.getIndex() == img.getIndex()));
                 if (image.getIndex() == img.getIndex()) {
-                    System.err.println("INNER! ");
-                    System.err.println(image);
-                    System.err.println(img);
+//                    System.err.println("INNER! ");
+//                    System.err.println(image);
+//                    System.err.println(img);
                     image.setId(img.getId());
                 }
             }

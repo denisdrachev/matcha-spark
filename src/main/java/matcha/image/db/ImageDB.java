@@ -7,6 +7,7 @@ import matcha.db.crud.Insert;
 import matcha.db.crud.Select;
 import matcha.db.crud.Update;
 import matcha.exception.context.image.LoadImageException;
+import matcha.exception.db.UpdateDBException;
 import matcha.exception.db.image.*;
 import matcha.image.model.Image;
 import org.sql2o.Sql2o;
@@ -105,6 +106,20 @@ public class ImageDB {
         } catch (Exception e) {
             log.warn("Exception. updateImageById: {}", e.getMessage());
             throw new UpdateImageByIdDBException();
+        }
+    }
+
+    public void updateClearAvatarByProfileId(int profileId) {
+        log.info("Update clear avatar by profileId: {}", profileId);
+        try (org.sql2o.Connection conn = sql2o.open()) {
+            int result = conn.createQuery(Update.updateClearAvatarByProfileId)
+                    .addParameter("profileId", profileId)
+                    .executeUpdate().getResult();
+            conn.commit();
+            log.info("Update clear avatar by profileId. Result: {}", result);
+        } catch (Exception e) {
+            log.warn("Exception. updateClearAvatarByProfileId: {}", e.getMessage());
+            throw new UpdateDBException();
         }
     }
 

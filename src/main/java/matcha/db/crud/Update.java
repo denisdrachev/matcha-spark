@@ -2,6 +2,7 @@ package matcha.db.crud;
 
 public class Update {
     public static String updateImageById = "UPDATE images set src = :src, avatar = :avatar WHERE id = :id";
+    public static String updateClearAvatarByProfileId = "UPDATE images set avatar = FALSE WHERE profileId = :profileId";
     public static String updateLocationById = "UPDATE locations set active = :active, time = :time, x = :x, y = :y, userSet = :userSet " +
             "   WHERE profileId = :profileId AND " +
             "((:userSet = TRUE AND userSet = TRUE) OR userSet = FALSE)";

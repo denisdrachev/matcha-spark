@@ -5,11 +5,9 @@ import lombok.NoArgsConstructor;
 import matcha.exception.context.image.ValidateAvatarInImagesException;
 import matcha.image.manipulation.ImageManipulator;
 import matcha.image.model.Image;
-import matcha.profile.service.ProfileService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -59,5 +57,9 @@ public class ImageService implements ImageInterface {
         if (images.stream().filter(image -> image.getIndex() >= 0 && image.getIndex() <= 4).count() != images.size())
             throw new ValidateAvatarInImagesException();
         //TODO добавить провеоку на уникальность индексов
+    }
+
+    public void clearAvatarValueBoProfileId(Integer profileId) {
+        imageManipulator.updateClearAvatarByProfileId(profileId);
     }
 }
