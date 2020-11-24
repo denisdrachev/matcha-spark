@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import matcha.location.manipulation.LocationManipulator;
 import matcha.location.model.Location;
-import matcha.user.service.UserService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,8 +28,15 @@ public class LocationService {
 
     private LocationManipulator locationManipulator = new LocationManipulator();
 
-    public Location getLocationByUserId(int userId) {
-        return locationManipulator.getLocationByUserIdAndActive(userId);
+    public Location getLocationIfActiveByProfileId(int profileId) {
+        Location location = locationManipulator.getLocationByProfileId(profileId);
+        if (!location.isActive())
+            return null;
+        return location;
+    }
+
+    public Location getLocationByProfileId(int profileId) {
+        return locationManipulator.getLocationByProfileId(profileId);
     }
 
     public List<Location> getAllLocations() {
@@ -41,7 +47,24 @@ public class LocationService {
         locationManipulator.deactivationLocationByLogin(profileId);
     }
 
+    public void updateUserLocation(Location location) {
+        locationManipulator.updateLocation(location);
+    }
+
+    public void initLocationAndUpdate(Location location, Integer profileId, boolean isActive, boolean userSet) {
+        if (location != null) {
+            location.setProfileId(profileId);
+            location.setActive(isActive);
+            location.setUserSet(userSet);
+            updateUserLocation(location);
+        }
+    }
+
     public void saveLocation(Location location) {
         locationManipulator.insertLocation(location);
+    }
+
+    public Location getLastLocationByProfileId(Integer profileId) {
+        return locationManipulator.getLastLocationByProfileId(profileId);
     }
 }

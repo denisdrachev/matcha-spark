@@ -6,7 +6,7 @@ public class Insert {
     public static String insertTag = "INSERT INTO tags (name, count) VALUES (:name, 1)";
     public static String insertTagRelation = "INSERT INTO tagRelations (login, tagId) VALUES (:login, :tagId)";
     public static String insertEvent = "INSERT INTO events (type, login, time, active, data, needShow) VALUES (:type, :login, :time, :active, :data, :needShow)";
-    public static String insertLocation = "INSERT INTO locations (profileId, x, y, time, active) VALUES (:profileId, :x, :y, :time, :active)";
+    public static String insertLocation = "INSERT INTO locations (profileId, x, y, time, active, userSet) VALUES (:profileId, :x, :y, :time, :active, :userSet)";
     public static String insertRaiting = "INSERT INTO rating (rating, profile) VALUES (?, ?)";
     public static String insertBlacklist = "INSERT INTO blacklist (fromLogin, toLogin, isBlocked) VALUES (:fromLogin, :toLogin, :isBlocked)";
     public static String insertConnected = "INSERT INTO connected (fromLogin, toLogin, isConnected) VALUES (:fromLogin, :toLogin, :isConnected)";

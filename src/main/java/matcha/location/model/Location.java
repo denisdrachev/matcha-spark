@@ -25,6 +25,8 @@ public class Location implements Serializable {
     private Double y;
     @ToString.Exclude
     private boolean active = false;
+    @ToString.Exclude
+    private boolean userSet = false;
     private Date time = Calendar.getInstance().getTime();
 
     public void setProfileId(int profileId) {

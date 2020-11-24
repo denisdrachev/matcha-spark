@@ -17,14 +17,9 @@ public class TagService {
         return tagService;
     }
 
-    public void saveTags(String login, String tags) {
-        System.err.println("LOGIN: " + login);
-        System.err.println("TAGS: " + tags);
+    public void saveTags(String login, List<String> tags) {
         tagManipulator.clearUserTags(login);
-        if (tags == null || tags.isEmpty())
-            return;
-        String[] split = tags.split(",");
-        for (String tag : split) {
+        for (String tag : tags) {
             int tagId = tagManipulator.saveTag(tag);
             tagManipulator.saveTagForUser(login, tagId);
         }

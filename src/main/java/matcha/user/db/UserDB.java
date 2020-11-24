@@ -7,15 +7,13 @@ import matcha.db.crud.Delete;
 import matcha.db.crud.Insert;
 import matcha.db.crud.Select;
 import matcha.db.crud.Update;
-import matcha.exception.db.DropUserByLoginDBException;
-import matcha.exception.db.GetUserCountByLoginDBException;
-import matcha.exception.db.GetUserProfileIdByLoginDBException;
-import matcha.exception.db.UpdateUserByIdDBException;
+import matcha.exception.db.*;
 import matcha.exception.db.location.GetLocationsException;
 import matcha.exception.service.UserRegistryException;
 import matcha.exception.user.UserAuthException;
 import matcha.exception.user.UserLoginException;
 import matcha.exception.user.UserNotFoundException;
+import matcha.model.SearchModel;
 import matcha.user.model.UserEntity;
 import matcha.user.model.UserEntity2;
 import matcha.user.model.UserUpdateEntity;
@@ -284,7 +282,7 @@ public class UserDB {
 
     public List<UserEntity> getAllUsers() {
         log.info("Get all users");
-        try (org.sql2o.Connection conn = sql2o.beginTransaction()) {
+        try (org.sql2o.Connection conn = sql2o.open()) {
 
             List<UserEntity> users = conn.createQuery(Select.selectUsers)
                     .executeAndFetch(UserEntity.class);
@@ -296,6 +294,33 @@ public class UserDB {
         } catch (Exception e) {
             log.warn("Exception. getLocations: {}", e.getMessage());
             throw new GetLocationsException();
+        }
+    }
+
+    public List<UserEntity> getUsersWithFilters(SearchModel searchModel) {
+        log.info("Get users with filters: {}", searchModel);
+        try (org.sql2o.Connection conn = sql2o.open()) {
+
+            //limit ageMax ageMin minX maxX minY maxY tagIds
+            // + рейтинг славы, + общие теги
+            //UserSearchEntity
+            List<UserEntity> users = conn.createQuery(Select.selectUsersWithFilters)
+                    .addParameter("ageMax", searchModel.getMaxAge())
+                    .addParameter("ageMin", searchModel.getMinAge())
+                    .addParameter("minX", searchModel.getMinX())
+                    .addParameter("maxX", searchModel.getMaxX())
+                    .addParameter("minY", searchModel.getMinY())
+                    .addParameter("maxY", searchModel.getMaxY())
+                    .addParameter("tagIds", searchModel.getTags())
+                    .executeAndFetch(UserEntity.class);
+            conn.commit();
+
+            log.info("Get users with filters. Result count: {}", users.size());
+            return users;
+        } catch (Exception e) {
+            log.warn("Exception. getUsersWithFilters: {}", e.getMessage());
+            e.printStackTrace();
+            throw new SelectDBException();
         }
     }
 }

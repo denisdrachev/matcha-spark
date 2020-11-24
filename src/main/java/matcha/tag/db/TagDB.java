@@ -57,7 +57,7 @@ public class TagDB {
         log.info("Get user tags only Ids. Login: {}", login);
         try (org.sql2o.Connection conn = sql2o.open()) {
 
-            List<Integer> tagsIds = conn.createQuery(Select.selectUserTagsOnluIds)
+            List<Integer> tagsIds = conn.createQuery(Select.selectUserTagsOnlyIds)
                     .addParameter("login", login)
                     .executeAndFetch(Integer.class);
             conn.commit();

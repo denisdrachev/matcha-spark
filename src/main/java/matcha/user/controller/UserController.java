@@ -52,8 +52,8 @@ public class UserController {
     //
     public void login() {
         post("/login", (req, res) -> {
+            log.info("Request /login {}", req.body());
             UserInfo user = new Gson().fromJson(req.body(), UserInfo.class);
-            log.info("Income registration request. User: {}", user);
 
             Response response = validationMessageService.validateMessage(user);
             if (response != null) {
@@ -69,7 +69,6 @@ public class UserController {
     }
 
     public void getUserProfile() {
-
 
         get("/profile-get/:login", (req, res) -> {
             log.info("Request /profile-get/:login");
@@ -88,7 +87,6 @@ public class UserController {
 
     public void getUserProfileSelf() {
 
-
         get("/profile-get", (req, res) -> {
             log.info("Request /profile-get");
 
@@ -106,20 +104,18 @@ public class UserController {
     }
 
     public void getUsers() {
-
-        get("/get-users", (req, res) -> {
-            log.info("Request /get-users");
-
-            String token = req.headers("Authorization");
-
-            if (token == null || token.isEmpty()) {
-                log.info("Token: {} Пользователь не авторизован.", token);
-                return validationMessageService.prepareErrorMessage("Вы не авторизованы.");
-            }
-
-            log.info("Request get users");
-            return validationMessageService.prepareMessageOkData(gson.toJsonTree(userService.getAllUsers()));
-        });
+        get("/get-users", (req, res) -> userService.getUsers(
+                req.headers("Authorization"),
+                req.queryParams("ageMin"),
+                req.queryParams("ageMax"),
+                req.queryParams("minRating"),
+                req.queryParams("maxRating"),
+                req.queryParams("deltaRadius"),
+                req.queryParams("tags"),
+                req.queryParams("limit"),
+                req.queryParams("offset")
+                )
+        );
     }
 
     public void logout() {

@@ -17,6 +17,7 @@ import matcha.image.service.ImageService;
 import matcha.location.model.Location;
 import matcha.location.service.LocationService;
 import matcha.mail.MailService;
+import matcha.model.SearchModel;
 import matcha.profile.model.ProfileEntity;
 import matcha.profile.model.UserProfileWithEmail;
 import matcha.profile.model.UserProfileWithoutEmail;
@@ -125,7 +126,8 @@ public class UserService implements UserInterface {
 
     public UserEntity getUserByLogin(String login) {
         UserEntity userByLogin = userManipulator.getUserByLogin(login);
-        Location locationByLogin = locationService.getLocationByUserId(userByLogin.getId());
+        //TODO тут исправил, проверить
+        Location locationByLogin = locationService.getLocationByProfileId(userByLogin.getProfileId());
         userByLogin.setLocation(locationByLogin);
         return userByLogin;
     }
@@ -136,7 +138,7 @@ public class UserService implements UserInterface {
 
     public void saveUser(UserUpdateEntity user, int profileId) {
         //TODO ВМЕСТО ЛОГИНА НУЖНО ПРОФИЛЬ_ИД кидать
-        locationService.deactivationLocationByLogin(profileId);
+//        locationService.deactivationLocationByLogin(profileId);
         userManipulator.userUpdate(user);
     }
 
@@ -150,7 +152,7 @@ public class UserService implements UserInterface {
         UserEntity userByToken = getUserByToken(token);
 
         UserEntity user = getUserByLogin(login != null ? login : userByToken.getLogin());
-        Location activeUserLocation = locationService.getLocationByUserId(user.getId());
+        Location activeUserLocation = locationService.getLocationIfActiveByProfileId(user.getProfileId());
         user.setLocation(activeUserLocation);
         ProfileEntity profileById = profileService.getProfileByIdWithImagesNotEmpty(user.getProfileId());
         BlackListMessage blackList = blackListService.getBlackListMessage(userByToken.getLogin(), user.getLogin());
@@ -183,16 +185,17 @@ public class UserService implements UserInterface {
         saveUser(new UserUpdateEntity(userInfo), currentUser.getProfileId());
 
         if (userInfo.getLocation() != null) {
-            userInfo.getLocation().setProfileId(currentUser.getId());
-            userInfo.getLocation().setActive(true);
-            locationService.saveLocation(userInfo.getLocation());
+            locationService.initLocationAndUpdate(userInfo.getLocation(), currentUser.getProfileId(), true, true);
+        } else {
+            Location locationByProfileId = locationService.getLocationByProfileId(currentUser.getProfileId());
+            locationService.initLocationAndUpdate(locationByProfileId, currentUser.getProfileId(), false, true);
         }
 
 //        Integer userProfileId = userManipulator.getUserProfileId(userInfo.getLogin());
         ProfileEntity newProfile = new ProfileEntity(currentUser.getProfileId(), userInfo);
         newProfile.setFilled(true);
 
-        tagService.saveTags(userInfo.getLogin(), String.join(",", userInfo.getTags()));
+        tagService.saveTags(userInfo.getLogin(), userInfo.getTags());
         profileService.updateProfile(currentUser.getProfileId(), newProfile);
 
         Event newEvent = new Event(EventType.PROFILE_UPDATE, userInfo.getLogin(), true, "");
@@ -202,7 +205,7 @@ public class UserService implements UserInterface {
 
     public Response profileUpdate(String token, String body) {
 
-        log.info("Request /profile-update body: {}", body);
+        log.info("Request /profile-update {}", body);
 
         if (token == null || token.isEmpty()) {
             log.info("Token: {} Пользователь не авторизован.", token);
@@ -210,8 +213,6 @@ public class UserService implements UserInterface {
         }
 
         UserInfoModel userProfile = new Gson().fromJson(body, UserInfoModel.class);
-
-        log.info("Request update user profile:{}", userProfile);
 
         Response response = validationMessageService.validateMessage(userProfile);
         if (response != null) {
@@ -259,8 +260,12 @@ public class UserService implements UserInterface {
         return userManipulator.getAllUsers();
     }
 
+    public List<UserEntity> getUsersWithFilters(SearchModel searchModel) {
+        return userManipulator.getUsersWithFilters(searchModel);
+    }
+
     public Object getUserConnected(String token) {
-        log.info("Request get user connecteds...");
+        log.info("Request /connected");
 
         if (token == null || token.isEmpty()) {
             log.info("Token: {} Пользователь не авторизован.", token);
@@ -422,5 +427,31 @@ public class UserService implements UserInterface {
         log.info("Request /test");
         tagService.getUsersWithCommonTags(List.of(1, 2));
         return validationMessageService.prepareMessageOkOnlyType();
+    }
+
+    public Response getUsers(String token, String ageMin, String ageMax, String minRating,
+                             String maxRating, String deltaRadius, String tags, String limit, String offset) {
+        log.info("Request /get-users ageMin:{} ageMax:{} minRating:{} maxRating:{} deltaRadius:{} tags:{} limit:{} offset:{}",
+                ageMin, ageMax, minRating, maxRating, deltaRadius, tags, limit, offset);
+
+        if (token == null || token.isEmpty()) {
+            log.info("Token: {} Пользователь не авторизован.", token);
+            return validationMessageService.prepareErrorMessage("Вы не авторизованы.");
+        }
+
+        UserEntity user = userManipulator.getUserByToken(token);
+        ProfileEntity profile = profileService.getProfileById(user.getProfileId());
+        Location location = locationService.getLocationByProfileId(profile.getId());
+
+        log.info("Request get users");
+        try {
+            SearchModel searchModel =
+                    new SearchModel(location, ageMin, ageMax, minRating, maxRating, deltaRadius, tags, limit, offset);
+            return validationMessageService.prepareMessageOkData(gson.toJsonTree(
+                    userService.getUsersWithFilters(searchModel)
+            ));
+        } catch (Exception e) {
+            return validationMessageService.prepareErrorMessage("Некорректные параметры запроса.");
+        }
     }
 }

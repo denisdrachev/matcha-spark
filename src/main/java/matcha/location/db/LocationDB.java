@@ -53,11 +53,10 @@ public class LocationDB {
                     .addParameter("y", location.getY())
                     .addParameter("time", location.getTime())
                     .addParameter("active", location.isActive())
+                    .addParameter("userSet", location.isUserSet())
                     .executeUpdate().getResult();
             conn.commit();
 
-//            int insert = jdbcTemplate.update(Insert.insertLocation, location.getProfileId(),
-//                    location.getX(), location.getY(), location.getTime(), location.isActive());
             log.info("Insert location result: {}", insert);
         } catch (Exception e) {
             log.warn("Exception. insertLocation: {}", e.getMessage());
@@ -65,20 +64,16 @@ public class LocationDB {
         }
     }
 
-    public Location getLocationByUserIdAndActive(Integer profileId) {
-        log.info("Get active location by user id: {}", profileId);
-        try (org.sql2o.Connection conn = sql2o.beginTransaction()) {
+    public Location getLocationByProfileId(Integer profileId) {
+        log.info("Get active location by profileid: {}", profileId);
+        try (org.sql2o.Connection conn = sql2o.open()) {
 
-            List<Location> locations = conn.createQuery(Select.selectLocationByUserIdAndActive)
+            List<Location> locations = conn.createQuery(Select.selectLocationByProfileId)
                     .addParameter("profileId", profileId)
                     .executeAndFetch(Location.class);
             conn.commit();
 
-//            Location location = jdbcTemplate.queryForObject(Select.selectLocationByUserIdAndActive,
-//                    new LocationRowMapper(), userId);
             log.info("Get active location by login done. Result: {}", locations);
-            if (locations.isEmpty())
-                return null;
             return locations.get(0);
         } catch (Exception e) {
             e.printStackTrace();
@@ -88,17 +83,21 @@ public class LocationDB {
     }
 
     public Integer updateLocation(Location location) {
-        try (org.sql2o.Connection conn = sql2o.beginTransaction()) {
+        try (org.sql2o.Connection conn = sql2o.open()) {
             log.info("Update location {}", location);
 
             Integer update = conn.createQuery(Update.updateLocationById)
                     .addParameter("active", location.isActive())
-                    .addParameter("id", location.getId())
+                    .addParameter("profileId", location.getProfileId())
+                    .addParameter("time", location.getTime())
+                    .addParameter("x", location.getX())
+                    .addParameter("y", location.getY())
+                    .addParameter("userSet", location.isUserSet())
                     .executeUpdate().getResult();
             conn.commit();
 
 //            int update = jdbcTemplate.update(Update.updateLocationById, location.isActive(), location.getId());
-            log.info("Update location done. Result: {}", update);
+            log.info("Update location. Result: {}", update);
             return update;
         } catch (Exception e) {
             log.warn("Exception. updateLocation: {}", e.getMessage());
@@ -121,6 +120,28 @@ public class LocationDB {
         } catch (Exception e) {
             log.warn("Exception. updateActiveLocationByLogin: {}", e.getMessage());
 //            throw new UpdateLocationException();
+        }
+    }
+
+    public Location getLastLocationByProfileId(Integer profileId) {
+        log.info("Get last inactive location by profileId: {}", profileId);
+        try (org.sql2o.Connection conn = sql2o.open()) {
+
+            List<Location> locations = conn.createQuery(Select.selectLastUserLocationByProfileId)
+                    .addParameter("profileId", profileId)
+                    .executeAndFetch(Location.class);
+            conn.commit();
+
+//            Location location = jdbcTemplate.queryForObject(Select.selectLocationByUserIdAndActive,
+//                    new LocationRowMapper(), userId);
+            log.info("Get last inactive location by profileId. Result: {}", locations);
+            if (locations.isEmpty())
+                return null;
+            return locations.get(0);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.warn("Exception. getLastInactiveLocationByProfileId: {}", e.getMessage());
+            throw new GetActiveLocationByLoginException();
         }
     }
 }

@@ -15,6 +15,21 @@ public class Select {
     public static String selectImageLikeEvent = "SELECT * FROM imageLikeEvents";
     public static String selectProfile = "SELECT * FROM profiles";
     public static String selectUsers = "SELECT * FROM users";
+    public static String selectUsersWithFilters = "SELECT * FROM users u inner join inner join blacklist b inner join profiles p inner join locations l " +
+            "inner join (SELECT r.login as name, COUNT(r.login) as count FROM tagRelations r WHERE r.tagId IN (:tagIds) GROUP BY r.login) t " +
+            "inner join (SELECT ev.data, COUNT(ev.data) as count FROM events ev WHERE data = u.login) e" +
+
+            "WHERE u.profileId = p.id " +
+            "AND :login = b.fromLogin AND u.login = b.toLogin AND b.isBlocked <> TRUE" + //как будет вести себя, если нет записи в блэклисте??? //прочерка на черный список (добавить ли проверку на забаненность пользователя?)
+            "AND p.age >= :ageMin AND p.age <= :ageMax " + //возраст
+            "AND p.id = l.profileId AND " +
+            "AND l.x >= :minX AND l.x <= :maxX AND l.y >= :minY AND l.y <= :maxY " + //растояние
+            "AND u.login = t.login " + //Теги
+            "AND u.login = e.login " +
+            "ORDER BY e.count DESC LIMIT :limit";
+
+    //limit ageMax ageMin minX maxX minY maxY tagIds
+
     public static String selectAllTags = "SELECT * FROM tags";
     public static String selectAllTagRelations = "SELECT * FROM tagRelations";
 
@@ -26,7 +41,7 @@ public class Select {
     public static String selectProfilesCountById = "SELECT COUNT(*) FROM profiles WHERE id = :id";
     public static String selectTagIdByName = "SELECT id FROM tags WHERE name = :name";
     public static String selectUserTags = "SELECT t.name FROM tagRelations r inner join tags t WHERE r.login = :login AND r.tagId = t.id";
-    public static String selectUserTagsOnluIds = "SELECT t.id FROM tagRelations r inner join tags t WHERE r.login = :login AND r.tagId = t.id";
+    public static String selectUserTagsOnlyIds = "SELECT t.id FROM tagRelations r inner join tags t WHERE r.login = :login AND r.tagId = t.id";
     public static String selectUsersWithCommonTags = "SELECT r.login as name, COUNT(r.login) as count FROM tagRelations r WHERE r.tagId IN (:tagIds) GROUP BY r.login";
     public static String selectBlackListCount = "SELECT COUNT(*) FROM blacklist WHERE fromLogin = :fromLogin AND toLogin = :toLogin";
     public static String selectUsersCountByLogin = "SELECT COUNT(*) FROM users WHERE login = :login";
@@ -42,7 +57,8 @@ public class Select {
     public static String selectImageByProfileId = "SELECT * FROM images WHERE profileId = :profileId LIMIT 5";
     public static String selectLocationById = "SELECT * FROM locations WHERE id = ? LIMIT 1";
     public static String selectLocationByUser = "SELECT * FROM locations WHERE user = ?";
-    public static String selectLocationByUserIdAndActive = "SELECT * FROM locations WHERE profileId = :profileId AND active = TRUE ORDER BY time DESC LIMIT 1";
+    public static String selectLocationByProfileId = "SELECT * FROM locations WHERE profileId = :profileId";
+    public static String selectLastUserLocationByProfileId = "SELECT * FROM locations WHERE profileId = :profileId ORDER BY time DESC LIMIT 1";
     public static String selectLocations = "SELECT * FROM locations";
     public static String selectRatingById = "SELECT * FROM rating WHERE id = ? LIMIT 1";
     public static String selectBlacklistById = "SELECT * FROM blacklist WHERE id = ? LIMIT 1";

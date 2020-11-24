@@ -3,6 +3,7 @@ package matcha.profile.service;
 import lombok.extern.slf4j.Slf4j;
 import matcha.image.model.Image;
 import matcha.image.service.ImageService;
+import matcha.location.service.LocationService;
 import matcha.profile.manipulation.ProfileManipulator;
 import matcha.profile.model.ProfileEntity;
 
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
 public class ProfileService {
 
     private ImageService imageService = ImageService.getInstance();
+    private LocationService locationService = LocationService.getInstance();
     private ProfileManipulator profileManipulator = new ProfileManipulator();
 
     private static ProfileService profileService;
@@ -59,10 +61,7 @@ public class ProfileService {
 
     public void updateProfile(int profileId, ProfileEntity newProfile) {
         ProfileEntity currentProfile = getProfileById(newProfile.getId());
-        System.err.println("profileId: " + profileId);
-        System.err.println("newProfile.getId(): " + newProfile.getId());
         List<Image> images = imageService.getImagesByProfileId(profileId);
-        System.err.println("images.size: " + images.size());
         //мб получуть только профиль id?
         newProfile.setId(currentProfile.getId());
 

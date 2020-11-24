@@ -1,15 +1,9 @@
 package matcha.location.manipulation;
 
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import matcha.exception.db.location.GetActiveLocationByLoginException;
 import matcha.location.db.LocationDB;
 import matcha.location.model.Location;
-import matcha.mail.MailService;
-import matcha.profile.db.ProfileDB;
-import matcha.user.db.UserDB;
-import matcha.validator.ValidationMessageService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,9 +16,9 @@ public class LocationManipulator {
 
     private final LocationDB locationDB = new LocationDB();
 
-    public Location getLocationByUserIdAndActive(Integer userId) {
+    public Location getLocationByProfileId(Integer profileId) {
 
-        return locationDB.getLocationByUserIdAndActive(userId);
+        return locationDB.getLocationByProfileId(profileId);
 
 //        Location locationByUserIdAndActive = locationDB.getLocationByUserIdAndActive(userId);
 //        if (locationByUserIdAndActive == null) {
@@ -55,5 +49,9 @@ public class LocationManipulator {
 
     public List<Location> getAllLocations() {
         return locationDB.getLocations();
+    }
+
+    public Location getLastLocationByProfileId(Integer profileId) {
+        return locationDB.getLastLocationByProfileId(profileId);
     }
 }

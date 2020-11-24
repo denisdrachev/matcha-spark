@@ -58,6 +58,7 @@ CREATE TABLE IF NOT EXISTS locations
     y         FLOAT NOT NULL,
     time      DATETIME,
     active    BOOLEAN,
+    userSet   BOOLEAN,
     FOREIGN KEY (profileId) REFERENCES profiles (id)
 );
 

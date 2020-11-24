@@ -7,7 +7,8 @@ import matcha.exception.context.UserAlreadyExistException;
 import matcha.exception.db.UpdateUserByIdDBException;
 import matcha.exception.db.location.InsertLocationException;
 import matcha.exception.user.*;
-import matcha.location.manipulation.LocationManipulator;
+import matcha.location.service.LocationService;
+import matcha.model.SearchModel;
 import matcha.response.Response;
 import matcha.response.ResponseOk;
 import matcha.user.db.UserDB;
@@ -26,7 +27,7 @@ import java.util.UUID;
 public class UserManipulator {
 
     private final UserDB userDB = new UserDB();
-    private final LocationManipulator locationManipulator = new LocationManipulator();
+    private final LocationService locationService = LocationService.getInstance();
 
     public void userRegistry(UserEntity user) {
         userDB.insertUser(user);
@@ -35,10 +36,8 @@ public class UserManipulator {
     //TODO рефакторинг
     public Response userLogin(UserInfo userLogin) {
         UserEntity user = userDB.getUserByLogin(userLogin.getLogin());
-        userLogin.getLocation().setProfileId(user.getId());
         try {
-            locationManipulator.insertLocation(userLogin.getLocation());
-
+            locationService.initLocationAndUpdate(userLogin.getLocation(), user.getProfileId(), false, false);
             if (user.isActive() && !user.isBlocked()) {
                 if (Utils.checkPassword(userLogin.getPassword(), user.getSalt(), user.getPasswordBytes())) {
 //                    user.setActivationCode("TEST_TEST_TEST");
@@ -131,5 +130,9 @@ public class UserManipulator {
 
     public List<UserEntity> getAllUsers() {
         return userDB.getAllUsers();
+    }
+
+    public List<UserEntity> getUsersWithFilters(SearchModel searchModel) {
+        return userDB.getUsersWithFilters(searchModel);
     }
 }
