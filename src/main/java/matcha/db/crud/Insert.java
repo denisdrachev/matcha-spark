@@ -9,6 +9,7 @@ public class Insert {
     public static String insertLocation = "INSERT INTO locations (profileId, x, y, time, active, userSet) VALUES (:profileId, :x, :y, :time, :active, :userSet)";
     public static String insertRaiting = "INSERT INTO rating (rating, profile) VALUES (?, ?)";
     public static String insertBlacklist = "INSERT INTO blacklist (fromLogin, toLogin, isBlocked) VALUES (:fromLogin, :toLogin, :isBlocked)";
+    public static String insertRating = "INSERT INTO rating (rating, login) VALUES (:rating, :login)";
     public static String insertConnected = "INSERT INTO connected (fromLogin, toLogin, isConnected) VALUES (:fromLogin, :toLogin, :isConnected)";
     public static String insertImageLikeEvent = "INSERT INTO imageLikeEvents (active, image, who, whom) VALUES (?, ?, ?, ?)";
     public static String insertProfile = "INSERT INTO profiles (age, gender, preference, biography, isFilled) " +

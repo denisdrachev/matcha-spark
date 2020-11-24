@@ -16,6 +16,7 @@ import matcha.exception.user.UserNotFoundException;
 import matcha.model.SearchModel;
 import matcha.user.model.UserEntity;
 import matcha.user.model.UserEntity2;
+import matcha.user.model.UserSearchEntity;
 import matcha.user.model.UserUpdateEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -297,23 +298,43 @@ public class UserDB {
         }
     }
 
-    public List<UserEntity> getUsersWithFilters(SearchModel searchModel) {
+    public List<UserSearchEntity> getUsersWithFilters(SearchModel searchModel) {
         log.info("Get users with filters: {}", searchModel);
         try (org.sql2o.Connection conn = sql2o.open()) {
 
             //limit ageMax ageMin minX maxX minY maxY tagIds
             // + рейтинг славы, + общие теги
             //UserSearchEntity
-            List<UserEntity> users = conn.createQuery(Select.selectUsersWithFilters)
-                    .addParameter("ageMax", searchModel.getMaxAge())
-                    .addParameter("ageMin", searchModel.getMinAge())
-                    .addParameter("minX", searchModel.getMinX())
-                    .addParameter("maxX", searchModel.getMaxX())
-                    .addParameter("minY", searchModel.getMinY())
-                    .addParameter("maxY", searchModel.getMaxY())
-                    .addParameter("tagIds", searchModel.getTags())
-                    .executeAndFetch(UserEntity.class);
-            conn.commit();
+            List<UserSearchEntity> users;
+            if (searchModel.getTags().size() == 0) {
+                users = conn.createQuery(Select.selectUsersWithoutTagsWithFilters)
+                        .addParameter("ageMax", searchModel.getMaxAge())
+                        .addParameter("ageMin", searchModel.getMinAge())
+                        .addParameter("minX", searchModel.getMinX())
+                        .addParameter("maxX", searchModel.getMaxX())
+                        .addParameter("minY", searchModel.getMinY())
+                        .addParameter("maxY", searchModel.getMaxY())
+                        .addParameter("limit", searchModel.getLimit())
+                        .addParameter("offset", searchModel.getOffset())
+                        .addParameter("login", searchModel.getLogin())
+                        .executeAndFetch(UserSearchEntity.class);
+                conn.commit();
+            } else {
+                users = conn.createQuery(Select.selectUsersWithFilters)
+                        .addParameter("ageMax", searchModel.getMaxAge())
+                        .addParameter("ageMin", searchModel.getMinAge())
+                        .addParameter("minX", searchModel.getMinX())
+                        .addParameter("maxX", searchModel.getMaxX())
+                        .addParameter("minY", searchModel.getMinY())
+                        .addParameter("maxY", searchModel.getMaxY())
+                        .addParameter("limit", searchModel.getLimit())
+                        .addParameter("offset", searchModel.getOffset())
+                        .addParameter("tagIds", searchModel.getTags())
+                        .addParameter("login", searchModel.getLogin())
+                        .executeAndFetch(UserSearchEntity.class);
+                conn.commit();
+            }
+
 
             log.info("Get users with filters. Result count: {}", users.size());
             return users;

@@ -9,6 +9,7 @@ import matcha.connected.service.ConnectedService;
 import matcha.event.manipulation.EventManipulator;
 import matcha.event.model.Event;
 import matcha.event.model.EventWithUserInfo;
+import matcha.rating.service.RatingService;
 import matcha.reactive.EventUnicastService;
 import matcha.utils.EventType;
 import org.springframework.stereotype.Service;
@@ -23,10 +24,12 @@ public class EventService {
     //TODO тут добавить реактивщину
     private EventUnicastService eventUnicastService;
     private ConnectedService connectedService = ConnectedService.getInstance();
-    private EventManipulator eventManipulator = new EventManipulator();
-
-    private static EventService eventService;
     private BlackListService blackListService = BlackListService.getInstance();
+    private RatingService ratingService = RatingService.getInstance();
+
+
+    private EventManipulator eventManipulator = new EventManipulator();
+    private static EventService eventService;
 
     public static EventService getInstance() {
         if (eventService == null) {
@@ -43,6 +46,7 @@ public class EventService {
         if (event == null)
             return;
         eventManipulator.insertEvent(event);
+        ratingService.incRatingByLogin(event.getLogin());
 //        eventUnicastService.onNext(event);
     }
 

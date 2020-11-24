@@ -3,7 +3,6 @@ package matcha.model;
 import lombok.Data;
 import matcha.location.model.Location;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Data
@@ -15,22 +14,24 @@ public class SearchModel {
     private Integer minRatingAge;
     private Integer maxRatingAge;
     private Double deltaRadius;
-    private List<String> tags;
+    private List<Integer> tags;
     private Integer limit;
     private Integer offset;
     private Location userLocation;
+    private String login;
 
     public SearchModel(Location location, String minAge, String maxAge, String minRatingAge, String maxRatingAge,
-                       String deltaRadius, String tags, String limit, String offset) {
+                       String deltaRadius, List<Integer> tags, String limit, String offset, String login) {
         setUserLocation(location);
         setMinAge(minAge);
         setMaxAge(maxAge);
         setMinRatingAge(minRatingAge);
         setMaxRatingAge(maxRatingAge);
         setDeltaRadius(deltaRadius);
-        setTags(tags);
+        this.tags = tags;
         setLimit(limit);
         setOffset(offset);
+        this.login = login;
     }
 
     public void setMinAge(String minAge) {
@@ -70,14 +71,14 @@ public class SearchModel {
         this.deltaRadius = distance * oneKmConst;
     }
 
-    public void setTags(String tags) {
-        if (tags != null) {
-            String[] split = tags.split(",");
-            this.tags = Arrays.asList(split);
-        } else {
-            this.tags = List.of();
-        }
-    }
+//    public void setTags(String tags) {
+//        if (tags != null) {
+//            String[] split = tags.split(",");
+//            this.tags = Arrays.asList(split);
+//        } else {
+//            this.tags = List.of();
+//        }
+//    }
 
     public void setLimit(String limit) {
         if (limit != null)

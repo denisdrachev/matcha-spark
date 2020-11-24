@@ -2,7 +2,6 @@ package matcha.db;
 
 import matcha.image.model.Image;
 import matcha.location.model.Location;
-import matcha.profile.model.ProfileEntity;
 import matcha.profile.service.ProfileService;
 import matcha.properties.ConfigProperties;
 import matcha.user.model.UserEntity;
@@ -39,7 +38,8 @@ public class SpringJdbcConfig {
 
         createUser();
         createUser2();
-        createUser3();
+//        createUser3();
+
 //        jdbcTemplate.update(Insert.insertImage, 0, "ABCD");
 //        jdbcTemplate.update(Insert.insertUser, "loginnnn", "password".getBytes(), null, "Artur", "Kamnev", "fermer@gmail.com", 1, 0, new Date(), "salt_test".getBytes(), null);
 //        jdbcTemplate.update(Insert.insertProfile, 22, 1, 0, "Simple fermer", "fermer", null, 1);
@@ -50,6 +50,46 @@ public class SpringJdbcConfig {
 
 //        jdbcTemplate.query(Select.selectImage, new BeanPropertyRowMapper(ImageModel.class)).forEach(System.out::println);
 //        jdbcTemplate.query(Select.selectProfile, new BeanPropertyRowMapper(ProfileModel.class)).forEach(System.out::println);
+    }
+
+
+    private void createUser0() {
+        String value = "-1";
+        Location location = new Location();
+        location.setX(1.1);
+        location.setY(1.1);
+        UserRegistry userRegistry = new UserRegistry(
+                "test3", "123", "fname_test3", "lname_test3", value + "@mail.ru", Calendar.getInstance().getTime(), location
+        );
+        userService.userRegistration(userRegistry);
+
+
+        UserEntity user_1 = userService.getUserByLogin("test3");
+        System.err.println(user_1.getActivationCode());
+
+        UserInfoModel userInfo = new UserInfoModel();
+        userInfo.setLogin(user_1.getLogin());
+        userInfo.setLocation(user_1.getLocation());
+        userInfo.setEmail(user_1.getEmail());
+        userInfo.setLname(user_1.getLname());
+        userInfo.setFname(user_1.getFname());
+//        ProfileEntity profileByIdWithImages = profileService.getProfileByIdWithImages(user_1.getProfileId());
+        userInfo.setAge(22);
+        userInfo.setGender(1);
+        userInfo.setPreference(List.of(3));
+        userInfo.setTags(List.of("tag2", "tag3"));
+        userInfo.setBiography("asdasdasd");
+
+        Image image = new Image();
+        image.setAvatar(true);
+        image.setSrc("https://i.ibb.co/cw9TnX9/0f6339673fed.jpg");
+        image.setIndex(1);
+
+        userInfo.setImages(List.of(image));
+
+        userService.saveUserInfo(userInfo);
+
+//        profileService.updateProfile(profileByIdWithImages.getId(), profileByIdWithImages);
     }
 
     private void createUser() {

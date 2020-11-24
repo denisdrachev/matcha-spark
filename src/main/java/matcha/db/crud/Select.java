@@ -8,25 +8,62 @@ public class Select {
     public static String selectLocation = "SELECT * FROM locations";
     public static String selectRaiting = "SELECT * FROM rating";
     public static String selectBlacklist = "SELECT * FROM blacklist WHERE fromLogin = :fromLogin AND toLogin = :toLogin";
+    public static String selectRatingByLogin = "SELECT * FROM rating WHERE login = :login";
     public static String selectConnectedElement = "SELECT * FROM connected WHERE (fromLogin = :fromLogin OR fromLogin = :fromLogin2) AND (toLogin = :toLogin OR toLogin = :toLogin2) LIMIT 1";
     public static String selectBlacklists = "SELECT * FROM blacklist";
+    public static String selectRating = "SELECT * FROM rating";
     public static String selectConnectedList = "SELECT * FROM connected";
     public static String selectConnectedWithUser = "SELECT * FROM connected WHERE (fromLogin = :login OR toLogin = :login)";
     public static String selectImageLikeEvent = "SELECT * FROM imageLikeEvents";
     public static String selectProfile = "SELECT * FROM profiles";
     public static String selectUsers = "SELECT * FROM users";
-    public static String selectUsersWithFilters = "SELECT * FROM users u inner join inner join blacklist b inner join profiles p inner join locations l " +
-            "inner join (SELECT r.login as name, COUNT(r.login) as count FROM tagRelations r WHERE r.tagId IN (:tagIds) GROUP BY r.login) t " +
-            "inner join (SELECT ev.data, COUNT(ev.data) as count FROM events ev WHERE data = u.login) e" +
 
-            "WHERE u.profileId = p.id " +
-            "AND :login = b.fromLogin AND u.login = b.toLogin AND b.isBlocked <> TRUE" + //как будет вести себя, если нет записи в блэклисте??? //прочерка на черный список (добавить ли проверку на забаненность пользователя?)
-            "AND p.age >= :ageMin AND p.age <= :ageMax " + //возраст
-            "AND p.id = l.profileId AND " +
-            "AND l.x >= :minX AND l.x <= :maxX AND l.y >= :minY AND l.y <= :maxY " + //растояние
-            "AND u.login = t.login " + //Теги
-            "AND u.login = e.login " +
-            "ORDER BY e.count DESC LIMIT :limit";
+//    private String login;
+//    private String fname;
+//    private String lname;
+//    private Location location;
+//    private Integer rating;
+//    private Integer tagsCount;
+
+    //        HttpUriRequest request = new HttpGet("http://localhost:4567/get-users?tags=tag2,tag4&ageMin=0&ageMax=100&minRating=0&maxRating=999&deltaRadius=1000&limit=10&offset=0");
+    public static String selectUsersWithFilters =
+            "SELECT u.login, u.fname, u.lname, l.x, l.y, i.src, r.rating, t.count as tagsCount " +
+                    "FROM ((((((users u INNER JOIN profiles p ON u.profileId = p.id) " +
+                    "INNER JOIN locations l ON u.profileId = l.profileId) " +
+                    "INNER JOIN rating r ON u.login = r.login) " +
+                    "INNER JOIN (SELECT r.login as login, COUNT(r.login) as count FROM tagRelations r WHERE r.tagId IN (:tagIds) GROUP BY r.login) t  ON u.login = t.login) " +
+                    "LEFT JOIN blacklist b ON b.fromLogin = :login AND b.toLogin = u.login) " +
+                    "INNER JOIN images i ON i.profileId = u.profileId AND i.avatar = TRUE) " +
+                    "WHERE (b.isBlocked IS NULL OR b.isBlocked <> TRUE) " +
+                    "AND t.count > 0 " +
+                    "AND p.age >= :ageMin AND p.age <= :ageMax " + //возраст
+                    "AND l.x >= :minX AND l.x <= :maxX AND l.y >= :minY AND l.y <= :maxY " + //растояние
+                    " LIMIT :limit OFFSET :offset ";
+
+    public static String selectUsersWithoutTagsWithFilters =
+            "SELECT u.login, u.fname, u.lname, l.x, l.y, i.src, r.rating " +
+                    "FROM (((((users u INNER JOIN profiles p ON u.profileId = p.id) " +
+                    "INNER JOIN locations l ON u.profileId = l.profileId) " +
+                    "INNER JOIN rating r ON u.login = r.login) " +
+                    "LEFT JOIN blacklist b ON b.fromLogin = :login AND b.toLogin = u.login) " +
+                    "RIGHT JOIN images i ON i.profileId = u.profileId AND i.avatar = TRUE) " +
+                    "WHERE (b.isBlocked IS NULL OR b.isBlocked <> TRUE) " +
+                    "AND p.age >= :ageMin AND p.age <= :ageMax " + //возраст
+                    "AND l.x >= :minX AND l.x <= :maxX AND l.y >= :minY AND l.y <= :maxY " + //растояние
+                    " LIMIT :limit OFFSET :offset ";
+
+//    public static String selectUsersWithFilters = "SELECT u.login, u.fname, u.lname, l.x, l.y, r.rating FROM users u inner join blacklist b inner join profiles p inner join locations l " +
+////            "inner join (SELECT r.login as login, COUNT(r.login) as count FROM tagRelations r WHERE r.tagId IN (:tagIds) GROUP BY r.login) t " +
+//            "inner join rating r " +
+//
+//            "WHERE u.profileId = p.id " +
+//            "AND u.login = r.login " +
+////            "AND b.fromLogin = :login AND u.login = b.toLogin AND b.isBlocked <> TRUE " + //как будет вести себя, если нет записи в блэклисте??? //прочерка на черный список (добавить ли проверку на забаненность пользователя?)
+////            "AND p.age >= :ageMin AND p.age <= :ageMax " + //возраст
+//            "AND u.profileId = l.profileId " +
+////            "AND l.x >= :minX AND l.x <= :maxX AND l.y >= :minY AND l.y <= :maxY " + //растояние
+////            "AND u.login = t.login " + //Теги
+//            "ORDER BY r.rating DESC LIMIT :limit";
 
     //limit ageMax ageMin minX maxX minY maxY tagIds
 

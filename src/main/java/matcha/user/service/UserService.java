@@ -23,13 +23,12 @@ import matcha.profile.model.UserProfileWithEmail;
 import matcha.profile.model.UserProfileWithoutEmail;
 import matcha.profile.service.ProfileService;
 import matcha.properties.ConfigProperties;
+import matcha.rating.model.Rating;
+import matcha.rating.service.RatingService;
 import matcha.response.Response;
 import matcha.tag.service.TagService;
 import matcha.user.manipulation.UserManipulator;
-import matcha.user.model.UserEntity;
-import matcha.user.model.UserInfo;
-import matcha.user.model.UserRegistry;
-import matcha.user.model.UserUpdateEntity;
+import matcha.user.model.*;
 import matcha.userprofile.model.UserInfoModel;
 import matcha.utils.EventType;
 import matcha.validator.ValidationMessageService;
@@ -66,6 +65,7 @@ public class UserService implements UserInterface {
 
     private UserManipulator userManipulator = new UserManipulator();
     private LocationService locationService = LocationService.getInstance();
+    private RatingService ratingService = RatingService.getInstance();
     private ConfigProperties configProperties = new ConfigProperties();
     private final MailService mailService = new MailService();
     private final ProfileService profileService = new ProfileService();
@@ -90,6 +90,8 @@ public class UserService implements UserInterface {
 
         //TODO рефактор отправки EMAIL
 //        mailService.sendRegistrationMail(userEntity.getEmail(), userEntity.getActivationCode());
+
+        ratingService.createRating(userRegistry.getLogin());
 
         Event newEvent = new Event(EventType.REGISTRATION, userRegistry.getLogin(), false, "");
         eventService.saveNewEvent(newEvent);
@@ -164,17 +166,17 @@ public class UserService implements UserInterface {
         Event newEventLoaded = new Event(EventType.PROFILE_LOADED, userByToken.getLogin(), !blackListMessage.isBlocked(), login, !blackListMessage.isBlocked());
         eventService.saveNewEvent(newEventLoaded);
 
-        Integer userRating = eventService.getUserRatingByLogin(user.getLogin());
+        Rating rating = ratingService.getRatingByLogin(user.getLogin());
         List<String> userTags = tagService.getUserTags(user.getLogin());
 
         if (login == null)
-            return new UserProfileWithEmail(user, profileById, blackList.isBlocked(), userRating, userTags);
+            return new UserProfileWithEmail(user, profileById, blackList.isBlocked(), rating.getRating(), userTags);
 
         boolean likeEventFrom = eventService.isLikeEvent(userByToken.getLogin(), user.getLogin());
         boolean likeEventTo = eventService.isLikeEvent(user.getLogin(), userByToken.getLogin());
 
 
-        return new UserProfileWithoutEmail(user, profileById, blackList.isBlocked(), likeEventFrom, likeEventTo, userRating, userTags);
+        return new UserProfileWithoutEmail(user, profileById, blackList.isBlocked(), likeEventFrom, likeEventTo, rating.getRating(), userTags);
     }
 
     //TODO рефакторинг
@@ -260,7 +262,7 @@ public class UserService implements UserInterface {
         return userManipulator.getAllUsers();
     }
 
-    public List<UserEntity> getUsersWithFilters(SearchModel searchModel) {
+    public List<UserSearchEntity> getUsersWithFilters(SearchModel searchModel) {
         return userManipulator.getUsersWithFilters(searchModel);
     }
 
@@ -442,11 +444,12 @@ public class UserService implements UserInterface {
         UserEntity user = userManipulator.getUserByToken(token);
         ProfileEntity profile = profileService.getProfileById(user.getProfileId());
         Location location = locationService.getLocationByProfileId(profile.getId());
+        List<Integer> tagsIds = tagService.getTagsIds(tags);
 
         log.info("Request get users");
         try {
             SearchModel searchModel =
-                    new SearchModel(location, ageMin, ageMax, minRating, maxRating, deltaRadius, tags, limit, offset);
+                    new SearchModel(location, ageMin, ageMax, minRating, maxRating, deltaRadius, tagsIds, limit, offset, user.getLogin());
             return validationMessageService.prepareMessageOkData(gson.toJsonTree(
                     userService.getUsersWithFilters(searchModel)
             ));

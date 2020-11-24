@@ -1,16 +1,13 @@
 package matcha.controller;
 
-import lombok.RequiredArgsConstructor;
 import matcha.blacklist.model.BlackListMessage;
 import matcha.blacklist.service.BlackListService;
 import matcha.location.model.Location;
 import matcha.location.service.LocationService;
+import matcha.rating.model.Rating;
+import matcha.rating.service.RatingService;
 import matcha.tag.model.Tag;
 import matcha.tag.service.TagService;
-import matcha.user.model.UserEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,12 +21,14 @@ public class LocationsController {
     private final LocationService locationService = LocationService.getInstance();
     private final BlackListService blackListService = BlackListService.getInstance();
     private final TagService tagService = TagService.getInstance();
+    private final RatingService ratingService = RatingService.getInstance();
 
 
     public LocationsController() {
         registration();
         getAllBlackList();
         getAllTags();
+        getAllRatings();
     }
 
 //    @GetMapping("/locations")
@@ -70,6 +69,17 @@ public class LocationsController {
                 return allTags.stream().map(location -> "<p>" + location + "</p>").collect(Collectors.joining());
             else
                 return "<p>Filed to load tags</p>";
+        });
+    }
+
+    public void getAllRatings() {
+        get("/ratings", (req, res) -> {
+            System.err.println("/ratings");
+            List<Rating> allRatings = ratingService.getAllRatings();
+            if (allRatings != null)
+                return allRatings.stream().map(location -> "<p>" + location + "</p>").collect(Collectors.joining());
+            else
+                return "<p>Filed to load ratings</p>";
         });
     }
 }

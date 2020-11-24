@@ -3,6 +3,7 @@ package matcha.tag.service;
 import matcha.tag.manipulation.TagManipulator;
 import matcha.tag.model.Tag;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TagService {
@@ -31,6 +32,19 @@ public class TagService {
 
     public List<Tag> getAllTags() {
         return tagManipulator.getAllTags();
+    }
+
+    public List<Integer> getTagsIds(String tags) {
+        List<Integer> ids = new ArrayList<>();
+        if (tags == null || tags.isEmpty())
+            return ids;
+        String[] split = tags.split(",");
+        for (String tag : split) {
+            int tagId = tagManipulator.getTagId(tag);
+            if (tagId != -1)
+                ids.add(tagId);
+        }
+        return ids;
     }
 
     public Object getUsersWithCommonTags(List<Integer> tags) {

@@ -53,4 +53,8 @@ public class TagManipulator {
 //        });
         return tagDB.getUsersWithCommonTags(tags);
     }
+
+    public int getTagId(String tag) {
+        return tagDB.getTagId(tag);
+    }
 }

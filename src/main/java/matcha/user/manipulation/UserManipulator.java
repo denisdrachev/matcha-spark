@@ -14,6 +14,7 @@ import matcha.response.ResponseOk;
 import matcha.user.db.UserDB;
 import matcha.user.model.UserEntity;
 import matcha.user.model.UserInfo;
+import matcha.user.model.UserSearchEntity;
 import matcha.user.model.UserUpdateEntity;
 import org.springframework.stereotype.Service;
 
@@ -132,7 +133,7 @@ public class UserManipulator {
         return userDB.getAllUsers();
     }
 
-    public List<UserEntity> getUsersWithFilters(SearchModel searchModel) {
+    public List<UserSearchEntity> getUsersWithFilters(SearchModel searchModel) {
         return userDB.getUsersWithFilters(searchModel);
     }
 }
