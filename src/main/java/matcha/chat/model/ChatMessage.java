@@ -1,5 +1,6 @@
 package matcha.chat.model;
 
+import com.google.gson.annotations.Expose;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,10 +14,15 @@ import java.util.Date;
 public class ChatMessage {
 
     private long id;
+@Expose
     private String toLogin;
+    @Expose
     private String fromLogin;
+    @Expose
     private String message;
+    @Expose
     private Date time = Calendar.getInstance().getTime();
+    @Expose
     private boolean read;
 
     public ChatMessage(String toLogin, String fromLogin, String message) {

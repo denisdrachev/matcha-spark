@@ -18,7 +18,7 @@ public class ChatMessageFull implements MyObject {
 
     @NotBlank(message = "Поле 'toLogin' не может быть пустым")
     private String toLogin;
-    @NotBlank(message = "Поле 'fromLogin' не может быть пустым")
+//    @NotBlank(message = "Поле 'fromLogin' не может быть пустым")
     private String fromLogin;
     @Min(value = 1)
     @NotNull

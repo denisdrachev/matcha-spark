@@ -87,7 +87,12 @@ model.createPost("das", "sdasd", strs);
             response.header("Access-Control-Allow-Credentials", "true");
         });
         exception(Exception.class, (exception, request, response) -> {
-            response.body(validationMessageService.prepareErrorMessage(exception.getMessage()).toString());
+            String s = validationMessageService.prepareErrorMessage(exception.getMessage()).toString();
+            if (s == null || s.isEmpty()) {
+                response.body("Некорректные параметры запроса.");
+            } else {
+                response.body(validationMessageService.prepareErrorMessage(exception.getMessage()).toString());
+            }
         });
         SingletonControllers.init();
     }

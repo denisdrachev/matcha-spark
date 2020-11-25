@@ -2,6 +2,7 @@ package matcha.userprofile.service;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import matcha.event.service.EventService;
 import matcha.profile.db.ProfileDB;
 import matcha.profile.model.ProfileEntity;
 import matcha.user.db.UserDB;
@@ -10,14 +11,23 @@ import matcha.userprofile.model.UserProfileChat;
 import org.springframework.stereotype.Service;
 
 @Slf4j
-@Service
-@AllArgsConstructor
+//@Service
+//@AllArgsConstructor
 public class UserProfileService implements UserProfileInterface {
 
     //TODO РЕФАКТОРИНГ! ТУДУ ТУДУ!
 
-    private UserDB userDB;
-    private ProfileDB profileDB;
+    private UserDB userDB = new UserDB();
+    private ProfileDB profileDB = new ProfileDB();
+
+    private static UserProfileService userProfileService;
+
+    public static UserProfileService getInstance() {
+        if (userProfileService == null) {
+            userProfileService = new UserProfileService();
+        }
+        return userProfileService;
+    }
 
     @Override
     public UserProfileChat getChatUserProfile(String login) {

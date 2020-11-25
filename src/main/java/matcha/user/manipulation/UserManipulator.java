@@ -85,11 +85,12 @@ public class UserManipulator {
         return userDB.getUserByToken(token);
     }
 
-    public void checkUserByToken(String token) {
-        Integer count = userDB.checkUserByToken(token);
-        if (count == 0) {
+    public String checkUserByToken(String token) {
+        List<String> users = userDB.checkUserByToken(token);
+        if (users.size() != 1) {
             throw new UserAuthException();
         }
+        return users.get(0);
     }
 
     public boolean activationUserByToken(String token) {

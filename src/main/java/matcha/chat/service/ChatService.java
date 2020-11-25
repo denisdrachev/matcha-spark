@@ -1,11 +1,14 @@
 package matcha.chat.service;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import lombok.AllArgsConstructor;
 import matcha.chat.manipulation.ChatManipulator;
 import matcha.chat.model.*;
 import matcha.event.model.Event;
 import matcha.event.service.EventService;
 import matcha.response.Response;
+import matcha.user.service.UserService;
 import matcha.userprofile.model.UserProfileChat;
 import matcha.userprofile.service.UserProfileService;
 import matcha.utils.EventType;
@@ -16,52 +19,101 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
+//@AllArgsConstructor
 public class ChatService implements ChatInterface {
 
-    private ChatManipulator chatManipulator;
-    private UserProfileService userProfileService;
-    private ValidationMessageService validationMessageService;
-    private EventService eventService;
+    private ChatManipulator chatManipulator = new ChatManipulator();
+    private UserProfileService userProfileService = UserProfileService.getInstance();
+    private ValidationMessageService validationMessageService = ValidationMessageService.getInstance();
+    private EventService eventService = EventService.getInstance();
+
+    private static ChatService chatService;
+
+    private Gson gson = new GsonBuilder()
+            .setPrettyPrinting()
+            .excludeFieldsWithoutExposeAnnotation()
+            .serializeNulls()
+            .create();
+
+    public static ChatService getInstance() {
+        if (chatService == null) {
+            chatService = new ChatService();
+        }
+        return chatService;
+    }
 
 
     @Override
     public Response saveMessage(ChatMessageSave chatMessage) {
         chatManipulator.insertChatMessage(chatMessage);
-        Event newEvent = new Event(EventType.SEND_MESSAGE, chatMessage.getFromLogin(), true, chatMessage.getToLogin());
+        Event newEvent = new Event(EventType.SEND_MESSAGE, chatMessage.getFromLogin(), true, chatMessage.getToLogin(), false);
         eventService.saveNewEvent(newEvent);
+        Event newToEvent = new Event(EventType.INCOME_MESSAGE, chatMessage.getToLogin(), true, chatMessage.getFromLogin(), false);
+        eventService.saveNewEvent(newToEvent);
 
         return validationMessageService.prepareMessageOkOnlyType();
     }
 
     //мб и не нужен этот функционал
+    @Deprecated
     @Override
     public Response getMessages(String toLogin, String fromLogin, int limit) {
         List<ChatMessage> chatMessages = chatManipulator.getChatMessages(toLogin, fromLogin, limit);
         chatMessages.stream()
                 .filter(chatMessage -> !chatMessage.isRead())
                 .forEach(chatManipulator::updateChatMessage);
-        return validationMessageService.prepareMessageOkDataList(chatMessages);
+        return validationMessageService.prepareMessageOkData(gson.toJsonTree(chatMessages));
     }
 
+    /**
+     * 1. Получает последние limit сообщений между пользователями toLogin и fromLogin
+     * 2. Если среди них есть непрочитанные - обновляет их в базу как прочитанные
+     * 3. Возвращает их
+     *
+     * -неэффективно
+     */
     @Override
     public Response getFullMessages(ChatMessageFull message) {
         List<ChatMessage> chatMessages =
                 chatManipulator.getFullChatMessages(message.getToLogin(), message.getFromLogin(), message.getLimit());
-        chatMessages.stream()
+        List<Long> ids = chatMessages.stream()
                 .filter(chatMessage -> !chatMessage.isRead())
-                .forEach(chatManipulator::updateChatMessage);
-        return validationMessageService.prepareMessageOkDataList(chatMessages);
+                .map(ChatMessage::getId)
+                .collect(Collectors.toList());
+        chatManipulator.updateChatMessagesByIds(ids);
+
+        return validationMessageService.prepareMessageOkData(gson.toJsonTree(chatMessages));
     }
 
+    /**
+     * 1. Ищет все непрочитанные сообщения от toLogin к fromLogin
+     * 2. Смотрит флаг во входящем запросе. Помечать ли полученные сообщения как прочитанные? Если да - помечает
+     * 3. Возвращает их
+     * <p>
+     * -неэффективно
+     */
     @Override
     public Response getNewMessages(ChatNewMessageFromUser message) {
         List<ChatMessage> chatMessages = chatManipulator.getNewChatMessages(message.getToLogin(), message.getFromLogin());
-        if (message.getIsRead() != 0)
-            chatMessages.forEach(chatManipulator::updateChatMessage);
-        return validationMessageService.prepareMessageOkDataList(chatMessages);
+//        if (message.getIsRead() != 0)
+//            chatMessages.forEach(chatManipulator::updateChatMessage);
+        if (message.getIsRead() != 0) {
+            List<Long> ids = chatMessages.stream()
+                    .filter(chatMessage -> !chatMessage.isRead())
+                    .map(ChatMessage::getId)
+                    .collect(Collectors.toList());
+            chatManipulator.updateChatMessagesByIds(ids);
+        }
+        return validationMessageService.prepareMessageOkData(gson.toJsonTree(chatMessages));
     }
 
+    /**
+     * 1. Ищет все непрочитанные сообщения toLogin
+     * 2. Для каждого непрочитанного сообщения ищет профиль отправителя (?!) и объединяет с сообщением
+     * 3. Возвращает это месиво
+     * <p>
+     * неэффективно и хз зачем вообще
+     */
     @Override
     public Response getAllNewMessages(ChatAllNewMessage message) {
         List<ChatMessage> chatMessages = chatManipulator.getAllNewChatMessages(message.getToLogin());
@@ -70,11 +122,10 @@ public class ChatService implements ChatInterface {
             chatUserProfile.setChatMessages(chatMessage);
             return chatUserProfile;
         }).collect(Collectors.toList());
-        return validationMessageService.prepareMessageOkDataList(collect);
+        return validationMessageService.prepareMessageOkData(gson.toJsonTree(collect));
     }
 
-    public void checkChatUsersConnected(String toLogin, String fromLogin) {
-        //пользователь toLogin лайнул хоть одну фотку пользователя fromLogin
-        //пользователь fromLogin лайнул хоть одну фотку пользователя toLogin
+    public List<ChatMessage> getAllMessages() {
+        return chatManipulator.getAllMessages();
     }
 }
