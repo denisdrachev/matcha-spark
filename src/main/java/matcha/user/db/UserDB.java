@@ -182,18 +182,18 @@ public class UserDB {
         }
     }
 
-    public Integer checkUserByToken(String token) {
-        log.info("Check user by Activation Code. activationCode: {}", token);
+    public List<String> checkUserByToken(String token) {
+        log.info("Check user by Activation Code.");
         try (org.sql2o.Connection conn = sql2o.beginTransaction()) {
 
-            List<Integer> count = conn.createQuery(Select.selectUsersCountByActivationCode)
+            List<String> users = conn.createQuery(Select.selectUsersCountByActivationCode)
                     .addParameter("activationCode", token)
-                    .executeAndFetch(Integer.class);
+                    .executeAndFetch(String.class);
             conn.commit();
 
 //            Integer count = jdbcTemplate.queryForObject(Select.selectUsersCountByActivationCode, Integer.class, token);
-            log.info("Check user by Activation Code. Result: {}", count.get(0));
-            return count.get(0);
+            log.info("Check user by Activation Code. Result: {}", users);
+            return users;
         } catch (Exception e) {
             log.info("Exception. checkUserByToken: {}", e.getMessage());
             throw new UserAuthException();

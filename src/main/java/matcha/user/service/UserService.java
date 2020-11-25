@@ -7,12 +7,19 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import matcha.blacklist.model.BlackListMessage;
 import matcha.blacklist.service.BlackListService;
+import matcha.chat.model.ChatAllNewMessage;
+import matcha.chat.model.ChatMessageFull;
+import matcha.chat.model.ChatMessageSave;
+import matcha.chat.model.ChatNewMessageFromUser;
+import matcha.chat.service.ChatService;
 import matcha.connected.model.ConnectedWithUserInfo;
 import matcha.connected.service.ConnectedService;
 import matcha.converter.Utils;
 import matcha.event.model.Event;
 import matcha.event.model.EventWithUserInfo;
 import matcha.event.service.EventService;
+import matcha.exception.context.IncorrectInputParamsException;
+import matcha.exception.user.UserNotFoundException;
 import matcha.image.service.ImageService;
 import matcha.location.model.Location;
 import matcha.location.service.LocationService;
@@ -65,6 +72,7 @@ public class UserService implements UserInterface {
 
     private UserManipulator userManipulator = new UserManipulator();
     private LocationService locationService = LocationService.getInstance();
+    private ChatService chatService = ChatService.getInstance();
     private RatingService ratingService = RatingService.getInstance();
     private ConfigProperties configProperties = new ConfigProperties();
     private final MailService mailService = new MailService();
@@ -122,8 +130,13 @@ public class UserService implements UserInterface {
         return validationMessageService.prepareMessageOkOnlyType();
     }
 
-    public void checkUserToToken(String token) {
-        userManipulator.checkUserByToken(token);
+    public String checkUserToToken(String token) {
+        return userManipulator.checkUserByToken(token);
+    }
+
+    public void checkUserExistsByLogin(String token) {
+        if (!userManipulator.isUserExistByLogin(token))
+            throw new IncorrectInputParamsException();
     }
 
     public UserEntity getUserByLogin(String login) {
@@ -456,5 +469,58 @@ public class UserService implements UserInterface {
         } catch (Exception e) {
             return validationMessageService.prepareErrorMessage("Некорректные параметры запроса.");
         }
+    }
+
+    public Response getFullMessagesByLimit(String token, String body) {
+        log.info("Request get full chat messages by limit: {}", body);
+
+        ChatMessageFull chatMessageFull = new Gson().fromJson(body, ChatMessageFull.class);
+        Response response = validationMessageService.validateMessage(chatMessageFull);
+        if (response != null) {
+            return response;
+        }
+        String fromLogin = userService.checkUserToToken(token);
+        chatMessageFull.setFromLogin(fromLogin);
+        userService.checkUserExistsByLogin(chatMessageFull.getToLogin());
+        return chatService.getFullMessages(chatMessageFull);
+    }
+
+    public Response getNewMessages(String token, String body) {
+        log.info("Request get new message from user: {}", body);
+        ChatNewMessageFromUser chatNewMessageFromUser = new Gson().fromJson(body, ChatNewMessageFromUser.class);
+        Response response = validationMessageService.validateMessage(chatNewMessageFromUser);
+        if (response != null) {
+            return response;
+        }
+        String toLogin = userService.checkUserToToken(token);
+        chatNewMessageFromUser.setToLogin(toLogin);
+        userService.checkUserExistsByLogin(chatNewMessageFromUser.getToLogin());
+        return chatService.getNewMessages(chatNewMessageFromUser);
+    }
+
+    public Response getAllNewMessages(String token, String body) {
+        log.info("Request get new message from user: {}", body);
+        ChatAllNewMessage chatNewMessageFromUser = new Gson().fromJson(body, ChatAllNewMessage.class);
+        Response response = validationMessageService.validateMessage(chatNewMessageFromUser);
+        if (response != null) {
+            return response;
+        }
+        String fromLogin = userService.checkUserToToken(token);
+        chatNewMessageFromUser.setFromLogin(fromLogin);
+        userService.checkUserExistsByLogin(chatNewMessageFromUser.getToLogin());
+        return chatService.getAllNewMessages(chatNewMessageFromUser);
+    }
+
+    public Response postChatMessage(String token, String body) {
+        log.info("Request save chat message: {}", body);
+        ChatMessageSave chatMessageSave = new Gson().fromJson(body, ChatMessageSave.class);
+        Response response = validationMessageService.validateMessage(chatMessageSave);
+        if (response != null) {
+            return response;
+        }
+        String fromLogin = userService.checkUserToToken(token);
+        chatMessageSave.setFromLogin(fromLogin);
+        userService.checkUserExistsByLogin(chatMessageSave.getToLogin());
+        return chatService.saveMessage(chatMessageSave);
     }
 }

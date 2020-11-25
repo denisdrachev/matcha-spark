@@ -16,6 +16,6 @@ public class Insert {
             "VALUES (:age, :gender, :preference, :biography, :isFilled)";
     public static String insertUser = "INSERT INTO users (login, password, activationCode, fname, lname, email, active, blocked, time, salt, profileId) " +
             "VALUES (:login, :password, :activationCode, :fname, :lname, :email, :active, :blocked, :time, :salt, :profileId)";
-    public static String insertChatMessage = "INSERT INTO chat (toLogin, fromLogin, message, time, read) VALUES (?, ?, ?, ?, ?)";
+    public static String insertChatMessage = "INSERT INTO chat (toLogin, fromLogin, message, time, read) VALUES (:toLogin, :fromLogin, :message, :time, :read)";
 
 }

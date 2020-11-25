@@ -13,6 +13,7 @@ public class EventType {
     public static String PROFILE_LOAD = "PROFILE_LOAD";
     public static String PROFILE_LOADED = "PROFILE_LOADED";
     public static String SEND_MESSAGE = "SEND_MESSAGE";
+    public static String INCOME_MESSAGE = "INCOME_MESSAGE";
     public static String READ_MESSAGE = "READ_MESSAGE";
     public static String REGISTRATION = "REGISTRATION";
     public static String LOGIN = "LOGIN";

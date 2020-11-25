@@ -2,10 +2,13 @@ package matcha.controller;
 
 import matcha.blacklist.model.BlackListMessage;
 import matcha.blacklist.service.BlackListService;
+import matcha.chat.model.ChatMessage;
+import matcha.chat.service.ChatService;
 import matcha.location.model.Location;
 import matcha.location.service.LocationService;
 import matcha.rating.model.Rating;
 import matcha.rating.service.RatingService;
+import matcha.response.Response;
 import matcha.tag.model.Tag;
 import matcha.tag.service.TagService;
 
@@ -22,6 +25,7 @@ public class LocationsController {
     private final BlackListService blackListService = BlackListService.getInstance();
     private final TagService tagService = TagService.getInstance();
     private final RatingService ratingService = RatingService.getInstance();
+    private final ChatService chatService = ChatService.getInstance();
 
 
     public LocationsController() {
@@ -29,6 +33,7 @@ public class LocationsController {
         getAllBlackList();
         getAllTags();
         getAllRatings();
+        getAllChatMessages();
     }
 
 //    @GetMapping("/locations")
@@ -80,6 +85,17 @@ public class LocationsController {
                 return allRatings.stream().map(location -> "<p>" + location + "</p>").collect(Collectors.joining());
             else
                 return "<p>Filed to load ratings</p>";
+        });
+    }
+
+    public void getAllChatMessages() {
+        get("/chats", (req, res) -> {
+            System.err.println("/chats");
+            List<ChatMessage> allMessages = chatService.getAllMessages();
+            if (allMessages != null)
+                return allMessages.stream().map(location -> "<p>" + location + "</p>").collect(Collectors.joining());
+            else
+                return "<p>Filed to load chat messages</p>";
         });
     }
 }

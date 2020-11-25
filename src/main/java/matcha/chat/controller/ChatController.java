@@ -1,39 +1,31 @@
 package matcha.chat.controller;
 
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import matcha.chat.model.ChatAllNewMessage;
-import matcha.chat.model.ChatMessageFull;
-import matcha.chat.model.ChatMessageSave;
-import matcha.chat.model.ChatNewMessageFromUser;
-import matcha.chat.service.ChatService;
-import matcha.response.Response;
 import matcha.user.service.UserService;
-import matcha.validator.ValidationMessageService;
-import org.springframework.web.bind.annotation.*;
+
+import static spark.Spark.get;
+import static spark.Spark.post;
 
 @Slf4j
-@CrossOrigin(origins = "*", allowedHeaders = "*")
-@RestController
-@AllArgsConstructor
-@RequestMapping(value = "chat")
 public class ChatController {
 
-    private ChatService chatService;
-    private UserService userService;
-    private ValidationMessageService validationMessageService;
+    private UserService userService = UserService.getInstance();
 
-    @PostMapping(value = "/chat/save", produces = "application/json")
-    public Response postChatMessage(@CookieValue(value = "token") String token,
-                                    @RequestBody ChatMessageSave message) {
-        log.info("Request save chat message: {}", message);
-        Response response = validationMessageService.validateMessage(message);
-        if (response != null) {
-            return response;
-        }
-        userService.checkUserToToken(token);
-        return chatService.saveMessage(message);
+    public ChatController() {
+        getFullMessagesByLimit();
+        getNewMessages();
+        getAllNewMessages();
+        postChatMessage();
     }
+
+    public void postChatMessage() {
+        post("/chat/save", (req, res) -> userService.postChatMessage(req.headers("Authorization"), req.body()));
+    }
+
+    //TODO получение id сообщения, которое прочитано
+//    public void postChatMessage() {
+//        post("/chat/save", (req, res) -> userService.postChatMessage(req.headers("Authorization"), req.body()));
+//    }
 
 //    @Deprecated
 //    @GetMapping(value = "/{toLogin}/{fromLogin}/{limit}", produces = "application/json")
@@ -42,39 +34,15 @@ public class ChatController {
 //        return chatService.getMessages(toLogin, fromLogin, limit);
 //    }
 
-    @GetMapping(value = "chat/full", produces = "application/json")
-    public Response getFullMessagesByLimit(@CookieValue(value = "token") String token,
-                                           @RequestBody ChatMessageFull message) {
-        log.info("Request get full chat messages by limit: {}", message);
-        Response response = validationMessageService.validateMessage(message);
-        if (response != null) {
-            return response;
-        }
-        userService.checkUserToToken(token);
-        return chatService.getFullMessages(message);
+    public void getFullMessagesByLimit() {
+        get("chat/full", (req, res) -> userService.getFullMessagesByLimit(req.headers("Authorization"), req.body()));
     }
 
-    @GetMapping(value = "chat/new", produces = "application/json")
-    public Response getNewMessages(@CookieValue(value = "token") String token,
-                                   @RequestBody ChatNewMessageFromUser message) {
-        log.info("Request get new message from user: {}", message);
-        Response response = validationMessageService.validateMessage(message);
-        if (response != null) {
-            return response;
-        }
-        userService.checkUserToToken(token);
-        return chatService.getNewMessages(message);
+    public void getNewMessages() {
+        get("/chat/new", (req, res) -> userService.getNewMessages(req.headers("Authorization"), req.body()));
     }
 
-    @GetMapping(value = "new/{toLogin}", produces = "application/json")
-    public Response getAllNewMessages(@CookieValue(value = "token") String token,
-                                      @RequestBody ChatAllNewMessage message) {
-        log.info("Request get new message from user: {}", message);
-        Response response = validationMessageService.validateMessage(message);
-        if (response != null) {
-            return response;
-        }
-        userService.checkUserToToken(token);
-        return chatService.getAllNewMessages(message);
+    public void getAllNewMessages() {
+        get("/new/:toLogin", (req, res) -> userService.getAllNewMessages(req.headers("Authorization"), req.body()));
     }
 }

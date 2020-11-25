@@ -10,11 +10,11 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Slf4j
-@Service
-@RequiredArgsConstructor
+//@Service
+//@RequiredArgsConstructor
 public class ChatManipulator {
 
-    private final ChatDB chatDB;
+    private final ChatDB chatDB = new ChatDB();
 
     public void insertChatMessage(ChatMessageSave chatMessage) {
         chatDB.insertChatMessage(chatMessage);
@@ -22,6 +22,12 @@ public class ChatManipulator {
 
     public void updateChatMessage(ChatMessage chatMessage) {
         chatDB.updateChatMessage(chatMessage);
+    }
+
+    public void updateChatMessagesByIds(List<Long> ids) {
+        if (ids.size() > 0) {
+            chatDB.updateChatMessagesByIds(ids);
+        }
     }
 
     public List<ChatMessage> getChatMessages(String toLogin, String fromLogin, int limit) {
@@ -54,5 +60,9 @@ public class ChatManipulator {
 //        } catch (GetChatMessageException e) {
 //            return List.of();
 //        }
+    }
+
+    public List<ChatMessage> getAllMessages() {
+        return chatDB.getAllMessages();
     }
 }

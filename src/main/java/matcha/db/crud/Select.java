@@ -82,13 +82,14 @@ public class Select {
     public static String selectUsersWithCommonTags = "SELECT r.login as name, COUNT(r.login) as count FROM tagRelations r WHERE r.tagId IN (:tagIds) GROUP BY r.login";
     public static String selectBlackListCount = "SELECT COUNT(*) FROM blacklist WHERE fromLogin = :fromLogin AND toLogin = :toLogin";
     public static String selectUsersCountByLogin = "SELECT COUNT(*) FROM users WHERE login = :login";
-    public static String selectUsersCountByActivationCode = "SELECT COUNT(*) FROM users WHERE activationCode = :activationCode";
+    public static String selectUsersCountByActivationCode = "SELECT users.login FROM users WHERE activationCode = :activationCode";
     public static String selectUsersCountByLoginAndActivationCode = "SELECT COUNT(*) FROM users WHERE login = :login AND activationCode = :activationCode";
     public static String selectUserAndProfileByActivationCode = "SELECT * FROM users u INNER JOIN profiles p ON u.profileId = p.id WHERE activationCode = ?";
-    public static String selectNewChatMessages = "SELECT * FROM chat WHERE toLogin = ? AND fromLogin = ? AND read = FALSE";
-    public static String selectCountAllNewChatMessages = "SELECT * FROM chat WHERE toLogin = ? AND read = FALSE";
-    public static String selectChatMessages = "SELECT * FROM chat WHERE toLogin = ? AND fromLogin = ? ORDER BY time DESC LIMIT ?";
-    public static String selectFullChatMessages = "SELECT * FROM chat WHERE (toLogin = ? OR toLogin = ?) AND (fromLogin = ? OR fromLogin = ?) ORDER BY time DESC LIMIT ?";
+    public static String selectNewChatMessages = "SELECT * FROM chat WHERE toLogin = :toLogin AND fromLogin = :fromLogin AND read = FALSE";
+    public static String selectCountAllNewChatMessages = "SELECT * FROM chat WHERE toLogin = :toLogin AND read = FALSE";
+    public static String selectAllMessages = "SELECT * FROM chat";
+    public static String selectChatMessages = "SELECT * FROM chat WHERE toLogin = :toLogin AND fromLogin = :fromLogin ORDER BY time DESC LIMIT :limit";
+    public static String selectFullChatMessages = "SELECT * FROM chat WHERE (toLogin = :toLogin OR fromLogin = :fromLogin) AND (toLogin = :fromLogin OR fromLogin = :toLogin) ORDER BY time DESC LIMIT :limit";
 
     public static String selectImageById = "SELECT * FROM images WHERE id = :id LIMIT 1";
     public static String selectImageByProfileId = "SELECT * FROM images WHERE profileId = :profileId LIMIT 5";
