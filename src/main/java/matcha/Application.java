@@ -1,11 +1,11 @@
 package matcha;
 
-import matcha.validator.ValidationMessageService;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-import org.slf4j.LoggerFactory;
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
+import matcha.validator.ValidationMessageService;
+import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import spark.Spark;
 
 import static spark.Spark.*;
 
@@ -48,7 +48,7 @@ model.createPost("das", "sdasd", strs);
 /*UUID post = *//*
 model.createPost("das", "sdasd", strs);
         */
-/*UUID post = *//*
+        /*UUID post = *//*
 model.createPost("das", "sdasd", strs);
 //        System.err.println(post);
 
@@ -58,9 +58,15 @@ model.createPost("das", "sdasd", strs);
 //        SpringApplication.run(Application.class, args);
 
 */
+        Thread thread = new Thread(Spark::awaitInitialization);
+//        awaitInitialization();
+        port(getHerokuAssignedPort());
+
+        webSocket("/socket", EchoWebSocket.class);
+        init();
+
         ValidationMessageService validationMessageService = ValidationMessageService.getInstance();
 
-        port(getHerokuAssignedPort());
         get("/hello", (req, res) -> "Hello Heroku World");
         options("/*",
                 (request, response) -> {
@@ -95,9 +101,10 @@ model.createPost("das", "sdasd", strs);
             }
         });
         SingletonControllers.init();
+
     }
 
-    static int getHerokuAssignedPort() {
+    public static int getHerokuAssignedPort() {
         ProcessBuilder processBuilder = new ProcessBuilder();
         if (processBuilder.environment().get("PORT") != null) {
             return Integer.parseInt(processBuilder.environment().get("PORT"));

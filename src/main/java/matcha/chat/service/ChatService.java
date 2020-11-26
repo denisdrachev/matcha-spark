@@ -2,13 +2,11 @@ package matcha.chat.service;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import lombok.AllArgsConstructor;
 import matcha.chat.manipulation.ChatManipulator;
 import matcha.chat.model.*;
 import matcha.event.model.Event;
 import matcha.event.service.EventService;
 import matcha.response.Response;
-import matcha.user.service.UserService;
 import matcha.userprofile.model.UserProfileChat;
 import matcha.userprofile.service.UserProfileService;
 import matcha.utils.EventType;
@@ -48,7 +46,7 @@ public class ChatService implements ChatInterface {
         chatManipulator.insertChatMessage(chatMessage);
         Event newEvent = new Event(EventType.SEND_MESSAGE, chatMessage.getFromLogin(), true, chatMessage.getToLogin(), false);
         eventService.saveNewEvent(newEvent);
-        Event newToEvent = new Event(EventType.INCOME_MESSAGE, chatMessage.getToLogin(), true, chatMessage.getFromLogin(), false);
+        Event newToEvent = new Event(EventType.INCOME_MESSAGE, chatMessage.getToLogin(), true, chatMessage.getFromLogin(), true);
         eventService.saveNewEvent(newToEvent);
 
         return validationMessageService.prepareMessageOkOnlyType();
@@ -69,8 +67,6 @@ public class ChatService implements ChatInterface {
      * 1. Получает последние limit сообщений между пользователями toLogin и fromLogin
      * 2. Если среди них есть непрочитанные - обновляет их в базу как прочитанные
      * 3. Возвращает их
-     *
-     * -неэффективно
      */
     @Override
     public Response getFullMessages(ChatMessageFull message) {
@@ -89,14 +85,10 @@ public class ChatService implements ChatInterface {
      * 1. Ищет все непрочитанные сообщения от toLogin к fromLogin
      * 2. Смотрит флаг во входящем запросе. Помечать ли полученные сообщения как прочитанные? Если да - помечает
      * 3. Возвращает их
-     * <p>
-     * -неэффективно
      */
     @Override
     public Response getNewMessages(ChatNewMessageFromUser message) {
         List<ChatMessage> chatMessages = chatManipulator.getNewChatMessages(message.getToLogin(), message.getFromLogin());
-//        if (message.getIsRead() != 0)
-//            chatMessages.forEach(chatManipulator::updateChatMessage);
         if (message.getIsRead() != 0) {
             List<Long> ids = chatMessages.stream()
                     .filter(chatMessage -> !chatMessage.isRead())

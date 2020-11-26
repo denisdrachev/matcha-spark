@@ -44,7 +44,7 @@ public class UserManipulator {
 //                    user.setActivationCode("TEST_TEST_TEST");
                     //TODO первнуть строку
                     userUpdateToken(user);
-                    return new ResponseOk(user.getActivationCode()/*, user.getLogin()*/);
+                    return new ResponseOk(user.getActivationCode());
                 } else {
                     log.info("Логин или пароль неверны. User: {}", userLogin);
                     throw new UserLoginOrPasswordIncorrectException();

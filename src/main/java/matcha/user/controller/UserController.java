@@ -31,6 +31,8 @@ public class UserController {
         getUsers();
         logout();
         testExecute();
+        resetPassword();
+        changeResetPassword();
     }
 
     private UserService userService = UserService.getInstance();
@@ -47,6 +49,14 @@ public class UserController {
             userService.userRegistration(user);
             return validationMessageService.prepareMessageOkOnlyType();
         });
+    }
+
+    public void resetPassword() {
+        post("/password-reset", (req, res) -> userService.resetPasswordEmail(req.headers("Authorization")));
+    }
+
+    public void changeResetPassword() {
+        post("/change-reset-password", (req, res) -> userService.resetPassword(req.headers("Authorization"), req.body()));
     }
 
     //

@@ -14,12 +14,10 @@ import matcha.chat.model.ChatNewMessageFromUser;
 import matcha.chat.service.ChatService;
 import matcha.connected.model.ConnectedWithUserInfo;
 import matcha.connected.service.ConnectedService;
-import matcha.converter.Utils;
 import matcha.event.model.Event;
 import matcha.event.model.EventWithUserInfo;
 import matcha.event.service.EventService;
 import matcha.exception.context.IncorrectInputParamsException;
-import matcha.exception.user.UserNotFoundException;
 import matcha.image.service.ImageService;
 import matcha.location.model.Location;
 import matcha.location.service.LocationService;
@@ -41,9 +39,11 @@ import matcha.utils.EventType;
 import matcha.validator.ValidationMessageService;
 
 import java.lang.reflect.Type;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static matcha.converter.Utils.initRegistryUser;
 import static spark.Spark.exception;
 
 @Slf4j
@@ -93,7 +93,7 @@ public class UserService implements UserInterface {
         UserEntity userEntity = new UserEntity(userRegistry);
         userEntity.setActive(configProperties.isUsersDefaultActive());
         userEntity.setProfileId(newProfileId);
-        Utils.initRegistryUser(userEntity);
+        initRegistryUser(userEntity);
         userManipulator.userRegistry(userEntity);
 
         //TODO рефактор отправки EMAIL
@@ -236,6 +236,13 @@ public class UserService implements UserInterface {
 
         userService.checkUserByLoginAndActivationCode(userProfile.getLogin(), token);
         imageService.checkImagesIsCorrect(userProfile.getImages());
+        if (userProfile.getTags() != null) {
+            for (String tag : userProfile.getTags()) {
+                if (tag.length() > 10) {
+                    return validationMessageService.prepareErrorMessage("Некорректные параметры запроса.");
+                }
+            }
+        }
         userService.saveUserInfo(userProfile);
         return validationMessageService.prepareMessageOkOnlyType();
     }
@@ -522,5 +529,29 @@ public class UserService implements UserInterface {
         chatMessageSave.setFromLogin(fromLogin);
         userService.checkUserExistsByLogin(chatMessageSave.getToLogin());
         return chatService.saveMessage(chatMessageSave);
+    }
+
+    public Response resetPasswordEmail(String token) {
+        log.info("Request /password-reset");
+        String fromLogin = userService.checkUserToToken(token);
+        UserEntity user = userService.getUserByLogin(fromLogin);
+        userManipulator.userUpdateToken(user);
+        mailService.sendResetPasswordEmail(user.getEmail(), user.getActivationCode());
+        return validationMessageService.prepareMessageOkOnlyType();
+    }
+
+    public Response resetPassword(String token, String body) {
+        log.info("Request /change-reset-password {}", body);
+        Map<String, String> map = gson.fromJson(body, HashMap.class);
+        String fromLogin = userService.checkUserToToken(token);
+
+        String password = map.get("password");
+        if (password == null || password.isEmpty())
+            return validationMessageService.prepareErrorMessage("Указан недопустимый пароль");
+
+        UserEntity user = userService.getUserByLogin(fromLogin);
+        user.setPassword(password);
+        initRegistryUser(user);
+        return validationMessageService.prepareMessageOkOnlyType();
     }
 }

@@ -89,7 +89,7 @@ public class Select {
     public static String selectCountAllNewChatMessages = "SELECT * FROM chat WHERE toLogin = :toLogin AND read = FALSE";
     public static String selectAllMessages = "SELECT * FROM chat";
     public static String selectChatMessages = "SELECT * FROM chat WHERE toLogin = :toLogin AND fromLogin = :fromLogin ORDER BY time DESC LIMIT :limit";
-    public static String selectFullChatMessages = "SELECT * FROM chat WHERE (toLogin = :toLogin OR fromLogin = :fromLogin) AND (toLogin = :fromLogin OR fromLogin = :toLogin) ORDER BY time DESC LIMIT :limit";
+    public static String selectFullChatMessages = "SELECT * FROM chat WHERE (toLogin = :toLogin AND fromLogin = :fromLogin) OR (toLogin = :fromLogin AND fromLogin = :toLogin) ORDER BY time DESC LIMIT :limit";
 
     public static String selectImageById = "SELECT * FROM images WHERE id = :id LIMIT 1";
     public static String selectImageByProfileId = "SELECT * FROM images WHERE profileId = :profileId LIMIT 5";

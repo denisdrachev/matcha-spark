@@ -43,6 +43,6 @@ public class ChatController {
     }
 
     public void getAllNewMessages() {
-        get("/new/:toLogin", (req, res) -> userService.getAllNewMessages(req.headers("Authorization"), req.body()));
+        get("/chat/allnew", (req, res) -> userService.getAllNewMessages(req.headers("Authorization"), req.body()));
     }
 }

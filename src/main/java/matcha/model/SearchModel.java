@@ -21,7 +21,7 @@ public class SearchModel {
     private String login;
 
     public SearchModel(Location location, String minAge, String maxAge, String minRatingAge, String maxRatingAge,
-                       String deltaRadius, List<Integer> tags, String limit, String offset, String login) {
+                       String deltaRadius, List<Integer> tags, String limit, String offset, String login) throws Exception {
         setUserLocation(location);
         setMinAge(minAge);
         setMaxAge(maxAge);
@@ -32,6 +32,13 @@ public class SearchModel {
         setLimit(limit);
         setOffset(offset);
         this.login = login;
+        validate();
+    }
+
+    private void validate() throws Exception {
+        if (userLocation == null || minAge < 0 || minAge > 150 || maxAge < 0 || maxAge > 150 || minRatingAge < 0
+                || maxRatingAge < 0 || deltaRadius < 0 || limit <= 0 || limit > 100 || offset < 0 || login == null || login.isEmpty())
+            throw new Exception();
     }
 
     public void setMinAge(String minAge) {
