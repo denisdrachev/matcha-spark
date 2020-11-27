@@ -4,7 +4,8 @@ import org.everit.json.schema.Schema;
 import org.everit.json.schema.loader.SchemaLoader;
 import org.json.JSONObject;
 import org.json.JSONTokener;
-import org.springframework.core.io.ClassPathResource;
+import spark.resource.ClassPathResource;
+//import org.springframework.core.io.ClassPathResource;
 
 import java.io.IOException;
 import java.io.InputStream;

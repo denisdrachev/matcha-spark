@@ -11,20 +11,13 @@ import matcha.db.crud.Update;
 import matcha.exception.db.InsertBlackListMessageDBException;
 import matcha.exception.db.NotFoundBlackListMessageDBException;
 import matcha.exception.db.UpdateBlackListMessageDBException;
-import matcha.model.rowMapper.BlackListMessageRowMapper;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Service;
 import org.sql2o.Sql2o;
 
 import java.util.List;
 
 @Slf4j
-@Service
-//@RequiredArgsConstructor
-@NoArgsConstructor
 public class BlackListDB {
 
-    private final JdbcTemplate jdbcTemplate = new JdbcTemplate();
     private final Sql2o sql2o = Sql2oModel.getSql2o();
 
     public void insertBlackListMessage(BlackListMessage message) {

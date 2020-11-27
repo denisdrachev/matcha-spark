@@ -12,13 +12,9 @@ import matcha.event.model.EventWithUserInfo;
 import matcha.rating.service.RatingService;
 import matcha.reactive.EventUnicastService;
 import matcha.utils.EventType;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
-@AllArgsConstructor
-@NoArgsConstructor
 public class EventService {
 
     //TODO тут добавить реактивщину

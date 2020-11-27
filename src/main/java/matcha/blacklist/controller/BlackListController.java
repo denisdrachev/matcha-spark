@@ -6,12 +6,10 @@ import matcha.blacklist.model.BlackListMessage;
 import matcha.response.Response;
 import matcha.user.service.UserService;
 import matcha.validator.ValidationMessageService;
-import org.springframework.web.bind.annotation.CrossOrigin;
 
 import static spark.Spark.post;
 
 @Slf4j
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 //@RestController
 //@AllArgsConstructor
 //@RequestMapping

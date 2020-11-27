@@ -19,10 +19,6 @@ import matcha.user.model.UserEntity;
 import matcha.user.model.UserEntity2;
 import matcha.user.model.UserSearchEntity;
 import matcha.user.model.UserUpdateEntity;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
-import org.springframework.stereotype.Service;
 import org.sql2o.Sql2o;
 
 import java.sql.Timestamp;
@@ -30,12 +26,8 @@ import java.util.Calendar;
 import java.util.List;
 
 @Slf4j
-@Service
-//@RequiredArgsConstructor
-@NoArgsConstructor
 public class UserDB {
 
-    private final JdbcTemplate jdbcTemplate = new JdbcTemplate();
     private final Sql2o sql2o = Sql2oModel.getSql2o();
 
     public Integer getUserCountByLogin(String login) {
@@ -77,7 +69,6 @@ public class UserDB {
 
     public int insertUser(UserEntity user) {
         log.info("Insert user: {}", user);
-        KeyHolder keyHolder = new GeneratedKeyHolder();
         try (org.sql2o.Connection conn = sql2o.open()) {
 
             Integer userId = conn.createQuery(Insert.insertUser)
@@ -150,16 +141,16 @@ public class UserDB {
         }
     }
 
-    public void dropUserByLogin(String login) {
-        log.info("Drop user by login: {}", login);
-        try {
-            int drop = jdbcTemplate.update(Delete.deleteUserById, login);
-            log.info("Drop user by login result: {}", drop);
-        } catch (Exception e) {
-            log.warn("Exception. dropUserByLogin: {}", e.getMessage());
-            throw new DropUserByLoginDBException();
-        }
-    }
+//    public void dropUserByLogin(String login) {
+//        log.info("Drop user by login: {}", login);
+//        try {
+//            int drop = jdbcTemplate.update(Delete.deleteUserById, login);
+//            log.info("Drop user by login result: {}", drop);
+//        } catch (Exception e) {
+//            log.warn("Exception. dropUserByLogin: {}", e.getMessage());
+//            throw new DropUserByLoginDBException();
+//        }
+//    }
 
     //TODO рефакторинг метода
     public UserEntity getUserByToken(String activationCode) {
@@ -325,6 +316,7 @@ public class UserDB {
                         .addParameter("limit", searchModel.getLimit())
                         .addParameter("offset", searchModel.getOffset())
                         .addParameter("login", searchModel.getLogin())
+                        .addParameter("preferenceGender", searchModel.getPreference())
                         .executeAndFetch(UserSearchEntity.class);
                 conn.commit();
             } else {

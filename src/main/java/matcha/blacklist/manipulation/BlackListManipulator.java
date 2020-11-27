@@ -6,14 +6,10 @@ import lombok.extern.slf4j.Slf4j;
 import matcha.blacklist.db.BlackListDB;
 import matcha.blacklist.model.BlackListMessage;
 import matcha.exception.db.NotFoundBlackListMessageDBException;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Slf4j
-@Service
-//@RequiredArgsConstructor
-@NoArgsConstructor
 public class BlackListManipulator {
 
     private final BlackListDB blackListDB = new BlackListDB();

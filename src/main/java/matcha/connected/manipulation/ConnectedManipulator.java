@@ -6,14 +6,10 @@ import matcha.connected.db.ConnectedDB;
 import matcha.connected.model.ConnectedEntity;
 import matcha.connected.model.ConnectedWithUserInfo;
 import matcha.exception.db.NotFoundBlackListMessageDBException;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Slf4j
-//@Service
-//@RequiredArgsConstructor
-//@NoArgsConstructor
 public class ConnectedManipulator {
 
     private final ConnectedDB connectedDB = new ConnectedDB();

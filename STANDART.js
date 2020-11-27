@@ -222,9 +222,10 @@
     // deltaRadius >= 0
     // limit > 0, limit <= 100
     // offset >= 0
+    //sortAge, sortLocation, sortRating, sortTags [-1: DESC, 1: ASC]
     {
         type: GET,
-        path: "/get-users?tags=tag2,tag4&ageMin=0&ageMax=100&minRating=0&maxRating=999&deltaRadius=1000&limit=10&offset=0",
+        path: "/get-users?tags=tag2,tag4&ageMin=0&ageMax=100&minRating=0&maxRating=999&deltaRadius=1000&limit=10&offset=0&sortAge=1&sortLocation=1&sortRating-1&sortTags=1",
         desc: "User_2: Поиск пользователей с использованием фильтров",
         header: 'Authorization',
         request: {},

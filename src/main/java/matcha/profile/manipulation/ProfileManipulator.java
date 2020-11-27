@@ -5,12 +5,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import matcha.profile.db.ProfileDB;
 import matcha.profile.model.ProfileEntity;
-import org.springframework.stereotype.Service;
 
 @Slf4j
-@Service
-//@RequiredArgsConstructor
-@NoArgsConstructor
 public class ProfileManipulator {
 
     private final ProfileDB profileDB = new ProfileDB();

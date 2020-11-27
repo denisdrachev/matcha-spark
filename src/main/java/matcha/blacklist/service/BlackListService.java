@@ -6,13 +6,9 @@ import matcha.blacklist.manipulation.BlackListManipulator;
 import matcha.blacklist.model.BlackListMessage;
 import matcha.image.service.ImageService;
 import matcha.location.model.Location;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
-@AllArgsConstructor
-@NoArgsConstructor
 public class BlackListService {
 
     private BlackListManipulator blackListManipulator = new BlackListManipulator();

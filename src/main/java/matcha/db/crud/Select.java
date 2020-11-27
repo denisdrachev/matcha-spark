@@ -35,6 +35,7 @@ public class Select {
                     "LEFT JOIN blacklist b ON b.fromLogin = :login AND b.toLogin = u.login) " +
                     "INNER JOIN images i ON i.profileId = u.profileId AND i.avatar = TRUE) " +
                     "WHERE (b.isBlocked IS NULL OR b.isBlocked <> TRUE) " +
+                    "AND p.gender IN (:preferenceGender) " +
                     "AND t.count > 0 " +
                     "AND p.age >= :ageMin AND p.age <= :ageMax " + //возраст
                     "AND l.x >= :minX AND l.x <= :maxX AND l.y >= :minY AND l.y <= :maxY "; //растояние
@@ -48,6 +49,7 @@ public class Select {
                     "LEFT JOIN blacklist b ON b.fromLogin = :login AND b.toLogin = u.login) " +
                     "RIGHT JOIN images i ON i.profileId = u.profileId AND i.avatar = TRUE) " +
                     "WHERE (b.isBlocked IS NULL OR b.isBlocked <> TRUE) " +
+                    "AND p.gender IN (:preferenceGender) " +
                     "AND p.age >= :ageMin AND p.age <= :ageMax " + //возраст
                     "AND l.x >= :minX AND l.x <= :maxX AND l.y >= :minY AND l.y <= :maxY "; //растояние
 //                    " LIMIT :limit OFFSET :offset ";

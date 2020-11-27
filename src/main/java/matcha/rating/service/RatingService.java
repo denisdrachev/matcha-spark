@@ -4,11 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import matcha.rating.manipulation.RatingManipulator;
 import matcha.rating.model.Rating;
-import org.springframework.stereotype.Service;
+//import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
+//@Service
 @AllArgsConstructor
 @NoArgsConstructor
 public class RatingService {

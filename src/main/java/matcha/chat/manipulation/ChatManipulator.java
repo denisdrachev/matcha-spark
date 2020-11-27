@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import matcha.chat.db.ChatDB;
 import matcha.chat.model.ChatMessage;
 import matcha.chat.model.ChatMessageSave;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 

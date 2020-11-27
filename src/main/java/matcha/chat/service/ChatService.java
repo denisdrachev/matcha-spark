@@ -11,12 +11,12 @@ import matcha.userprofile.model.UserProfileChat;
 import matcha.userprofile.service.UserProfileService;
 import matcha.utils.EventType;
 import matcha.validator.ValidationMessageService;
-import org.springframework.stereotype.Service;
+//import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Service
+//@Service
 //@AllArgsConstructor
 public class ChatService implements ChatInterface {
 

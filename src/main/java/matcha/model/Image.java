@@ -17,8 +17,8 @@ public class Image implements Serializable {
     private String src;
     private boolean main;
 
-    @Override
-    public String toString() {
-        return Converter.objectToJson(this).get();
-    }
+//    @Override
+//    public String toString() {
+//        return Converter.objectToJson(this).get();
+//    }
 }

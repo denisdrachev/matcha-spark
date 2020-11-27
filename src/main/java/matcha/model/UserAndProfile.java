@@ -1,9 +1,6 @@
 package matcha.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import matcha.converter.Converter;
 import matcha.image.model.Image;
 import matcha.location.model.Location;
@@ -14,8 +11,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserAndProfile implements Serializable {
@@ -72,9 +68,9 @@ public class UserAndProfile implements Serializable {
 //        return jsonObject;
 //    }
 
-    @Override
-    public String toString() {
-        return Converter.objectToJson(this).get();
-    }
+//    @Override
+//    public String toString() {
+//        return Converter.objectToJson(this).get();
+//    }
 
 }

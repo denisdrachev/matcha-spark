@@ -5,13 +5,9 @@ import lombok.NoArgsConstructor;
 import matcha.connected.manipulation.ConnectedManipulator;
 import matcha.connected.model.ConnectedEntity;
 import matcha.connected.model.ConnectedWithUserInfo;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
-@AllArgsConstructor
-@NoArgsConstructor
 public class ConnectedService {
 
     private ConnectedManipulator connectedManipulator = new ConnectedManipulator();

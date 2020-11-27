@@ -127,7 +127,8 @@ public class UserController {
                 req.queryParams("sortAge"),
                 req.queryParams("sortLocation"),
                 req.queryParams("sortRating"),
-                req.queryParams("sortTags")
+                req.queryParams("sortTags"),
+                req.queryParams("needPreference")
                 )
 //                возрасту, местоположению, «рейтингу славы» и тегам.
         );

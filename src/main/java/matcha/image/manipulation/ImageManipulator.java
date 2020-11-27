@@ -4,14 +4,11 @@ import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import matcha.image.db.ImageDB;
 import matcha.image.model.Image;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Slf4j
-@Service
 //@RequiredArgsConstructor
-@NoArgsConstructor
 public class ImageManipulator {
 
     private final ImageDB imageDB = new ImageDB();

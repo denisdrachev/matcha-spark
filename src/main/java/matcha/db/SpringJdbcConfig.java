@@ -8,9 +8,7 @@ import matcha.user.model.UserEntity;
 import matcha.user.model.UserRegistry;
 import matcha.user.service.UserService;
 import matcha.userprofile.model.UserInfoModel;
-import org.springframework.jdbc.core.JdbcTemplate;
 
-import javax.annotation.PreDestroy;
 import java.util.Calendar;
 import java.util.List;
 
@@ -18,7 +16,6 @@ import java.util.List;
 //@AllArgsConstructor
 public class SpringJdbcConfig {
 
-    JdbcTemplate jdbcTemplate;
     ConfigProperties properties;
     UserService userService = UserService.getInstance();
     ProfileService profileService = ProfileService.getInstance();
@@ -222,7 +219,6 @@ public class SpringJdbcConfig {
         }
     }
 
-    @PreDestroy
     public void preDestroy() {
 //        try {
 //            System.out.println("CONNECTION!");

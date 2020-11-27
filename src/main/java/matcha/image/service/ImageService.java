@@ -5,13 +5,9 @@ import lombok.NoArgsConstructor;
 import matcha.exception.context.image.ValidateAvatarInImagesException;
 import matcha.image.manipulation.ImageManipulator;
 import matcha.image.model.Image;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
-@AllArgsConstructor
-@NoArgsConstructor
 public class ImageService implements ImageInterface {
 
     private ImageManipulator imageManipulator = new ImageManipulator();

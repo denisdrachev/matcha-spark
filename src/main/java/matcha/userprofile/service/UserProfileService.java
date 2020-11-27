@@ -8,7 +8,6 @@ import matcha.profile.model.ProfileEntity;
 import matcha.user.db.UserDB;
 import matcha.user.model.UserEntity;
 import matcha.userprofile.model.UserProfileChat;
-import org.springframework.stereotype.Service;
 
 @Slf4j
 //@Service

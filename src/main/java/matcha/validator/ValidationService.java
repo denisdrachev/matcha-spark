@@ -5,13 +5,10 @@ import lombok.extern.slf4j.Slf4j;
 import matcha.exception.context.image.ValidateAvatarInImagesException;
 import matcha.exception.context.image.ValidateAvatarIndexInImagesException;
 import matcha.image.model.ImageEntity;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
 @Slf4j
-@AllArgsConstructor
 public class ValidationService {
 
     public void validateAvatarInImages(Integer avatar, List<ImageEntity> imageElems) {

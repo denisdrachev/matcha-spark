@@ -2,21 +2,19 @@ package matcha.validator;
 
 import lombok.Getter;
 import matcha.properties.ConfigProperties;
-import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-@Service
-public class ValidatorFactory {
+public class ValidatorFactory3 {
 
     private ConfigProperties properties;
     @Getter
     private Map<String, JsonSchemaValidator> validatorMap = new HashMap();
 
-    public ValidatorFactory(ConfigProperties properties) {
+    public ValidatorFactory3(ConfigProperties properties) {
         this.properties = properties;
         properties.getSchemasList().forEach(s -> {
             try {

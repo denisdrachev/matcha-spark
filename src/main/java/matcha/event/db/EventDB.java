@@ -12,7 +12,6 @@ import matcha.exception.db.InsertEventDBException;
 import matcha.exception.db.LoadEventsException;
 import matcha.exception.db.UpdateEventDBException;
 import matcha.utils.EventType;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.sql2o.Sql2o;
 
 import java.sql.Timestamp;
@@ -24,7 +23,6 @@ import java.util.List;
 //@NoArgsConstructor
 public class EventDB {
 
-    private final JdbcTemplate jdbcTemplate = new JdbcTemplate();
     private final Sql2o sql2o = Sql2oModel.getSql2o();
 
     public Integer insertEvent(Event event) {

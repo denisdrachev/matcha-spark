@@ -131,11 +131,18 @@ public class SearchModel {
     }
 
     public void setPreference(Integer preference) {
-        if (preference == 3) {
+        if (preference == null) {
             this.preference = List.of(1, 2);
         } else {
-            this.preference = List.of(preference);
+            if (preference == 3) {
+                this.preference = List.of(1, 2);
+            } else if (preference == 2) {
+                this.preference = List.of(2);
+            } else {
+                this.preference = List.of(1);
+            }
         }
+        System.err.println("this.preference: " + this.preference);
     }
 
     public void setSortAge(String sortAge) {

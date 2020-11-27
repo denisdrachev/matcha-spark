@@ -4,13 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import matcha.location.manipulation.LocationManipulator;
 import matcha.location.model.Location;
-import org.springframework.stereotype.Service;
+//import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
-@AllArgsConstructor
-@NoArgsConstructor
+//@Service
+//@AllArgsConstructor
+//@NoArgsConstructor
 public class LocationService {
 
     private static LocationService locationService;

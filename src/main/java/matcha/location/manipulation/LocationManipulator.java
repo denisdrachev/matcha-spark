@@ -4,14 +4,10 @@ import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import matcha.location.db.LocationDB;
 import matcha.location.model.Location;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Slf4j
-@Service
-//@RequiredArgsConstructor
-@NoArgsConstructor
 public class LocationManipulator {
 
     private final LocationDB locationDB = new LocationDB();

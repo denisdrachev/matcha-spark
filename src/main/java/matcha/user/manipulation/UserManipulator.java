@@ -16,15 +16,15 @@ import matcha.user.model.UserEntity;
 import matcha.user.model.UserInfo;
 import matcha.user.model.UserSearchEntity;
 import matcha.user.model.UserUpdateEntity;
-import org.springframework.stereotype.Service;
+//import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
 
 @Slf4j
-@Service
-@RequiredArgsConstructor
+//@Service
+//@RequiredArgsConstructor
 public class UserManipulator {
 
     private final UserDB userDB = new UserDB();

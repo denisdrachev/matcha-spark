@@ -1,21 +1,30 @@
 package matcha;
 
-import ch.qos.logback.classic.Level;
-import ch.qos.logback.classic.Logger;
+//import ch.qos.logback.classic.Level;
+//import ch.qos.logback.classic.Logger;
+import lombok.extern.slf4j.Slf4j;
 import matcha.validator.ValidationMessageService;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+//import org.springframework.boot.autoconfigure.SpringBootApplication;
 import spark.Spark;
+
+//import java.util.logging.Level;
+//import java.util.logging.Logger;
+
+import java.util.logging.Level;
 
 import static spark.Spark.*;
 
-@SpringBootApplication
+//@SpringBootApplication
+
+@Slf4j
 public class Application {
 
     public static void main(String[] args) {
 
-        Logger root = (Logger)LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
-        root.setLevel(Level.INFO);
+//        Logger root = (Logger)LoggerFactory.getLogger("Logger.ROOT_LOGGER_NAME");
+//        root.setLevel(Level.INFO);
 
 //        jdbc:h2:mem:matcha
 //        String connectionString = "jdbc:h2:mem:matcha;DB_CLOSE_DELAY=-1;INIT=RUNSCRIPT from 'classpath:sql/tables/all.sql'";

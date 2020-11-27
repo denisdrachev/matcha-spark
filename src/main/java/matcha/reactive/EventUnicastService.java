@@ -2,7 +2,6 @@ package matcha.reactive;
 
 import matcha.event.model.Event;
 import org.json.JSONObject;
-import reactor.core.publisher.Flux;
 
 public interface EventUnicastService {
     /**
@@ -13,5 +12,5 @@ public interface EventUnicastService {
 //    void onNext(EventSocket next);
     void onNext(Event next);
 
-    Flux<JSONObject> getMessages();
+//    Flux<JSONObject> getMessages();
 }

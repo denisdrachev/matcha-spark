@@ -9,8 +9,7 @@ import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class Location implements Serializable {
@@ -37,8 +36,8 @@ public class Location implements Serializable {
         this.profileId = (int) user;
     }
 
-    @Override
-    public String toString() {
-        return Converter.objectToJson(this).get();
-    }
+//    @Override
+//    public String toString() {
+//        return Converter.objectToJson(this).get();
+//    }
 }

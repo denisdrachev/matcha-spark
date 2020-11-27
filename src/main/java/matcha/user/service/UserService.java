@@ -453,10 +453,10 @@ public class UserService implements UserInterface {
 
     public Response getUsers(String token, String ageMin, String ageMax, String minRating,
                              String maxRating, String deltaRadius, String tags, String limit,
-                             String offset, String sortAge, String sortLocation, String sortRating, String sortTags) {
+                             String offset, String sortAge, String sortLocation, String sortRating, String sortTags, String needPreference) {
         log.info("Request /get-users ageMin:{} ageMax:{} minRating:{} maxRating:{} deltaRadius:{} tags:{} limit:{} " +
-                        "offset:{}, sortAge:{}, sortLocation:{}, sortRating:{}, sortTags{}",
-                ageMin, ageMax, minRating, maxRating, deltaRadius, tags, limit, offset, sortAge, sortLocation, sortRating, sortTags);
+                        "offset:{}, sortAge:{}, sortLocation:{}, sortRating:{}, sortTags{}, needPreference{}",
+                ageMin, ageMax, minRating, maxRating, deltaRadius, tags, limit, offset, sortAge, sortLocation, sortRating, sortTags, needPreference);
 
 
 //        req.queryParams("sortAge"),
@@ -476,8 +476,15 @@ public class UserService implements UserInterface {
 
         log.info("Request get users");
         try {
+            Integer preference;
+            if (Integer.parseInt(needPreference) == 1 && profile.getPreference() != null) {
+                preference = profile.getPreference();
+            } else {
+                preference = null;
+            }
+
             SearchModel searchModel = new SearchModel(location, ageMin, ageMax, minRating, maxRating,
-                    deltaRadius, tagsIds, limit, offset, user.getLogin(), profile.getPreference(), sortAge, sortLocation, sortRating, sortTags);
+                    deltaRadius, tagsIds, limit, offset, user.getLogin(), preference, sortAge, sortLocation, sortRating, sortTags);
             return validationMessageService.prepareMessageOkData(gson.toJsonTree(
                     userService.getUsersWithFilters(searchModel)
             ));

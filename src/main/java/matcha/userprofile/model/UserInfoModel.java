@@ -1,9 +1,6 @@
 package matcha.userprofile.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import matcha.converter.Converter;
 import matcha.image.model.Image;
 import matcha.location.model.Location;
@@ -17,8 +14,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserInfoModel implements Serializable, MyObject {
@@ -71,9 +67,9 @@ public class UserInfoModel implements Serializable, MyObject {
     private String activationCode;
 
 
-    @Override
-    public String toString() {
-        return Converter.objectToJson(this).get();
-    }
+//    @Override
+//    public String toString() {
+//        return Converter.objectToJson(this).get();
+//    }
 
 }

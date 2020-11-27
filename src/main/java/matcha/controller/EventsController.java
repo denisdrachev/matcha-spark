@@ -4,9 +4,6 @@ import lombok.RequiredArgsConstructor;
 import matcha.event.model.Event;
 import matcha.event.service.EventService;
 import matcha.image.model.Image;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
 import java.util.stream.Collectors;
