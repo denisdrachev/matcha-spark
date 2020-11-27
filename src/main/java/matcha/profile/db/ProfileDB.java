@@ -13,17 +13,13 @@ import matcha.exception.db.GetProfileCountByIdDBException;
 import matcha.exception.db.UpdateProfileByIdDBException;
 import matcha.profile.model.ProfileEntity;
 import matcha.profile.model.ProfileEntityWithoutImages;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.sql2o.Sql2o;
 
 import java.util.List;
 
 @Slf4j
-//@Service
-//@RequiredArgsConstructor
 public class ProfileDB {
 
-    private final JdbcTemplate jdbcTemplate = new JdbcTemplate();
     private final Sql2o sql2o = Sql2oModel.getSql2o();
 
     public Integer insertEmptyProfile() {
@@ -32,28 +28,14 @@ public class ProfileDB {
 
             Integer profileId = conn.createQuery(Insert.insertProfile)
                     .addParameter("age", 0)
-                    .addParameter("gender", 1)
-                    .addParameter("preference", "")
+                    .addParameter("gender", 3)
+                    .addParameter("preference", 3)
                     .addParameter("biography", "")
 //                    .addParameter("tags", "")
                     .addParameter("isFilled", false)
                     .executeUpdate().getKey(Integer.class);
             conn.commit();
 
-           /* KeyHolder keyHolder = new GeneratedKeyHolder();
-            int update = jdbcTemplate.update(new PreparedStatementCreator() {
-                @Override
-                public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-                    PreparedStatement ps = connection.prepareStatement(Insert.insertProfile, new String[]{"id"});
-                    ps.setNull(1, Types.INTEGER);
-                    ps.setNull(2, Types.INTEGER);
-                    ps.setNull(3, Types.VARCHAR);
-                    ps.setNull(4, Types.VARCHAR);
-                    ps.setNull(5, Types.VARCHAR);
-                    ps.setBoolean(6, false);
-                    return ps;
-                }
-            }, keyHolder);*/
             log.info("Create empty profile result: {}", profileId);
             return profileId;
         } catch (Exception e) {
@@ -72,8 +54,6 @@ public class ProfileDB {
                     .executeAndFetch(Integer.class);
             conn.commit();
 
-//            Integer integer = jdbcTemplate.queryForObject(Select.selectProfilesCountById,
-//                    Integer.class, profileId);
             log.info("Get profile cound by ID. profileId: {} count: {}", profileId, count.get(0));
             return count.get(0);
         } catch (Exception e) {
@@ -111,7 +91,7 @@ public class ProfileDB {
             int result = conn.createQuery(Update.updateProfileById)
                     .addParameter("age", profile.getAge())
                     .addParameter("gender", profile.getGender())
-                    .addParameter("preference", profile.getPreferenceAsString())
+                    .addParameter("preference", profile.getPreference())
                     .addParameter("biography", profile.getBiography())
 //                    .addParameter("tags", profile.getTagsAsString())
                     .addParameter("isFilled", profile.isFilled())

@@ -5,9 +5,6 @@ import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class ProfileRowMapper implements RowMapper<ProfileEntity> {
     @Override
@@ -17,9 +14,9 @@ public class ProfileRowMapper implements RowMapper<ProfileEntity> {
         profile.setAge(rs.getInt("age") == 0 ? null : rs.getInt("age"));
         profile.setBiography(rs.getString("biography"));
         profile.setGender(rs.getInt("gender") == 0 ? null : rs.getInt("gender"));
-        if (rs.getString("preference") != null)
-            profile.setPreference(Stream.of(rs.getString("preference").split(","))
-                    .map(Integer::parseInt).collect(Collectors.toList()));
+//        if (rs.getString("preference") != null)
+//            profile.setPreference(Stream.of(rs.getString("preference").split(","))
+//                    .map(Integer::parseInt).collect(Collectors.toList()));
 //        if (rs.getString("tags") != null)
 //            profile.setTags(Arrays.asList(rs.getString("tags").split(",")));
         profile.setFilled(rs.getBoolean("isFilled"));

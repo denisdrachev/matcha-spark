@@ -18,7 +18,7 @@ public class ProfileByLoginModel implements Serializable {
     private Integer id;
     private Integer age = null;
     private Integer gender = null;
-    private List<Integer> preference = new ArrayList<>();
+    private Integer preference;
     private String biography;
     private List<String> tags = new ArrayList<>();
     private List<Image> images = new ArrayList<>();
@@ -32,6 +32,6 @@ public class ProfileByLoginModel implements Serializable {
         this.biography = userAndProfileUpdateModel.getBiography();
         this.tags = userAndProfileUpdateModel.getTags();
         this.images = userAndProfileUpdateModel.getImages();
-        this.avatar = userAndProfileUpdateModel.getAvatar();
+//        this.avatar = userAndProfileUpdateModel.getAvatar();
     }
 }

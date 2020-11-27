@@ -234,7 +234,7 @@ public class UserService implements UserInterface {
             return response;
         }
 
-        userService.checkUserByLoginAndActivationCode(userProfile.getLogin(), token);
+        checkUserByLoginAndActivationCode(userProfile.getLogin(), token);
         imageService.checkImagesIsCorrect(userProfile.getImages());
         if (userProfile.getTags() != null) {
             for (String tag : userProfile.getTags()) {
@@ -243,7 +243,7 @@ public class UserService implements UserInterface {
                 }
             }
         }
-        userService.saveUserInfo(userProfile);
+        saveUserInfo(userProfile);
         return validationMessageService.prepareMessageOkOnlyType();
     }
 
@@ -452,9 +452,17 @@ public class UserService implements UserInterface {
     }
 
     public Response getUsers(String token, String ageMin, String ageMax, String minRating,
-                             String maxRating, String deltaRadius, String tags, String limit, String offset) {
-        log.info("Request /get-users ageMin:{} ageMax:{} minRating:{} maxRating:{} deltaRadius:{} tags:{} limit:{} offset:{}",
-                ageMin, ageMax, minRating, maxRating, deltaRadius, tags, limit, offset);
+                             String maxRating, String deltaRadius, String tags, String limit,
+                             String offset, String sortAge, String sortLocation, String sortRating, String sortTags) {
+        log.info("Request /get-users ageMin:{} ageMax:{} minRating:{} maxRating:{} deltaRadius:{} tags:{} limit:{} " +
+                        "offset:{}, sortAge:{}, sortLocation:{}, sortRating:{}, sortTags{}",
+                ageMin, ageMax, minRating, maxRating, deltaRadius, tags, limit, offset, sortAge, sortLocation, sortRating, sortTags);
+
+
+//        req.queryParams("sortAge"),
+//                req.queryParams("sortLocation"),
+//                req.queryParams("sortRating"),
+//                req.queryParams("sortTags")
 
         if (token == null || token.isEmpty()) {
             log.info("Token: {} Пользователь не авторизован.", token);
@@ -468,8 +476,8 @@ public class UserService implements UserInterface {
 
         log.info("Request get users");
         try {
-            SearchModel searchModel =
-                    new SearchModel(location, ageMin, ageMax, minRating, maxRating, deltaRadius, tagsIds, limit, offset, user.getLogin());
+            SearchModel searchModel = new SearchModel(location, ageMin, ageMax, minRating, maxRating,
+                    deltaRadius, tagsIds, limit, offset, user.getLogin(), profile.getPreference(), sortAge, sortLocation, sortRating, sortTags);
             return validationMessageService.prepareMessageOkData(gson.toJsonTree(
                     userService.getUsersWithFilters(searchModel)
             ));

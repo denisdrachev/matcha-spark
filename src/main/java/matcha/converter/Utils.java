@@ -1,6 +1,7 @@
 package matcha.converter;
 
 import lombok.SneakyThrows;
+import matcha.model.SearchModel;
 import matcha.properties.StringConstants;
 import matcha.user.model.UserEntity;
 import org.apache.commons.io.FileUtils;
@@ -13,10 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.security.SecureRandom;
 import java.security.spec.KeySpec;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Utils {
@@ -41,7 +39,6 @@ public class Utils {
         byte[] prepearPassword = getPrepearPassword(inputPassword, salt);
         return Arrays.equals(currentPassword, prepearPassword);
     }
-
 
 
     public static byte[] getSalt() {
@@ -75,5 +72,37 @@ public class Utils {
         byte[] decodedBytes = Base64.getDecoder().decode(encodedString);
         FileUtils.writeByteArrayToFile(new File(outputFileName), decodedBytes);
         return outputFileName;
+    }
+
+    public static String prepareOrderBy(SearchModel searchModel) {
+
+        List<String> order = new ArrayList<>();
+
+        if (searchModel.getSortAge() == -1) {
+            order.add("p.age DESC");
+        } else if (searchModel.getSortAge() == 1) {
+            order.add("p.age");
+        }
+        if (searchModel.getSortLocation() == -1) {
+            order.add("l.x DESC, l.y DESC");
+        } else if (searchModel.getSortLocation() == 1) {
+            order.add("l.x, l.y");
+        }
+        if (searchModel.getSortRating() == -1) {
+            order.add("r.rating DESC");
+        } else if (searchModel.getSortRating() == 1) {
+            order.add("r.rating");
+        }
+        if (searchModel.getTags().size() != 0) {
+            if (searchModel.getSortTags() == -1) {
+                order.add("t.count DESC");
+            } else if (searchModel.getSortTags() == 1) {
+                order.add("t.count");
+            }
+        }
+        if (order.size() > 0) {
+            return " ORDER BY " + order.stream().collect(Collectors.joining(", "));
+        }
+        return "";
     }
 }

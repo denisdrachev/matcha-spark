@@ -135,7 +135,7 @@ public class UserTester {
         data.put("fname", "first name");
         data.put("lname", "last name");
         data.put("biography", "test");
-        data.put("preference", List.of(0, 1));
+        data.put("preference", 2);
         data.put("password", "test");
         data.put("gender", 1);
         data.put("age", 52);
@@ -171,7 +171,8 @@ public class UserTester {
     void getUsers(String token) throws ClientProtocolException, IOException {
         // Given
 //        String name = RandomStringUtils.randomAlphabetic(8);
-        HttpUriRequest request = new HttpGet("http://localhost:4567/get-users?tags=tag2,tag4&ageMin=0&ageMax=100&minRating=0&maxRating=999&deltaRadius=1000&limit=10&offset=0");
+        HttpUriRequest request = new HttpGet("http://localhost:4567/get-users?tags=tag2,tag4&ageMin=0&ageMax=100&minRating=0&maxRating=999&deltaRadius=1000&limit=10&offset=0" +
+                "&sortLocation=-11");
         request.setHeader("Authorization", token);
         // When
         HttpResponse httpResponse = HttpClientBuilder.create().build().execute(request);

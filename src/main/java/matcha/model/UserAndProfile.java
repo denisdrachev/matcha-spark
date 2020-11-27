@@ -26,7 +26,7 @@ public class UserAndProfile implements Serializable {
     private String email;
     private Integer age;
     private Integer gender;
-    private List<Integer> preference;
+    private Integer preference;
     private String biography;
     private List<String> tags;
     private List<Image> images;

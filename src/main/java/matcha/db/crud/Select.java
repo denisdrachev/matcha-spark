@@ -27,7 +27,7 @@ public class Select {
 
     //        HttpUriRequest request = new HttpGet("http://localhost:4567/get-users?tags=tag2,tag4&ageMin=0&ageMax=100&minRating=0&maxRating=999&deltaRadius=1000&limit=10&offset=0");
     public static String selectUsersWithFilters =
-            "SELECT u.login, u.fname, u.lname, l.x, l.y, i.src, r.rating, t.count as tagsCount " +
+            "SELECT u.login, u.fname, u.lname, p.age, l.x, l.y, i.src, r.rating, t.count as tagsCount " +
                     "FROM ((((((users u INNER JOIN profiles p ON u.profileId = p.id) " +
                     "INNER JOIN locations l ON u.profileId = l.profileId) " +
                     "INNER JOIN rating r ON u.login = r.login) " +
@@ -37,11 +37,11 @@ public class Select {
                     "WHERE (b.isBlocked IS NULL OR b.isBlocked <> TRUE) " +
                     "AND t.count > 0 " +
                     "AND p.age >= :ageMin AND p.age <= :ageMax " + //возраст
-                    "AND l.x >= :minX AND l.x <= :maxX AND l.y >= :minY AND l.y <= :maxY " + //растояние
-                    " LIMIT :limit OFFSET :offset ";
+                    "AND l.x >= :minX AND l.x <= :maxX AND l.y >= :minY AND l.y <= :maxY "; //растояние
+//                    " LIMIT :limit OFFSET :offset ";
 
     public static String selectUsersWithoutTagsWithFilters =
-            "SELECT u.login, u.fname, u.lname, l.x, l.y, i.src, r.rating " +
+            "SELECT u.login, u.fname, u.lname, p.age, l.x, l.y, i.src, r.rating " +
                     "FROM (((((users u INNER JOIN profiles p ON u.profileId = p.id) " +
                     "INNER JOIN locations l ON u.profileId = l.profileId) " +
                     "INNER JOIN rating r ON u.login = r.login) " +
@@ -49,8 +49,8 @@ public class Select {
                     "RIGHT JOIN images i ON i.profileId = u.profileId AND i.avatar = TRUE) " +
                     "WHERE (b.isBlocked IS NULL OR b.isBlocked <> TRUE) " +
                     "AND p.age >= :ageMin AND p.age <= :ageMax " + //возраст
-                    "AND l.x >= :minX AND l.x <= :maxX AND l.y >= :minY AND l.y <= :maxY " + //растояние
-                    " LIMIT :limit OFFSET :offset ";
+                    "AND l.x >= :minX AND l.x <= :maxX AND l.y >= :minY AND l.y <= :maxY "; //растояние
+//                    " LIMIT :limit OFFSET :offset ";
 
 //    public static String selectUsersWithFilters = "SELECT u.login, u.fname, u.lname, l.x, l.y, r.rating FROM users u inner join blacklist b inner join profiles p inner join locations l " +
 ////            "inner join (SELECT r.login as login, COUNT(r.login) as count FROM tagRelations r WHERE r.tagId IN (:tagIds) GROUP BY r.login) t " +

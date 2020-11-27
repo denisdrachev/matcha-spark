@@ -26,4 +26,6 @@ public class UserSearchEntity implements Serializable, MyObject {
     private Integer tagsCount;
     @Expose
     private String src;
+    @Expose
+    private Integer age;
 }

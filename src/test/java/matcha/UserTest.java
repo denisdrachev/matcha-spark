@@ -46,10 +46,10 @@ class UserTest {
 
 
     @Test
-    public void updateProfileUser() throws IOException {
+    public void updateProfileUser(Double x, Double y) throws IOException {
 //        UserTester
 
-        HttpResponse httpResponse = userTester.updateUserProfile(test2token, login, 1.1, 1.1, List.of("tag2", "tag4"));
+        HttpResponse httpResponse = userTester.updateUserProfile(test2token, login, x, y, List.of("tag2", "tag4"));
 
         String responseString = new BasicResponseHandler().handleResponse(httpResponse);
         assertEquals(HttpStatus.SC_OK, httpResponse.getStatusLine().getStatusCode(), responseString);
@@ -78,7 +78,7 @@ class UserTest {
             System.err.println("Пользователь уже существует");
         }
         loginUser();
-        updateProfileUser();
+        updateProfileUser(1.41, 1.23);
         getUsers();
     }
 

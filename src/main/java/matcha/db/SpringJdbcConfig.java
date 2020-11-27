@@ -76,7 +76,7 @@ public class SpringJdbcConfig {
 //        ProfileEntity profileByIdWithImages = profileService.getProfileByIdWithImages(user_1.getProfileId());
         userInfo.setAge(22);
         userInfo.setGender(1);
-        userInfo.setPreference(List.of(3));
+        userInfo.setPreference(3);
         userInfo.setTags(List.of("tag2", "tag3"));
         userInfo.setBiography("asdasdasd");
 
@@ -115,7 +115,7 @@ public class SpringJdbcConfig {
 //        ProfileEntity profileByIdWithImages = profileService.getProfileByIdWithImages(user_1.getProfileId());
         userInfo.setAge(22);
         userInfo.setGender(1);
-        userInfo.setPreference(List.of(3));
+        userInfo.setPreference(3);
         userInfo.setTags(List.of("tag2", "tag3"));
         userInfo.setBiography("asdasdasd");
 
@@ -154,7 +154,7 @@ public class SpringJdbcConfig {
 //        ProfileEntity profileByIdWithImages = profileService.getProfileByIdWithImages(user_1.getProfileId());
         userInfo.setAge(22);
         userInfo.setGender(1);
-        userInfo.setPreference(List.of(3));
+        userInfo.setPreference(3);
         userInfo.setTags(List.of("tag2", "tag1"));
         userInfo.setBiography("asdasdasd");
 
@@ -193,7 +193,7 @@ public class SpringJdbcConfig {
 //        ProfileEntity profileByIdWithImages = profileService.getProfileByIdWithImages(user_1.getProfileId());
         userInfo.setAge(22);
         userInfo.setGender(1);
-        userInfo.setPreference(List.of(3));
+        userInfo.setPreference(3);
         userInfo.setTags(List.of("tag4", "tag5"));
         userInfo.setBiography("asdasdasd");
 

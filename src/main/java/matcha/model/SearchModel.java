@@ -19,9 +19,15 @@ public class SearchModel {
     private Integer offset;
     private Location userLocation;
     private String login;
+    private List<Integer> preference;
+    private int sortAge;
+    private int sortLocation;
+    private int sortRating;
+    private int sortTags;
 
     public SearchModel(Location location, String minAge, String maxAge, String minRatingAge, String maxRatingAge,
-                       String deltaRadius, List<Integer> tags, String limit, String offset, String login) throws Exception {
+                       String deltaRadius, List<Integer> tags, String limit, String offset, String login,
+                       Integer preference, String sortAge, String sortLocation, String sortRating, String sortTags) throws Exception {
         setUserLocation(location);
         setMinAge(minAge);
         setMaxAge(maxAge);
@@ -32,12 +38,19 @@ public class SearchModel {
         setLimit(limit);
         setOffset(offset);
         this.login = login;
+        setPreference(preference);
+        setSortAge(sortAge);
+        setSortLocation(sortLocation);
+        setSortRating(sortRating);
+        setSortTags(sortTags);
         validate();
     }
 
     private void validate() throws Exception {
         if (userLocation == null || minAge < 0 || minAge > 150 || maxAge < 0 || maxAge > 150 || minRatingAge < 0
-                || maxRatingAge < 0 || deltaRadius < 0 || limit <= 0 || limit > 100 || offset < 0 || login == null || login.isEmpty())
+                || maxRatingAge < 0 || deltaRadius < 0 || limit <= 0 || limit > 100 || offset < 0 || login == null
+                || login.isEmpty() || sortAge < -1 || sortAge > 1 || sortLocation < -1 || sortLocation > 1
+                || sortRating < -1 || sortRating > 1 || sortTags < -1 || sortTags > 1)
             throw new Exception();
     }
 
@@ -115,5 +128,46 @@ public class SearchModel {
 
     public Double getMinY() {
         return userLocation.getY() - this.deltaRadius;
+    }
+
+    public void setPreference(Integer preference) {
+        if (preference == 3) {
+            this.preference = List.of(1, 2);
+        } else {
+            this.preference = List.of(preference);
+        }
+    }
+
+    public void setSortAge(String sortAge) {
+        if (sortAge == null || sortAge.isEmpty())
+            this.sortAge = 0;
+        else {
+            this.sortAge = Integer.parseInt(sortAge);
+        }
+    }
+
+    public void setSortLocation(String sortLocation) {
+        if (sortLocation == null || sortLocation.isEmpty())
+            this.sortLocation = 0;
+        else
+            this.sortLocation = Integer.parseInt(sortLocation);
+    }
+
+    public void setSortRating(String sortRating) {
+        if (sortRating == null || sortRating.isEmpty())
+            this.sortRating = 0;
+        else
+            this.sortRating = Integer.parseInt(sortRating);
+    }
+
+    public void setSortTags(String sortTags) {
+        if (sortTags == null || sortTags.isEmpty())
+            this.sortTags = 0;
+        else
+            this.sortTags = Integer.parseInt(sortTags);
+    }
+
+    public boolean isSorting() {
+        return !(sortAge == 0 && sortLocation == 0 && sortRating == 0 && sortTags == 0);
     }
 }

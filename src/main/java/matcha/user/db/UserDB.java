@@ -3,6 +3,7 @@ package matcha.user.db;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import matcha.Sql2oModel;
+import matcha.converter.Utils;
 import matcha.db.crud.Delete;
 import matcha.db.crud.Insert;
 import matcha.db.crud.Select;
@@ -300,6 +301,13 @@ public class UserDB {
 
     public List<UserSearchEntity> getUsersWithFilters(SearchModel searchModel) {
         log.info("Get users with filters: {}", searchModel);
+
+        String limitAndOffset = " LIMIT :limit OFFSET :offset ";
+
+        String orderBy = Utils.prepareOrderBy(searchModel);
+        System.err.println("orderBy: " + orderBy);
+
+//        возрасту, местоположению, «рейтингу славы» и тегам.
         try (org.sql2o.Connection conn = sql2o.open()) {
 
             //limit ageMax ageMin minX maxX minY maxY tagIds
@@ -307,7 +315,7 @@ public class UserDB {
             //UserSearchEntity
             List<UserSearchEntity> users;
             if (searchModel.getTags().size() == 0) {
-                users = conn.createQuery(Select.selectUsersWithoutTagsWithFilters)
+                users = conn.createQuery(Select.selectUsersWithoutTagsWithFilters + orderBy + limitAndOffset)
                         .addParameter("ageMax", searchModel.getMaxAge())
                         .addParameter("ageMin", searchModel.getMinAge())
                         .addParameter("minX", searchModel.getMinX())
@@ -320,7 +328,7 @@ public class UserDB {
                         .executeAndFetch(UserSearchEntity.class);
                 conn.commit();
             } else {
-                users = conn.createQuery(Select.selectUsersWithFilters)
+                users = conn.createQuery(Select.selectUsersWithFilters + orderBy + limitAndOffset)
                         .addParameter("ageMax", searchModel.getMaxAge())
                         .addParameter("ageMin", searchModel.getMinAge())
                         .addParameter("minX", searchModel.getMinX())

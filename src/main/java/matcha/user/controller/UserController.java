@@ -123,8 +123,13 @@ public class UserController {
                 req.queryParams("deltaRadius"),
                 req.queryParams("tags"),
                 req.queryParams("limit"),
-                req.queryParams("offset")
+                req.queryParams("offset"),
+                req.queryParams("sortAge"),
+                req.queryParams("sortLocation"),
+                req.queryParams("sortRating"),
+                req.queryParams("sortTags")
                 )
+//                возрасту, местоположению, «рейтингу славы» и тегам.
         );
     }
 

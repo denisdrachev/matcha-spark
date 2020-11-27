@@ -30,7 +30,7 @@ public class UserProfileWithEmail implements Serializable {
     @Expose
     private Integer gender;
     @Expose
-    private List<Integer> preference;
+    private Integer preference;
     @Expose
     private String biography;
     @Expose
