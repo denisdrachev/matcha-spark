@@ -7,11 +7,14 @@ import matcha.validator.ValidationMessageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 //import org.springframework.boot.autoconfigure.SpringBootApplication;
+import spark.Session;
 import spark.Spark;
 
 //import java.util.logging.Level;
 //import java.util.logging.Logger;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 
 import static spark.Spark.*;
@@ -21,58 +24,24 @@ import static spark.Spark.*;
 @Slf4j
 public class Application {
 
+    // this map is shared between sessions and threads, so it needs to be thread-safe (http://stackoverflow.com/a/2688817)
+    static Map<Session, String> userUsernameMap = new ConcurrentHashMap<>();
+    static int nextUserNumber = 1; //Used for creating the next username
+
+
     public static void main(String[] args) {
 
-//        Logger root = (Logger)LoggerFactory.getLogger("Logger.ROOT_LOGGER_NAME");
-//        root.setLevel(Level.INFO);
-
-//        jdbc:h2:mem:matcha
-//        String connectionString = "jdbc:h2:mem:matcha;DB_CLOSE_DELAY=-1;INIT=RUNSCRIPT from 'classpath:sql/tables/all.sql'";
-////        private val inputH2Url = "jdbc:h2:mem:inputDb;MODE=MSSQLServer;USER=sa;DB_CLOSE_DELAY=-1"
-//
-//
-////                "jdbc:h2:~/reviews.db;INIT=RUNSCRIPT from 'classpath:db/init.sql'";
-//        Sql2o sql2o = new Sql2o(connectionString,
-//                "root", "root", new PostgresQuirks() {
-//            {
-//                System.err.println("OK!");
-//                // make sure we use default UUID converter.
-//                converters.put(UUID.class, new UUIDConverter());
-//            }
-//        });
-
-/*
-
-        List<String> strs = new ArrayList<>();
-        strs.add("asdasd");
-        Sql2oModel model = new Sql2oModel();
-        */
-/*UUID post = *//*
-
-        model.createPost("das", "sdasd", strs);
-        */
-/*UUID post = *//*
-model.createPost("das", "sdasd", strs);
-        */
-/*UUID post = *//*
-model.createPost("das", "sdasd", strs);
-        */
-        /*UUID post = *//*
-model.createPost("das", "sdasd", strs);
-//        System.err.println(post);
-
-        List<Event> allPosts = model.getAllPosts();
-        System.err.println(allPosts.size());
-        allPosts.forEach(System.out::println);
-//        SpringApplication.run(Application.class, args);
-
-*/
-        Thread thread = new Thread(Spark::awaitInitialization);
-//        awaitInitialization();
+//        Thread thread = new Thread(Spark::awaitInitialization);
         port(getHerokuAssignedPort());
 
-        webSocket("/socket", EchoWebSocket.class);
+//        webSocket("/socket.io", EchoWebSocket.class);
+//        init();
+
+
+//        staticFileLocation("/public"); //index.html is served at localhost:4567 (default port)
+        webSocket("/chat", ChatWebSocketHandler.class);
         init();
+//        qqq qqq = new qqq();
 
         ValidationMessageService validationMessageService = ValidationMessageService.getInstance();
 
@@ -98,7 +67,7 @@ model.createPost("das", "sdasd", strs);
                 });
 
         before((request, response) -> {
-            response.header("Access-Control-Allow-Origin", "*");
+            response.header("Access-Control-Allow-Origin", "http://192.168.29.73:3000");
             response.header("Access-Control-Allow-Credentials", "true");
         });
         exception(Exception.class, (exception, request, response) -> {
@@ -113,6 +82,7 @@ model.createPost("das", "sdasd", strs);
         SingletonControllers.init();
 
     }
+
 
     public static int getHerokuAssignedPort() {
         ProcessBuilder processBuilder = new ProcessBuilder();

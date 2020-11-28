@@ -18,11 +18,13 @@ public class EchoWebSocket {
 
     @OnWebSocketConnect
     public void connected(Session session) {
+        System.out.println("Socket connected!");
         sessions.add(session);
     }
 
     @OnWebSocketClose
     public void closed(Session session, int statusCode, String reason) {
+        System.out.println("Socket closed!");
         sessions.remove(session);
     }
 
