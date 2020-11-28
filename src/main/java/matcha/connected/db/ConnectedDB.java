@@ -125,10 +125,10 @@ public class ConnectedDB {
                     .addParameter("login", login)
                     .executeAndFetch(ConnectedWithUserInfo.class);
             conn.commit();
-            log.info("Get all Connected with user result size: {}", result.size());
+            log.info("Get all Connected users result size: {}", result.size());
             return result;
         } catch (Exception e) {
-            log.warn("Failed to load all Connected with user. Exception message: {}", e.getMessage());
+            log.warn("Failed to load all Connected users. Exception message: {}", e.getMessage());
             throw new NotFoundBlackListMessageDBException();
         }
     }

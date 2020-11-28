@@ -18,7 +18,7 @@ import java.util.Map;
 
 class EventControllerTest {
 
-    @Test
+//    @Test
     void getHistory() throws ClientProtocolException, IOException {
         // Given
 //        String name = RandomStringUtils.randomAlphabetic(8);
@@ -39,7 +39,7 @@ class EventControllerTest {
 //        assertEquals(httpResponse.getStatusLine().getStatusCode(), HttpStatus.SC_NOT_FOUND, responseString);
     }
 
-    @Test
+//    @Test
     void getNotifications() {
     }
 
