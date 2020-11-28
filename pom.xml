@@ -247,7 +247,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.19.1</version>
+                <version>3.0.0-M5</version>
             </plugin>
 
             <plugin>
@@ -257,64 +257,65 @@
                 <configuration>
                     <source>11</source>
                     <target>11</target>
-<!--                    <verbose>true</verbose>-->
+                    <!--                    <verbose>true</verbose>-->
                 </configuration>
             </plugin>
+
+
+            <!--            <plugin>-->
+            <!--                &lt;!&ndash; Build an executable JAR &ndash;&gt;-->
+            <!--                <groupId>org.apache.maven.plugins</groupId>-->
+            <!--                <artifactId>maven-jar-plugin</artifactId>-->
+            <!--                <version>3.2.0</version>-->
+            <!--                <configuration>-->
+            <!--                    &lt;!&ndash;                    <includes>&ndash;&gt;-->
+            <!--                    &lt;!&ndash;                        <include>**/images/*</include>&ndash;&gt;-->
+            <!--                    &lt;!&ndash;                    </includes>&ndash;&gt;-->
+            <!--                    <archive>-->
+            <!--                        <manifest>-->
+            <!--                            <addClasspath>true</addClasspath>-->
+            <!--                            <mainClass>matcha.Application</mainClass>-->
+            <!--                        </manifest>-->
+            <!--                    </archive>-->
+            <!--                </configuration>-->
+            <!--            </plugin>-->
 
 
             <plugin>
-                <!-- Build an executable JAR -->
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>3.2.0</version>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.3.0</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
                 <configuration>
-                    <!--                    <includes>-->
-                    <!--                        <include>**/images/*</include>-->
-                    <!--                    </includes>-->
+                    <finalName>matcha</finalName>
+                    <descriptorRefs>
+                        <!-- This tells Maven to include all dependencies -->
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
                     <archive>
                         <manifest>
-                            <addClasspath>true</addClasspath>
                             <mainClass>matcha.Application</mainClass>
                         </manifest>
                     </archive>
+                    <appendAssemblyId>false</appendAssemblyId>
                 </configuration>
             </plugin>
-
-
-
-<!--            <plugin>-->
-<!--                <artifactId>maven-assembly-plugin</artifactId>-->
-<!--&lt;!&ndash;                <version></version>&ndash;&gt;-->
-<!--                <executions>-->
-<!--                    <execution>-->
-<!--                        <phase>package</phase>-->
-<!--                        <goals>-->
-<!--                            <goal>single</goal>-->
-<!--                        </goals>-->
-<!--                    </execution>-->
-<!--                </executions>-->
-<!--                <configuration>-->
-<!--                    <descriptorRefs>-->
-<!--                        &lt;!&ndash; This tells Maven to include all dependencies &ndash;&gt;-->
-<!--                        <descriptorRef>jar-with-dependencies</descriptorRef>-->
-<!--                    </descriptorRefs>-->
-<!--                    <archive>-->
-<!--                        <manifest>-->
-<!--                            <mainClass>**/Application</mainClass>-->
-<!--                        </manifest>-->
-<!--                    </archive>-->
-<!--                </configuration>-->
-<!--            </plugin>-->
-<!--            <plugin>-->
-<!--                <groupId>com.heroku.sdk</groupId>-->
-<!--                <artifactId>heroku-maven-plugin</artifactId>-->
-<!--                <version>0.4.4</version>-->
-<!--                <configuration>-->
-<!--                    <jdkVersion>11</jdkVersion>-->
-<!--                    &lt;!&ndash; Use your own application name &ndash;&gt;-->
-<!--                    <appName>matcha-spark</appName>-->
-<!--                    <processTypes>-->
-<!--                        &lt;!&ndash; Tell Heroku how to launch your application &ndash;&gt;-->
+            <!--            <plugin>-->
+            <!--                <groupId>com.heroku.sdk</groupId>-->
+            <!--                <artifactId>heroku-maven-plugin</artifactId>-->
+            <!--                <version>0.4.4</version>-->
+            <!--                <configuration>-->
+            <!--                    <jdkVersion>11</jdkVersion>-->
+            <!--                    &lt;!&ndash; Use your own application name &ndash;&gt;-->
+            <!--                    <appName>matcha-spark</appName>-->
+            <!--                    <processTypes>-->
+            <!--                        &lt;!&ndash; Tell Heroku how to launch your application &ndash;&gt;-->
 <!--                        &lt;!&ndash; You might have to remove the ./ in front   &ndash;&gt;-->
 <!--                        <web>java -jar ./target/matcha-spark-1.0-SNAPSHOT-jar-with-dependencies.jar&ndash;&gt;</web>-->
 <!--                    </processTypes>-->
