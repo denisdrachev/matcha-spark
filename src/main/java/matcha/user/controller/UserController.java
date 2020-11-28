@@ -114,22 +114,25 @@ public class UserController {
     }
 
     public void getUsers() {
-        get("/get-users", (req, res) -> userService.getUsers(
-                req.headers("Authorization"),
-                req.queryParams("ageMin"),
-                req.queryParams("ageMax"),
-                req.queryParams("minRating"),
-                req.queryParams("maxRating"),
-                req.queryParams("deltaRadius"),
-                req.queryParams("tags"),
-                req.queryParams("limit"),
-                req.queryParams("offset"),
-                req.queryParams("sortAge"),
-                req.queryParams("sortLocation"),
-                req.queryParams("sortRating"),
-                req.queryParams("sortTags"),
-                req.queryParams("needPreference")
-                )
+        get("/get-users", (req, res) -> {
+                    System.out.println(req.queryString());
+            return userService.getUsers(
+                            req.headers("Authorization"),
+                            req.queryParams("ageMin"),
+                            req.queryParams("ageMax"),
+                            req.queryParams("minRating"),
+                            req.queryParams("maxRating"),
+                            req.queryParams("deltaRadius"),
+                            req.queryParams("tags"),
+                            req.queryParams("limit"),
+                            req.queryParams("offset"),
+                            req.queryParams("sortAge"),
+                            req.queryParams("sortLocation"),
+                            req.queryParams("sortRating"),
+                            req.queryParams("sortTags"),
+                            req.queryParams("needPreference")
+                    );
+                }
 //                возрасту, местоположению, «рейтингу славы» и тегам.
         );
     }

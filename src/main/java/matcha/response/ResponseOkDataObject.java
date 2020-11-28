@@ -11,7 +11,7 @@ import matcha.model.MyObject;
 @NoArgsConstructor
 @Setter
 @Getter
-public class ResponseOkDataObject implements MyObject, Response {
+public class ResponseOkDataObject  extends ResponseBase {
 
     private String type;
     private JsonElement data;

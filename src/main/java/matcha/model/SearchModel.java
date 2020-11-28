@@ -30,6 +30,8 @@ public class SearchModel {
                        Integer preference, String sortAge, String sortLocation, String sortRating, String sortTags) throws Exception {
         setUserLocation(location);
         setMinAge(minAge);
+        //tags=24,sefad&sortAge=1&sortLocation=1&sortRating=1&sortTags=1&ageMin=18&ageMax=27&minRating=0&maxRating=500&deltaRadius=500&limit=3&offset=0
+        //get-users?ageMin=0&ageMax=100&minRating=0&maxRating=999&deltaRadius=1000&limit=100&offset=0&sortAge=1&sortLocation=1&sortRating-1&sortTags=1&needPreference=1
         setMaxAge(maxAge);
         setMinRatingAge(minRatingAge);
         setMaxRatingAge(maxRatingAge);

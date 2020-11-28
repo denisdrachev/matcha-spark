@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @Setter
 @Getter
-public class ResponseDataList implements MyObject, Response {
+public class ResponseDataList  extends ResponseBase {
 
     private String type;
     private List data;

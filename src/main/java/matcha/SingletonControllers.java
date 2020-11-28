@@ -2,6 +2,7 @@ package matcha;
 
 import matcha.blacklist.controller.BlackListController;
 import matcha.chat.controller.ChatController;
+import matcha.connected.controller.ConnectedController;
 import matcha.controller.EventsController;
 import matcha.controller.ImagesController;
 import matcha.controller.LocationsController;
@@ -32,6 +33,8 @@ public class SingletonControllers {
         new EventsController();
 
         new ChatController();
+
+        new ConnectedController();
 
         new SpringJdbcConfig();
     }

@@ -15,6 +15,7 @@ import matcha.tag.service.TagService;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static matcha.converter.Utils.clearAllTables;
 import static spark.Spark.get;
 
 //@Controller
@@ -34,6 +35,19 @@ public class LocationsController {
         getAllTags();
         getAllRatings();
         getAllChatMessages();
+        clearTables();
+    }
+
+    private void clearTables() {
+
+        get("/clear", (req, res) -> {
+            clearAllTables();
+//            if (allLocations != null)
+                return "{\"type\": \"ok\"}";
+//            else
+//                return "{\"type\": \"error\"}";
+        });
+
     }
 
 //    @GetMapping("/locations")

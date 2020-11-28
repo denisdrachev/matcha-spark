@@ -1,12 +1,20 @@
 package matcha.converter;
 
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
+import matcha.Sql2oModel;
+import matcha.db.crud.Delete;
+import matcha.db.crud.Drop;
+import matcha.db.crud.Select;
+import matcha.exception.db.GetUserCountByLoginDBException;
 import matcha.model.SearchModel;
 import matcha.properties.StringConstants;
 import matcha.user.model.UserEntity;
+import org.apache.commons.beanutils.PropertyUtilsBean;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.everit.json.schema.ValidationException;
+import org.sql2o.Sql2o;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
@@ -17,6 +25,7 @@ import java.security.spec.KeySpec;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Slf4j
 public class Utils {
 
     @SneakyThrows
@@ -104,5 +113,33 @@ public class Utils {
             return " ORDER BY " + order.stream().collect(Collectors.joining(", "));
         }
         return "";
+    }
+
+    public static void clearAllTables() {
+        executeDbQuery(Delete.deleteUsers);
+        executeDbQuery(Delete.deleteTagRelations);
+        executeDbQuery(Delete.deleteTags);
+        executeDbQuery(Delete.deleteConnected);
+        executeDbQuery(Delete.deleteEvents);
+        executeDbQuery(Delete.deleteChat);
+        executeDbQuery(Delete.deleteImageLikeEvents);
+        executeDbQuery(Delete.deleteLocations);
+        executeDbQuery(Delete.deleteBlacklist);
+        executeDbQuery(Delete.deleteRating);
+        executeDbQuery(Delete.deleteProfiles);
+        executeDbQuery(Delete.deleteImages);
+    }
+
+    private static void executeDbQuery(String query) {
+        Sql2o sql2o = Sql2oModel.getSql2o();
+        try (org.sql2o.Connection conn = sql2o.open()) {
+
+            int result = conn.createQuery(query)
+                    .executeUpdate().getResult();
+            conn.commit();
+            log.info("{} result: {}", query, result);
+        } catch (Exception e) {
+            log.warn("Exception. {}: {}", query, e.getMessage());
+        }
     }
 }

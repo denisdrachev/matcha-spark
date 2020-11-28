@@ -16,6 +16,7 @@ public class RestTest {
     @Test
     public void qqq() {
         port = 4567;
-//        given().parameters().when().post("/login").then().body("type", equalTo("200"));
+//        given().param
+//        eters().when().post("/login").then().body("type", equalTo("200"));
     }
 }

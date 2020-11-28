@@ -118,7 +118,7 @@ public class ConnectedDB {
     }
 //
     public List<ConnectedWithUserInfo> getAllConnectedWithUser(String login) {
-        log.info("Get all Connected with user");
+        log.info("Get all Connected with user: {}", login);
         try (org.sql2o.Connection conn = sql2o.open()) {
 
             List<ConnectedWithUserInfo> result = conn.createQuery(Select.selectConnectedWithUser)

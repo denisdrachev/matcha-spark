@@ -11,7 +11,7 @@ import org.json.JSONObject;
 @NoArgsConstructor
 @Setter
 @Getter
-public class ResponseOkData implements MyObject, Response {
+public class ResponseOkData extends ResponseBase {
 
     private String type;
     private Object data;
