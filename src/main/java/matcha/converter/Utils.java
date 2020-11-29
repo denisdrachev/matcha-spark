@@ -4,13 +4,9 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import matcha.Sql2oModel;
 import matcha.db.crud.Delete;
-import matcha.db.crud.Drop;
-import matcha.db.crud.Select;
-import matcha.exception.db.GetUserCountByLoginDBException;
 import matcha.model.SearchModel;
 import matcha.properties.StringConstants;
 import matcha.user.model.UserEntity;
-import org.apache.commons.beanutils.PropertyUtilsBean;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.everit.json.schema.ValidationException;
@@ -133,11 +129,10 @@ public class Utils {
     private static void executeDbQuery(String query) {
         Sql2o sql2o = Sql2oModel.getSql2o();
         try (org.sql2o.Connection conn = sql2o.open()) {
-
             int result = conn.createQuery(query)
                     .executeUpdate().getResult();
             conn.commit();
-            log.info("{} result: {}", query, result);
+            log.info("Result: {} : {}", query, result);
         } catch (Exception e) {
             log.warn("Exception. {}: {}", query, e.getMessage());
         }

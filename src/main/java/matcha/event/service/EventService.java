@@ -1,7 +1,5 @@
 package matcha.event.service;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import matcha.blacklist.model.BlackListMessage;
 import matcha.blacklist.service.BlackListService;
 import matcha.connected.model.ConnectedEntity;
@@ -110,14 +108,14 @@ public class EventService {
             }
         }
 
-        Event newEventLoaded = new Event(
-                likeValue == 1 ? EventType.LIKED : EventType.UNLIKED,
-                toLogin,
-                likeValue == 1 && !blackListFrom.isBlocked(),
-                fromLogin,
-                likeValue == 1 && !blackListFrom.isBlocked()
-        );
-        eventService.saveNewEvent(newEventLoaded);
+//        Event newEventLoaded = new Event(
+//                likeValue == 1 ? EventType.LIKED : EventType.UNLIKED,
+//                toLogin,
+//                likeValue == 1 && !blackListFrom.isBlocked(),
+//                fromLogin,
+//                likeValue == 1 && !blackListFrom.isBlocked()
+//        );
+//        eventService.saveNewEvent(newEventLoaded);
 
 
 //        List event = new Event(eventType, fromLogin, true, toLogin);

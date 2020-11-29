@@ -11,10 +11,11 @@ import matcha.userprofile.model.UserProfileChat;
 import matcha.userprofile.service.UserProfileService;
 import matcha.utils.EventType;
 import matcha.validator.ValidationMessageService;
-//import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+//import org.springframework.stereotype.Service;
 
 //@Service
 //@AllArgsConstructor
@@ -46,8 +47,8 @@ public class ChatService implements ChatInterface {
         chatManipulator.insertChatMessage(chatMessage);
         Event newEvent = new Event(EventType.SEND_MESSAGE, chatMessage.getFromLogin(), true, chatMessage.getToLogin(), false);
         eventService.saveNewEvent(newEvent);
-        Event newToEvent = new Event(EventType.INCOME_MESSAGE, chatMessage.getToLogin(), true, chatMessage.getFromLogin(), true);
-        eventService.saveNewEvent(newToEvent);
+//        Event newToEvent = new Event(EventType.INCOME_MESSAGE, chatMessage.getToLogin(), true, chatMessage.getFromLogin(), true);
+//        eventService.saveNewEvent(newToEvent);
 
         return validationMessageService.prepareMessageOkOnlyType();
     }

@@ -2,22 +2,19 @@ package matcha;
 
 //import ch.qos.logback.classic.Level;
 //import ch.qos.logback.classic.Logger;
+
 import lombok.extern.slf4j.Slf4j;
 import matcha.validator.ValidationMessageService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-//import org.springframework.boot.autoconfigure.SpringBootApplication;
 import spark.Session;
-import spark.Spark;
-
-//import java.util.logging.Level;
-//import java.util.logging.Logger;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.Level;
 
 import static spark.Spark.*;
+
+//import org.springframework.boot.autoconfigure.SpringBootApplication;
+//import java.util.logging.Level;
+//import java.util.logging.Logger;
 
 //@SpringBootApplication
 
@@ -66,9 +63,11 @@ public class Application {
                     return "OK";
                 });
 
-        before((request, response) -> {
-            response.header("Access-Control-Allow-Origin", "http://192.168.29.73:3000");
-            response.header("Access-Control-Allow-Credentials", "true");
+        before((request, res) -> {
+            res.header("Access-Control-Allow-Origin", "http://192.168.29.73:3000");
+            res.header("Access-Control-Allow-Credentials", "true");
+
+            res.type("application/json");
         });
         exception(Exception.class, (exception, request, response) -> {
             exception.printStackTrace();

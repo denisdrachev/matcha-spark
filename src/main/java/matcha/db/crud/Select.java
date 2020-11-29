@@ -47,7 +47,7 @@ public class Select {
                     "INNER JOIN locations l ON u.profileId = l.profileId) " +
                     "INNER JOIN rating r ON u.login = r.login) " +
                     "LEFT JOIN blacklist b ON b.fromLogin = :login AND b.toLogin = u.login) " +
-                    "RIGHT JOIN images i ON i.profileId = u.profileId AND i.avatar = TRUE) " +
+                    "INNER JOIN images i ON i.profileId = u.profileId AND i.avatar = TRUE) " +
                     "WHERE (b.isBlocked IS NULL OR b.isBlocked <> TRUE) " +
                     "AND p.gender IN (:preferenceGender) " +
                     "AND p.age >= :ageMin AND p.age <= :ageMax " + //возраст
@@ -111,12 +111,22 @@ public class Select {
 //    public static String selectNotificationEvents = "SELECT e.type, e.login as login, e.time, e.active, u.fname, u.lname FROM events e inner join users u " +
 //            "WHERE e.data = :data AND e.login = u.login AND e.data <> e.login ORDER BY time DESC LIMIT :limit OFFSET :offset";
 
-    public static String selectHistoryEvents = "SELECT e.type, e.data as login, e.time, e.active, u.fname, u.lname, i.src FROM events e inner join users u inner join images i " +
-            "WHERE e.active = TRUE AND e.login = :login AND e.data <> '' AND e.data <> e.login AND e.data = u.login AND u.profileId = i.profileId AND i.avatar = TRUE " +
-            "ORDER BY time DESC LIMIT :limit OFFSET :offset";
-    public static String selectNotificationEvents = "SELECT e.type, e.login as login, e.time, e.active, u.fname, u.lname, i.src FROM events e inner join users u inner join images i " +
-            "WHERE e.active = TRUE AND e.data = :data AND e.data <> e.login AND e.login = u.login AND u.profileId = i.profileId AND i.avatar = TRUE " +
-            "ORDER BY time DESC LIMIT :limit OFFSET :offset";
+    public static String selectHistoryEvents =
+            "SELECT e.type, e.data as login, e.time, e.active, u.fname, u.lname, i.src, p.gender " +
+                    "FROM (((events e INNER JOIN users u ON e.login = u.login) " +
+                    "INNER JOIN images i ON u.profileId = i.profileId AND i.avatar = TRUE) " +
+                    "INNER JOIN profiles p ON u.profileId = p.id) " +
+// не надо вроде                   "RIGHT JOIN blacklist b ON b.toLogin = e.login AND b.fromLogin = :login) " +
+                    "WHERE e.active = TRUE AND e.login = :login AND e.data <> '' AND e.data <> e.login " +
+                    "ORDER BY time DESC LIMIT :limit OFFSET :offset";
+    public static String selectNotificationEvents =
+            "SELECT e.type, e.login as login, e.time, e.active, u.fname, u.lname, i.src, p.gender " +
+                    "FROM ((((events e INNER JOIN users u ON u.login = e.data) " +
+                    "INNER JOIN images i ON u.profileId = i.profileId AND i.avatar = TRUE) " +
+                    "INNER JOIN profiles p ON p.id = u.profileId) " +
+                    "LEFT JOIN blacklist b ON b.toLogin = e.login AND b.fromLogin = :data) " +
+                    "WHERE (b.isBlocked IS NULL OR b.isBlocked <> TRUE) AND e.active = TRUE AND e.data = :data AND e.data <> e.login " +
+                    "ORDER BY time DESC LIMIT :limit OFFSET :offset";
 
 
     public static String selectUserEventsCount = "SELECT COUNT(*) FROM events WHERE login = :login OR data = :login";

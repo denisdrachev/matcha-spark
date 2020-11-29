@@ -24,4 +24,6 @@ public class EventWithUserInfo {
     private String lname;
     @Expose
     private String src;
+    @Expose
+    private Integer gender;
 }

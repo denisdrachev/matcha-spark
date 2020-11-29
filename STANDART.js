@@ -104,7 +104,7 @@
 ----------------------------------------------------------------
     {
         type: GET,
-        path: "/history/:limit/:offset",
+        path: "/history?limit=10?offset=0",
         desc: "User_1: Смотрит историю",
         header: 'Authorization',
         request: {},

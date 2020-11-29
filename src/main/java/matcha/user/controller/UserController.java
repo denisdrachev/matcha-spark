@@ -3,6 +3,7 @@ package matcha.user.controller;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import lombok.extern.slf4j.Slf4j;
+import matcha.converter.JsonTransformer;
 import matcha.response.Response;
 import matcha.user.model.UserInfo;
 import matcha.user.model.UserRegistry;
@@ -48,7 +49,7 @@ public class UserController {
             }
             userService.userRegistration(user);
             return validationMessageService.prepareMessageOkOnlyType();
-        });
+        }, new JsonTransformer());
     }
 
     public void resetPassword() {

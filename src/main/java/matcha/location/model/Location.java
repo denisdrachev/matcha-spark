@@ -1,8 +1,11 @@
 package matcha.location.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.gson.annotations.Expose;
-import lombok.*;
-import matcha.converter.Converter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -12,6 +15,7 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonIgnoreProperties(value = {"id", "profileId", "active", "userSet", "time"})
 public class Location implements Serializable {
 
     private int id;
@@ -27,6 +31,12 @@ public class Location implements Serializable {
     @ToString.Exclude
     private boolean userSet = false;
     private Date time = Calendar.getInstance().getTime();
+
+    public Location(@NotNull(message = "Поле location.x не может быть пустым") Double x,
+                    @NotNull(message = "Поле location.y не может быть пустым") Double y) {
+        this.x = x;
+        this.y = y;
+    }
 
     public void setProfileId(int profileId) {
         this.profileId = profileId;

@@ -175,9 +175,9 @@ public class UserService implements UserInterface {
         Event newEventLoad = new Event(EventType.PROFILE_LOAD, userByToken.getLogin(), true, login);
         eventService.saveNewEvent(newEventLoad);
 
-        BlackListMessage blackListMessage = blackListService.getBlackListMessage(user.getLogin(), login);
-        Event newEventLoaded = new Event(EventType.PROFILE_LOADED, userByToken.getLogin(), !blackListMessage.isBlocked(), login, !blackListMessage.isBlocked());
-        eventService.saveNewEvent(newEventLoaded);
+//        BlackListMessage blackListMessage = blackListService.getBlackListMessage(user.getLogin(), login);
+//        Event newEventLoaded = new Event(EventType.PROFILE_LOADED, login, !blackListMessage.isBlocked(), userByToken.getLogin(), !blackListMessage.isBlocked());
+//        eventService.saveNewEvent(newEventLoaded);
 
         Rating rating = ratingService.getRatingByLogin(user.getLogin());
         List<String> userTags = tagService.getUserTags(user.getLogin());

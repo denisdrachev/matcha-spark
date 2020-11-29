@@ -1,6 +1,5 @@
 package matcha.connected.db;
 
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import matcha.Sql2oModel;
 import matcha.connected.model.ConnectedEntity;
@@ -27,7 +26,7 @@ public class ConnectedDB {
         log.info("Insert connected entity '{}'", connectedEntity);
         try (org.sql2o.Connection conn = sql2o.open()) {
 
-            int result = conn.createQuery(Insert.insertBlacklist)
+            int result = conn.createQuery(Insert.insertConnected)
                     .addParameter("fromLogin", connectedEntity.getFromLogin())
                     .addParameter("toLogin", connectedEntity.getToLogin())
                     .addParameter("isConnected", connectedEntity.isConnected())
