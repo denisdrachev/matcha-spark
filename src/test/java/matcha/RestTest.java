@@ -13,6 +13,7 @@ import io.restassured.specification.ResponseSpecification;
 import matcha.location.model.Location;
 import matcha.user.model.UserRegistry;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
@@ -20,7 +21,7 @@ import static io.restassured.RestAssured.port;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 
-
+@Disabled
 public class RestTest {
 
     ResponseSpecification responseSpecError = new ResponseSpecBuilder()
