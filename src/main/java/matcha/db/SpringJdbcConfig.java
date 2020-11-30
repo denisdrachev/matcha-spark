@@ -64,7 +64,6 @@ public class SpringJdbcConfig {
         System.err.println(user_1.getActivationCode());
 
         UserInfoModel userInfo = new UserInfoModel();
-        userInfo.setLogin(user_1.getLogin());
         userInfo.setLocation(user_1.getLocation());
         userInfo.setEmail(user_1.getEmail());
         userInfo.setLname(user_1.getLname());
@@ -83,7 +82,7 @@ public class SpringJdbcConfig {
 
         userInfo.setImages(List.of(image));
 
-        userService.saveUserInfo(userInfo);
+        userService.saveUserInfo(userInfo, user_1.getLogin());
 
 //        profileService.updateProfile(profileByIdWithImages.getId(), profileByIdWithImages);
     }
@@ -103,7 +102,6 @@ public class SpringJdbcConfig {
         System.err.println(user_1.getActivationCode());
 
         UserInfoModel userInfo = new UserInfoModel();
-        userInfo.setLogin(user_1.getLogin());
         userInfo.setLocation(user_1.getLocation());
         userInfo.setEmail(user_1.getEmail());
         userInfo.setLname(user_1.getLname());
@@ -122,7 +120,7 @@ public class SpringJdbcConfig {
 
         userInfo.setImages(List.of(image));
 
-        userService.saveUserInfo(userInfo);
+        userService.saveUserInfo(userInfo, user_1.getLogin());
 
 //        profileService.updateProfile(profileByIdWithImages.getId(), profileByIdWithImages);
     }
@@ -142,7 +140,6 @@ public class SpringJdbcConfig {
         System.err.println(user_1.getActivationCode());
 
         UserInfoModel userInfo = new UserInfoModel();
-        userInfo.setLogin(user_1.getLogin());
         userInfo.setLocation(user_1.getLocation());
         userInfo.setEmail(user_1.getEmail());
         userInfo.setLname(user_1.getLname());
@@ -161,7 +158,7 @@ public class SpringJdbcConfig {
 
         userInfo.setImages(List.of(image));
 
-        userService.saveUserInfo(userInfo);
+        userService.saveUserInfo(userInfo, user_1.getLogin());
 
 //        profileService.updateProfile(profileByIdWithImages.getId(), profileByIdWithImages);
     }
@@ -181,7 +178,6 @@ public class SpringJdbcConfig {
         System.err.println(user_1.getActivationCode());
 
         UserInfoModel userInfo = new UserInfoModel();
-        userInfo.setLogin(user_1.getLogin());
         userInfo.setLocation(user_1.getLocation());
         userInfo.setEmail(user_1.getEmail());
         userInfo.setLname(user_1.getLname());
@@ -200,7 +196,7 @@ public class SpringJdbcConfig {
 
         userInfo.setImages(List.of(image));
 
-        userService.saveUserInfo(userInfo);
+        userService.saveUserInfo(userInfo, user_1.getLogin());
 
 //        profileService.updateProfile(profileByIdWithImages.getId(), profileByIdWithImages);
     }

@@ -5,6 +5,7 @@ import matcha.image.manipulation.ImageManipulator;
 import matcha.image.model.Image;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ImageService implements ImageInterface {
 
@@ -47,10 +48,17 @@ public class ImageService implements ImageInterface {
     }
 
     public void checkImagesIsCorrect(List<Image> images) {
-        if (images.stream().filter(Image::isAvatar).count() != 1)
+        if (images.stream().filter(image -> !image.getSrc().isEmpty()).count() != images.size()
+                || images.stream().filter(Image::isAvatar).count() != 1
+                || images.stream().filter(image -> image.getIndex() >= 0 && image.getIndex() <= 4).count() != images.size()
+                || images.stream().map(Image::getIndex).collect(Collectors.toSet()).size() != images.size())
             throw new IncorrectInputParamsException("Данные по изображениям некорректны");
-        if (images.stream().filter(image -> image.getIndex() >= 0 && image.getIndex() <= 4).count() != images.size())
-            throw new IncorrectInputParamsException("Данные по изображениям некорректны");
+//        if (images.stream().filter(Image::isAvatar).count() != 1)
+//            throw new IncorrectInputParamsException("Данные по изображениям некорректны");
+//        if (images.stream().filter(image -> image.getIndex() >= 0 && image.getIndex() <= 4).count() != images.size())
+//            throw new IncorrectInputParamsException("Данные по изображениям некорректны");
+//        if (images.stream().map(Image::getIndex).collect(Collectors.toSet()).size() != images.size())
+//            throw new IncorrectInputParamsException("Данные по изображениям некорректны");
         //TODO добавить провеоку на уникальность индексов
     }
 

@@ -6,10 +6,6 @@ package matcha;
 import lombok.extern.slf4j.Slf4j;
 import matcha.exception.BaseException;
 import matcha.validator.ValidationMessageService;
-import spark.Session;
-
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import static spark.Spark.*;
 
@@ -23,8 +19,8 @@ import static spark.Spark.*;
 public class Application {
 
     // this map is shared between sessions and threads, so it needs to be thread-safe (http://stackoverflow.com/a/2688817)
-    static Map<Session, String> userUsernameMap = new ConcurrentHashMap<>();
-    static int nextUserNumber = 1; //Used for creating the next username
+//    static Map<Session, String> userUsernameMap = new ConcurrentHashMap<>();
+//    static int nextUserNumber = 1; //Used for creating the next username
 
 
     public static void main(String[] args) {

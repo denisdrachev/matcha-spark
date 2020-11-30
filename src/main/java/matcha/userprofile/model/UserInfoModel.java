@@ -1,27 +1,22 @@
 package matcha.userprofile.model;
 
-import lombok.*;
-import matcha.converter.Converter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import matcha.image.model.Image;
-import matcha.location.model.Location;
+import matcha.location.model.LocationLight;
 import matcha.model.MyObject;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.io.Serializable;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserInfoModel implements Serializable, MyObject {
-
-    @NotBlank(message = "Значение поля 'login' не может быть пустым.")
-    private String login;
-    private String password;
 
     @Length(min = 1, max = 100, message = "Допустимая длина имени от 1 до 100 символов")
     @NotBlank(message = "Значение поля 'fname' не может быть пустым.")
@@ -33,6 +28,7 @@ public class UserInfoModel implements Serializable, MyObject {
 
     @Email(message = "Значение поля 'email' не соответствует формату")
     @NotBlank(message = "Значение поля 'email' не может быть пустым.")
+    @Length(min = 1, max = 100, message = "Допустимая длина email до 100 символов")
     private String email;
 
     @NotNull(message = "Значение поля 'age' не может быть пустым.")
@@ -40,8 +36,8 @@ public class UserInfoModel implements Serializable, MyObject {
     @Max(value = 120, message = "Значение поля 'age' не может быть больше 120.")
     private Integer age;
 
-    @Min(value = 1, message = "Указан не верный гендер.")
-    @Max(value = 3, message = "Указан не верный гендер.")
+    @Min(value = 1, message = "Указан не верный гендер. Допустимые значения: 1,2,3")
+    @Max(value = 3, message = "Указан не верный гендер. Допустимые значения: 1,2,3")
     @NotNull(message = "Значение поля 'gender' не может быть пустым.")
     private Integer gender;
 
@@ -50,10 +46,11 @@ public class UserInfoModel implements Serializable, MyObject {
     @NotNull(message = "Значение поля 'preference' не может быть пустым.")
     private Integer preference;
 
+    @Length(min = 1, max = 200, message = "Допустимая длина biography до 200 символов")
     @NotBlank(message = "Значение поля 'biography' не может быть пустым.")
     private String biography;
 
-    @Size(min = 1, message = "Не заполнено поле Теги")
+    @Size(min = 1, max = 10, message = "Не заполнено поле tags")
     @NotNull(message = "Значение поля 'tags' не может быть пустым.")
     private List<String> tags;
 
@@ -61,10 +58,8 @@ public class UserInfoModel implements Serializable, MyObject {
     @Size(min = 1, message = "Не заполнены изображения")
     private List<Image> images;
 
-    private Date time = Calendar.getInstance().getTime();
     @Valid
-    private Location location;
-    private String activationCode;
+    private LocationLight location;
 
 
 //    @Override

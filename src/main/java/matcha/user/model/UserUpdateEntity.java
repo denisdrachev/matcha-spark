@@ -19,10 +19,11 @@ public class UserUpdateEntity {
     private String email;
     private Date time = Calendar.getInstance().getTime();
 
-    public UserUpdateEntity(UserInfoModel userRegistry) {
+    public UserUpdateEntity(UserInfoModel userRegistry, String login) {
         this.email = userRegistry.getEmail();
         this.fname = userRegistry.getFname();
         this.lname = userRegistry.getLname();
-        this.login = userRegistry.getLogin();
+//        this.login = userRegistry.getLogin();
+        this.login = login;
     }
 }

@@ -91,6 +91,10 @@ public class UserController {
                 return validationMessageService.prepareErrorMessage("Вы не авторизованы.");
             }
 
+            String userLogin = userService.checkUserToToken(token);
+
+            userService.updateTimeByLogin(userLogin);
+
             log.info("Request get user profile by login: {}", login);
             return validationMessageService.prepareMessageOkData(gson.toJsonTree(userService.getUserProfile(token, login)));
         });
@@ -108,6 +112,9 @@ public class UserController {
                 log.info("Token: {} Пользователь не авторизован.", token);
                 return validationMessageService.prepareErrorMessage("Вы не авторизованы.");
             }
+
+            String userLogin = userService.checkUserToToken(token);
+            userService.updateTimeByLogin(userLogin);
 
             log.info("Request get self user profile");
             return validationMessageService.prepareMessageOkData(gson.toJsonTree(userService.getUserProfile(token, null)));

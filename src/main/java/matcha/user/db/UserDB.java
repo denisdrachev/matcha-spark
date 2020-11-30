@@ -225,7 +225,7 @@ public class UserDB {
             log.info("Update user by login end. result: {}", result);
         } catch (Exception e) {
             log.warn("Exception. updateUserByActivationCode: {}", e.getMessage());
-            throw new UpdateDBException("Ошибка");
+            throw new UpdateDBException();
         }
     }
 
@@ -247,7 +247,7 @@ public class UserDB {
             log.info("Update user by login end. result: {}", result);
         } catch (Exception e) {
             log.warn("Exception. updateUserByActivationCode: {}", e.getMessage());
-            throw new UpdateDBException("Ошибка");
+            throw new UpdateDBException();
         }
     }
 
@@ -335,6 +335,22 @@ public class UserDB {
             log.warn("Exception. getUsersWithFilters: {}", e.getMessage());
             e.printStackTrace();
             throw new SelectDBException();
+        }
+    }
+
+    public void updateTimeByLogin(String userLogin) {
+        log.info("Update user time by login: {}", userLogin);
+        try (org.sql2o.Connection conn = sql2o.beginTransaction()) {
+
+            int result = conn.createQuery(Update.updateUserTimeByLogin)
+                    .addParameter("login", userLogin)
+                    .addParameter("time", Calendar.getInstance().getTime())
+                    .executeUpdate().getResult();
+            conn.commit();
+            log.info("Update user time by login end. Result: {}", result);
+        } catch (Exception e) {
+            log.warn("Exception. updateTimeByLogin: {}", e.getMessage());
+            throw new UpdateDBException();
         }
     }
 }

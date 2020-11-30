@@ -1,9 +1,7 @@
 package matcha.controller;//package matcha.controller;
 
-import lombok.RequiredArgsConstructor;
 import matcha.image.model.Image;
 import matcha.image.service.ImageService;
-import matcha.location.model.Location;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,7 +28,7 @@ public class ImagesController {
 //        return "greeting";
 
         get("/images", (req, res) -> {
-
+            res.type("text/html");
             List<Image> imagesList = imageService.getAllImages();
             if (imagesList != null)
                 return imagesList.stream().map(location -> "<p>" + location + "</p>").collect(Collectors.joining());

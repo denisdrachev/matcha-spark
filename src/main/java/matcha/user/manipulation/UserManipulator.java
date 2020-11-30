@@ -139,4 +139,8 @@ public class UserManipulator {
     public List<UserSearchEntity> getUsersWithFilters(SearchModel searchModel) {
         return userDB.getUsersWithFilters(searchModel);
     }
+
+    public void updateTimeByLogin(String userLogin) {
+        userDB.updateTimeByLogin(userLogin);
+    }
 }

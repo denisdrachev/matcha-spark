@@ -200,14 +200,14 @@ public class UserService implements UserInterface {
     }
 
     //TODO рефакторинг
-    public void saveUserInfo(UserInfoModel userInfo) {
+    public void saveUserInfo(UserInfoModel userInfo, String login) {
 
-        UserEntity currentUser = getUserByLogin(userInfo.getLogin());
+        UserEntity currentUser = getUserByLogin(login);
 
-        saveUser(new UserUpdateEntity(userInfo), currentUser.getProfileId());
-
+        saveUser(new UserUpdateEntity(userInfo, currentUser.getLogin()), currentUser.getProfileId());
         if (userInfo.getLocation() != null) {
-            locationService.initLocationAndUpdate(userInfo.getLocation(), currentUser.getProfileId(), true, true);
+            Location location = new Location(userInfo.getLocation());
+            locationService.initLocationAndUpdate(location, currentUser.getProfileId(), true, true);
         } else {
             Location locationByProfileId = locationService.getLocationByProfileId(currentUser.getProfileId());
             locationService.initLocationAndUpdate(locationByProfileId, currentUser.getProfileId(), false, true);
@@ -217,10 +217,10 @@ public class UserService implements UserInterface {
         ProfileEntity newProfile = new ProfileEntity(currentUser.getProfileId(), userInfo);
         newProfile.setFilled(true);
 
-        tagService.saveTags(userInfo.getLogin(), userInfo.getTags());
+        tagService.saveTags(login, userInfo.getTags());
         profileService.updateProfile(currentUser.getProfileId(), newProfile);
 
-        Event newEvent = new Event(EventType.PROFILE_UPDATE, userInfo.getLogin(), true, "");
+        Event newEvent = new Event(EventType.PROFILE_UPDATE, login, true, "");
         eventService.saveNewEvent(newEvent);
     }
 
@@ -234,6 +234,8 @@ public class UserService implements UserInterface {
             return validationMessageService.prepareErrorMessage("Вы не авторизованы.");
         }
 
+        String requestUserLogin = checkUserToToken(token);
+
         UserInfoModel userProfile = new Gson().fromJson(body, UserInfoModel.class);
 
         Response response = validationMessageService.validateMessage(userProfile);
@@ -241,7 +243,8 @@ public class UserService implements UserInterface {
             return response;
         }
 
-        checkUserByLoginAndActivationCode(userProfile.getLogin(), token);
+//        checkUserByLoginAndActivationCode(userProfile.getLogin(), token);
+
         imageService.checkImagesIsCorrect(userProfile.getImages());
         if (userProfile.getTags() != null) {
             for (String tag : userProfile.getTags()) {
@@ -250,7 +253,7 @@ public class UserService implements UserInterface {
                 }
             }
         }
-        saveUserInfo(userProfile);
+        saveUserInfo(userProfile, requestUserLogin);
         return validationMessageService.prepareMessageOkOnlyType();
     }
 
@@ -389,6 +392,14 @@ public class UserService implements UserInterface {
 
         UserEntity userByToken = getUserByToken(token);
 
+        ProfileEntity profileById = profileService.getProfileByIdWithImages(userByToken.getProfileId());
+//        profileService.getProfileByIdWithImages(userByToken.getProfileId()).getImages().stream().noneMatch(image -> image.isAvatar() && image.getSrc().isEmpty())
+//        profileById.getImages().stream().filter(Image::isAvatar).flatMap(image -> image.getSrc().isEmpty())
+
+        if (profileById.getImages().stream().anyMatch(image -> image.isAvatar() && image.getSrc().isEmpty())) {
+            return validationMessageService.prepareErrorMessage("Вы не можете лайкать. У вас не установлен аватар.");
+        }
+
         if (!userManipulator.isUserExistByLogin(loginParam)) {
             return validationMessageService.prepareErrorMessage("Указанный пользователь не найден.");
         }
@@ -396,6 +407,7 @@ public class UserService implements UserInterface {
         if (userByToken.getLogin().equals(loginParam)) {
             return validationMessageService.prepareErrorMessage("Себя лайкнут нельзя :)");
         }
+
 
         eventService.setLikeOrUnlike(userByToken.getLogin(), loginParam, value);
 
@@ -595,5 +607,9 @@ public class UserService implements UserInterface {
         user.setPassword(password);
         initRegistryUser(user);
         return validationMessageService.prepareMessageOkOnlyType();
+    }
+
+    public void updateTimeByLogin(String userLogin) {
+        userManipulator.updateTimeByLogin(userLogin);
     }
 }
