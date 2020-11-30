@@ -83,28 +83,41 @@ public class Utils {
 
         List<String> order = new ArrayList<>();
 
-        if (searchModel.getSortAge() == -1) {
-            order.add("p.age DESC");
-        } else if (searchModel.getSortAge() == 1) {
-            order.add("p.age");
-        }
-        if (searchModel.getSortLocation() == -1) {
-            order.add("l.x DESC, l.y DESC");
-        } else if (searchModel.getSortLocation() == 1) {
-            order.add("l.x, l.y");
-        }
-        if (searchModel.getSortRating() == -1) {
-            order.add("r.rating DESC");
-        } else if (searchModel.getSortRating() == 1) {
-            order.add("r.rating");
-        }
-        if (searchModel.getTags().size() != 0) {
-            if (searchModel.getSortTags() == -1) {
-                order.add("t.count DESC");
-            } else if (searchModel.getSortTags() == 1) {
-                order.add("t.count");
+        LinkedList<String> sortOrderList = searchModel.getSortOrderList();
+
+        for (String s : sortOrderList) {
+            if (s.equals("sortAge")) {
+                if (searchModel.getSortAge() == -1) {
+                    order.add("p.age DESC");
+                } else if (searchModel.getSortAge() == 1) {
+                    order.add("p.age");
+                }
+            }
+            if (s.equals("sortLocation")) {
+                if (searchModel.getSortLocation() == -1) {
+                    order.add("l.x DESC, l.y DESC");
+                } else if (searchModel.getSortLocation() == 1) {
+                    order.add("l.x, l.y");
+                }
+            }
+            if (s.equals("sortRating")) {
+                if (searchModel.getSortRating() == -1) {
+                    order.add("r.rating DESC");
+                } else if (searchModel.getSortRating() == 1) {
+                    order.add("r.rating");
+                }
+            }
+            if (s.equals("sortTags")) {
+                if (searchModel.getTags().size() != 0) {
+                    if (searchModel.getSortTags() == -1) {
+                        order.add("t.count DESC");
+                    } else if (searchModel.getSortTags() == 1) {
+                        order.add("t.count");
+                    }
+                }
             }
         }
+
         if (order.size() > 0) {
             return " ORDER BY " + order.stream().collect(Collectors.joining(", "));
         }

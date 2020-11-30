@@ -1,16 +1,14 @@
 package matcha.blacklist.db;
 
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import matcha.Sql2oModel;
 import matcha.blacklist.model.BlackListMessage;
 import matcha.db.crud.Insert;
 import matcha.db.crud.Select;
 import matcha.db.crud.Update;
-import matcha.exception.db.InsertBlackListMessageDBException;
-import matcha.exception.db.NotFoundBlackListMessageDBException;
-import matcha.exception.db.UpdateBlackListMessageDBException;
+import matcha.exception.db.InsertDBException;
+import matcha.exception.db.SelectDBException;
+import matcha.exception.db.UpdateDBException;
 import org.sql2o.Sql2o;
 
 import java.util.List;
@@ -36,7 +34,7 @@ public class BlackListDB {
             log.info("Insert BlackList message result: {}", result);
         } catch (Exception e) {
             log.warn("Exception. insertBlackListMessage: {}", e.getMessage());
-            throw new InsertBlackListMessageDBException();
+            throw new InsertDBException();
         }
     }
 
@@ -56,7 +54,7 @@ public class BlackListDB {
             log.info("Update BlackList message result: {}", result);
         } catch (Exception e) {
             log.warn("Exception. updateBlackListMessage: {}", e.getMessage());
-            throw new UpdateBlackListMessageDBException();
+            throw new UpdateDBException();
         }
     }
 
@@ -76,7 +74,7 @@ public class BlackListDB {
             return result.get(0);
         } catch (Exception e) {
             log.warn("Failed to load BlackList message. Exception message: {}", e.getMessage());
-            throw new NotFoundBlackListMessageDBException();
+            throw new SelectDBException();
         }
     }
 
@@ -115,7 +113,7 @@ public class BlackListDB {
             return result;
         } catch (Exception e) {
             log.warn("Failed to load all BlackList messages. Exception message: {}", e.getMessage());
-            throw new NotFoundBlackListMessageDBException();
+            throw new SelectDBException();
         }
     }
 }

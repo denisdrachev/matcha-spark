@@ -1,5 +1,7 @@
 package matcha.exception.db;
 
 
-public class SendRegistrationMailException extends RuntimeException {
+import matcha.exception.BaseException;
+
+public class SendRegistrationMailException extends BaseException {
 }

@@ -1,9 +1,15 @@
 package matcha.exception.user;
 
 
-public class UserAuthException extends RuntimeException {
+import matcha.exception.BaseException;
+
+public class UserAuthException extends BaseException {
 
     public UserAuthException() {
         super("Ошибка авторизации");
+    }
+
+    public UserAuthException(String message) {
+        super(message);
     }
 }

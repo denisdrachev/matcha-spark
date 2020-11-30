@@ -1,5 +1,7 @@
 package matcha.event.service;
 
+import com.google.gson.Gson;
+import lombok.extern.slf4j.Slf4j;
 import matcha.blacklist.model.BlackListMessage;
 import matcha.blacklist.service.BlackListService;
 import matcha.connected.model.ConnectedEntity;
@@ -10,9 +12,14 @@ import matcha.event.model.EventWithUserInfo;
 import matcha.rating.service.RatingService;
 import matcha.reactive.EventUnicastService;
 import matcha.utils.EventType;
+import org.eclipse.jetty.websocket.api.Session;
 
+import java.io.IOException;
 import java.util.List;
 
+import static matcha.ChatWebSocketHandler.webSocketConnection;
+
+@Slf4j
 public class EventService {
 
     //TODO тут добавить реактивщину
@@ -20,6 +27,7 @@ public class EventService {
     private ConnectedService connectedService = ConnectedService.getInstance();
     private BlackListService blackListService = BlackListService.getInstance();
     private RatingService ratingService = RatingService.getInstance();
+    private Gson gson = new Gson();
 
 
     private EventManipulator eventManipulator = new EventManipulator();
@@ -41,7 +49,16 @@ public class EventService {
             return;
         eventManipulator.insertEvent(event);
         ratingService.incRatingByLogin(event.getLogin());
-//        eventUnicastService.onNext(event);
+
+        try {
+            if (webSocketConnection.containsKey(event.getData())) {
+                Session session = webSocketConnection.get(event.getData());
+                session.getRemote().sendString(gson.toJson(event));
+            }
+        } catch (IOException e) {
+            log.warn("Exception WebSocket Event sending.");
+            e.printStackTrace();
+        }
     }
 
     public void updateEventActiveById(Event event) {

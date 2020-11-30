@@ -1,8 +1,14 @@
 package matcha.exception.context;
 
 
-public class UserRegistrationException extends RuntimeException {
+import matcha.exception.BaseException;
+
+public class UserRegistrationException extends BaseException {
     public UserRegistrationException() {
         super("Ошибка регистрации пользователя");
+    }
+
+    public UserRegistrationException(String message) {
+        super(message);
     }
 }

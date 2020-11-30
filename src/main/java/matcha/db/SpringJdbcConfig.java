@@ -9,7 +9,6 @@ import matcha.user.model.UserRegistry;
 import matcha.user.service.UserService;
 import matcha.userprofile.model.UserInfoModel;
 
-import java.util.Calendar;
 import java.util.List;
 
 //@Configuration
@@ -56,7 +55,7 @@ public class SpringJdbcConfig {
         location.setX(1.1);
         location.setY(1.1);
         UserRegistry userRegistry = new UserRegistry(
-                "test3", "123", "fname_test3", "lname_test3", value + "@mail.ru", Calendar.getInstance().getTime(), location
+                "test3", "123", "fname_test3", "lname_test3", value + "@mail.ru", location
         );
         userService.userRegistration(userRegistry);
 
@@ -92,10 +91,10 @@ public class SpringJdbcConfig {
     private void createUser() {
         String value = "-1";
         Location location = new Location();
-        location.setX(1.1);
-        location.setY(1.1);
+        location.setX(2.2);
+        location.setY(2.2);
         UserRegistry userRegistry = new UserRegistry(
-                "User_1", "123", "fname", "lname", value + "@mail.ru", Calendar.getInstance().getTime(), location
+                "User_1", "123", "fname", "lname", value + "@mail.ru", location
         );
         userService.userRegistration(userRegistry);
 
@@ -113,7 +112,7 @@ public class SpringJdbcConfig {
         userInfo.setAge(22);
         userInfo.setGender(1);
         userInfo.setPreference(3);
-        userInfo.setTags(List.of("tag2", "tag3"));
+        userInfo.setTags(List.of("tag1", "tag2", "tag3"));
         userInfo.setBiography("asdasdasd");
 
         Image image = new Image();
@@ -134,7 +133,7 @@ public class SpringJdbcConfig {
         location.setX(1.1);
         location.setY(1.1);
         UserRegistry userRegistry = new UserRegistry(
-                "User_2", "123", "fname", "lname", value + "@mail.ru", Calendar.getInstance().getTime(), location
+                "User_2", "123", "fname", "lname", value + "@mail.ru", location
         );
         userService.userRegistration(userRegistry);
 
@@ -149,10 +148,10 @@ public class SpringJdbcConfig {
         userInfo.setLname(user_1.getLname());
         userInfo.setFname(user_1.getFname());
 //        ProfileEntity profileByIdWithImages = profileService.getProfileByIdWithImages(user_1.getProfileId());
-        userInfo.setAge(22);
-        userInfo.setGender(1);
-        userInfo.setPreference(3);
-        userInfo.setTags(List.of("tag2", "tag1"));
+        userInfo.setAge(40);
+        userInfo.setGender(2);
+        userInfo.setPreference(2);
+        userInfo.setTags(List.of("tag2", "tag3", "tag4"));
         userInfo.setBiography("asdasdasd");
 
         Image image = new Image();
@@ -173,7 +172,7 @@ public class SpringJdbcConfig {
         location.setX(1.1);
         location.setY(1.1);
         UserRegistry userRegistry = new UserRegistry(
-                "User_3", "123", "fname", "lname", value + "@mail.ru", Calendar.getInstance().getTime(), location
+                "User_3", "123", "fname", "lname", value + "@mail.ru", location
         );
         userService.userRegistration(userRegistry);
 
@@ -213,7 +212,7 @@ public class SpringJdbcConfig {
             location.setX(1.1);
             location.setY(1.1);
             UserRegistry userRegistry = new UserRegistry(
-                    value, value, value, value, value + "@mail.ru", Calendar.getInstance().getTime(), location
+                    value, value, value, value, value + "@mail.ru", location
             );
             userService.userRegistration(userRegistry);
         }

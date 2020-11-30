@@ -1,8 +1,14 @@
 package matcha.exception.db;
 
 
-public class UpdateDBException extends RuntimeException {
+import matcha.exception.BaseException;
+
+public class UpdateDBException extends BaseException {
     public UpdateDBException() {
         super("Ошибка обновления данных базы");
+    }
+
+    public UpdateDBException(String message) {
+        super(message);
     }
 }

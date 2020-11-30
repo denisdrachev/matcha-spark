@@ -1,8 +1,6 @@
 package matcha.image.service;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import matcha.exception.context.image.ValidateAvatarInImagesException;
+import matcha.exception.context.IncorrectInputParamsException;
 import matcha.image.manipulation.ImageManipulator;
 import matcha.image.model.Image;
 
@@ -49,9 +47,10 @@ public class ImageService implements ImageInterface {
     }
 
     public void checkImagesIsCorrect(List<Image> images) {
-        if (images.stream().filter(Image::isAvatar).count() != 1) throw new ValidateAvatarInImagesException();
+        if (images.stream().filter(Image::isAvatar).count() != 1)
+            throw new IncorrectInputParamsException("Данные по изображениям некорректны");
         if (images.stream().filter(image -> image.getIndex() >= 0 && image.getIndex() <= 4).count() != images.size())
-            throw new ValidateAvatarInImagesException();
+            throw new IncorrectInputParamsException("Данные по изображениям некорректны");
         //TODO добавить провеоку на уникальность индексов
     }
 

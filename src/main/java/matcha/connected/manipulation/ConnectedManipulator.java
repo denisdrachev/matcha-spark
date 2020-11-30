@@ -1,11 +1,9 @@
 package matcha.connected.manipulation;
 
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import matcha.connected.db.ConnectedDB;
 import matcha.connected.model.ConnectedEntity;
 import matcha.connected.model.ConnectedWithUserInfo;
-import matcha.exception.db.NotFoundBlackListMessageDBException;
 
 import java.util.List;
 

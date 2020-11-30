@@ -1,15 +1,13 @@
 package matcha.location.db;
 
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import matcha.Sql2oModel;
 import matcha.db.crud.Insert;
 import matcha.db.crud.Select;
 import matcha.db.crud.Update;
-import matcha.exception.db.location.GetActiveLocationByLoginException;
-import matcha.exception.db.location.GetLocationsException;
-import matcha.exception.db.location.InsertLocationException;
-import matcha.exception.db.location.UpdateLocationException;
+import matcha.exception.db.InsertDBException;
+import matcha.exception.db.SelectDBException;
+import matcha.exception.db.UpdateDBException;
 import matcha.location.model.Location;
 import org.sql2o.Sql2o;
 
@@ -33,7 +31,7 @@ public class LocationDB {
             return locations;
         } catch (Exception e) {
             log.warn("Exception. getLocations: {}", e.getMessage());
-            throw new GetLocationsException();
+            throw new SelectDBException();
         }
     }
 
@@ -54,7 +52,7 @@ public class LocationDB {
             log.info("Insert location result: {}", insert);
         } catch (Exception e) {
             log.warn("Exception. insertLocation: {}", e.getMessage());
-            throw new InsertLocationException();
+            throw new InsertDBException();
         }
     }
 
@@ -72,7 +70,7 @@ public class LocationDB {
         } catch (Exception e) {
             e.printStackTrace();
             log.warn("Exception. getActiveLocationByLogin: {}", e.getMessage());
-            throw new GetActiveLocationByLoginException();
+            throw new SelectDBException();
         }
     }
 
@@ -95,7 +93,7 @@ public class LocationDB {
             return update;
         } catch (Exception e) {
             log.warn("Exception. updateLocation: {}", e.getMessage());
-            throw new UpdateLocationException();
+            throw new UpdateDBException();
         }
     }
 
@@ -135,7 +133,7 @@ public class LocationDB {
         } catch (Exception e) {
             e.printStackTrace();
             log.warn("Exception. getLastInactiveLocationByProfileId: {}", e.getMessage());
-            throw new GetActiveLocationByLoginException();
+            throw new SelectDBException();
         }
     }
 }

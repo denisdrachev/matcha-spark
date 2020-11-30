@@ -8,12 +8,7 @@ import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 import org.json.JSONObject;
 
-import javax.websocket.ClientEndpoint;
-import javax.websocket.OnClose;
-import javax.websocket.OnMessage;
-import javax.websocket.OnOpen;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @WebSocket
@@ -24,23 +19,26 @@ public class ChatWebSocketHandler {
     public static Map<String, Session> webSocketConnection = new HashMap<>();
 
     @OnWebSocketConnect
-    public void onConnect(Session user) throws Exception {
+    public void onConnect(Session userSession) throws Exception {
+
         System.out.println("onConnect! ");
 //        String username = "User" + Chat.nextUserNumber++;
 //        Chat.userUsernameMap.put(user, username);
 //        Chat.broadcastMessage(sender = "Server", msg = (username + " joined the chat"));
 
-        String token = user.getUpgradeRequest().getParameterMap().get("token").get(0);
-        System.out.println(token);
 
         try {
-            String login = "login";
-//            String login = userService.checkUserToToken(authorization);
-            user.getRemote().sendString(String.valueOf(new JSONObject()
-                    .put("token", token)
-//                    .put("login", login)
-            ));
-//            webSocketConnection.put(login, user);
+            String token = userSession.getUpgradeRequest().getParameterMap().get("token").get(0);
+            System.out.println(token);
+//            String login = "login";
+            String login = userService.checkUserToToken(token);
+            webSocketConnection.put(login, userSession);
+
+
+//            userSession.getRemote().sendString(String.valueOf(new JSONObject()
+//                            .put("token", token)
+////                    .put("login", login)
+//            ));
         } catch (Exception e) {
             e.printStackTrace();
         }

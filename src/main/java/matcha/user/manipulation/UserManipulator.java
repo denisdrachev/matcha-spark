@@ -1,12 +1,12 @@
 package matcha.user.manipulation;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import matcha.converter.Utils;
-import matcha.exception.context.UserAlreadyExistException;
-import matcha.exception.db.UpdateUserByIdDBException;
-import matcha.exception.db.location.InsertLocationException;
-import matcha.exception.user.*;
+import matcha.exception.context.UserRegistrationException;
+import matcha.exception.db.InsertDBException;
+import matcha.exception.db.UpdateDBException;
+import matcha.exception.user.UserAuthException;
+import matcha.location.model.Location;
 import matcha.location.service.LocationService;
 import matcha.model.SearchModel;
 import matcha.response.Response;
@@ -16,11 +16,12 @@ import matcha.user.model.UserEntity;
 import matcha.user.model.UserInfo;
 import matcha.user.model.UserSearchEntity;
 import matcha.user.model.UserUpdateEntity;
-//import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
+
+//import org.springframework.stereotype.Service;
 
 @Slf4j
 //@Service
@@ -38,7 +39,8 @@ public class UserManipulator {
     public Response userLogin(UserInfo userLogin) {
         UserEntity user = userDB.getUserByLogin(userLogin.getLogin());
         try {
-            locationService.initLocationAndUpdate(userLogin.getLocation(), user.getProfileId(), false, false);
+            Location location = new Location(userLogin.getLocation());
+            locationService.initLocationAndUpdate(location, user.getProfileId(), false, false);
             if (user.isActive() && !user.isBlocked()) {
                 if (Utils.checkPassword(userLogin.getPassword(), user.getSalt(), user.getPasswordBytes())) {
 //                    user.setActivationCode("TEST_TEST_TEST");
@@ -47,18 +49,18 @@ public class UserManipulator {
                     return new ResponseOk(user.getActivationCode());
                 } else {
                     log.info("Логин или пароль неверны. User: {}", userLogin);
-                    throw new UserLoginOrPasswordIncorrectException();
+                    throw new UserAuthException("Некорректное имя пользователя или пароль");
                 }
             } else {
                 String format = String.format("Пользователь %s заблокирован или неактивен", userLogin.getLogin());
                 log.info(format);
-                throw new UserBlockedOrDisabledException(format);
+                throw new UserAuthException(format);
             }
-        } catch (InsertLocationException | UpdateUserByIdDBException ile) {
+        } catch (InsertDBException | UpdateDBException ile) {
             String format = String.format("Ошибка авторизации пользователя %s.", userLogin.getLogin());
             log.info(format);
             ile.printStackTrace();
-            throw new UserLoginException(format);
+            throw new UserAuthException(format);
         }
     }
 
@@ -109,7 +111,7 @@ public class UserManipulator {
     public void checkUserExistByLogin(String login) {
         Integer userCountByLogin = userDB.getUserCountByLogin(login);
         if (userCountByLogin != 0)
-            throw new UserAlreadyExistException("Пользователь с ником " + login + " уже существует");
+            throw new UserRegistrationException("Пользователь с ником " + login + " уже существует");
 
     }
 
@@ -127,7 +129,7 @@ public class UserManipulator {
     public void checkUserByLoginAndActivationCode(String login, String token) {
         Integer userCount = userDB.checkUserByLoginAndToken(login, token);
         if (userCount != 1)
-            throw new UserNotFoundException();
+            throw new UserAuthException("Пользователь не найден");
     }
 
     public List<UserEntity> getAllUsers() {

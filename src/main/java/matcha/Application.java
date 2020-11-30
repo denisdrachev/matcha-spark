@@ -4,6 +4,7 @@ package matcha;
 //import ch.qos.logback.classic.Logger;
 
 import lombok.extern.slf4j.Slf4j;
+import matcha.exception.BaseException;
 import matcha.validator.ValidationMessageService;
 import spark.Session;
 
@@ -27,6 +28,16 @@ public class Application {
 
 
     public static void main(String[] args) {
+//        System.setProperty(org.slf4j.simple.SimpleLogger.DEFAULT_LOG_LEVEL_KEY, "INFO");
+//
+//
+//        final org.slf4j.Logger log = LoggerFactory.getLogger(Application.class);
+////
+////        log.trace("trace");
+////        log.debug("debug");
+//        log.info("info");
+////        log.warn("warning");
+////        log.error("error");
 
 //        Thread thread = new Thread(Spark::awaitInitialization);
         port(getHerokuAssignedPort());
@@ -69,13 +80,19 @@ public class Application {
 
             res.type("application/json");
         });
+        String s1 = validationMessageService.prepareErrorMessage("Некорректные параметры запроса").toString();
         exception(Exception.class, (exception, request, response) -> {
             exception.printStackTrace();
             String s = validationMessageService.prepareErrorMessage(exception.getMessage()).toString();
-            if (s == null || s.isEmpty()) {
-                response.body("Некорректные параметры запроса.");
+            if (exception instanceof BaseException) {
+                if (s == null || s.isEmpty()) {
+                    response.body(s1);
+                } else {
+                    response.body(validationMessageService.prepareErrorMessage(exception.getMessage()).toString());
+                }
             } else {
-                response.body(validationMessageService.prepareErrorMessage(exception.getMessage()).toString());
+
+                response.body(s1);
             }
         });
         SingletonControllers.init();

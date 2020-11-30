@@ -1,7 +1,9 @@
 package matcha.exception.db;
 
 
-public class InsertDBException extends RuntimeException {
+import matcha.exception.BaseException;
+
+public class InsertDBException extends BaseException {
     public InsertDBException() {
         super("Ошибка добавления в базу");
     }

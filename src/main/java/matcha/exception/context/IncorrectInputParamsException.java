@@ -1,8 +1,14 @@
 package matcha.exception.context;
 
 
-public class IncorrectInputParamsException extends RuntimeException {
+import matcha.exception.BaseException;
+
+public class IncorrectInputParamsException extends BaseException {
     public IncorrectInputParamsException() {
         super("Некорректные параметры запроса.");
+    }
+
+    public IncorrectInputParamsException(String message) {
+        super(message);
     }
 }

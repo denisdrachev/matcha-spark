@@ -37,8 +37,8 @@ public class UserEntity implements Serializable, MyObject {
         this.lname = userRegistry.getLname();
         this.login = userRegistry.getLogin();
         this.password = userRegistry.getPassword();
-        this.location = userRegistry.getLocation();
-        this.time = userRegistry.getTime();
+        this.location = new Location(userRegistry.getLocation());
+        this.time = Calendar.getInstance().getTime();
     }
 
     public UserEntity(UserInfoModel userRegistry) {

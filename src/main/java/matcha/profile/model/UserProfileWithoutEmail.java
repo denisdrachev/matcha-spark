@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import matcha.image.model.Image;
-import matcha.location.model.Location;
+import matcha.location.model.LocationLight;
 import matcha.user.model.UserEntity;
 
 import java.io.Serializable;
@@ -40,7 +40,7 @@ public class UserProfileWithoutEmail implements Serializable {
     @Expose
     private Date time;
     @Expose
-    private Location location;
+    private LocationLight location;
     @Expose
     private boolean isBlocked;
     @Expose

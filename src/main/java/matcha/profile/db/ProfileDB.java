@@ -7,10 +7,9 @@ import matcha.db.crud.Insert;
 import matcha.db.crud.Select;
 import matcha.db.crud.Update;
 import matcha.exception.context.UserRegistrationException;
-import matcha.exception.db.DropProfileByIdDBException;
-import matcha.exception.db.GetProfileByIdDBException;
-import matcha.exception.db.GetProfileCountByIdDBException;
-import matcha.exception.db.UpdateProfileByIdDBException;
+import matcha.exception.db.DeleteDBException;
+import matcha.exception.db.SelectDBException;
+import matcha.exception.db.UpdateDBException;
 import matcha.profile.model.ProfileEntity;
 import matcha.profile.model.ProfileEntityWithoutImages;
 import org.sql2o.Sql2o;
@@ -58,7 +57,7 @@ public class ProfileDB {
             return count.get(0);
         } catch (Exception e) {
             log.warn("Exception. getProfileCountById: {}", e.getMessage());
-            throw new GetProfileCountByIdDBException();
+            throw new SelectDBException();
         }
     }
 
@@ -80,7 +79,7 @@ public class ProfileDB {
         } catch (Exception e) {
             e.printStackTrace();
             log.warn("Exception. getProfileById: {}", e.getMessage());
-            throw new GetProfileByIdDBException("Ошибка. Не удалось загрузить профиль");
+            throw new SelectDBException("Ошибка. Не удалось загрузить профиль");
         }
     }
 
@@ -106,7 +105,7 @@ public class ProfileDB {
         } catch (Exception e) {
             log.warn("Exception. updateProfileById: {}", e.getMessage());
             e.printStackTrace();
-            throw new UpdateProfileByIdDBException();
+            throw new UpdateDBException();
         }
     }
 
@@ -123,7 +122,7 @@ public class ProfileDB {
             log.info("Drop profile by id end. result: {}", result);
         } catch (Exception e) {
             log.warn("Exception. dropProfileById: {}", e.getMessage());
-            throw new DropProfileByIdDBException();
+            throw new DeleteDBException();
         }
     }
 }

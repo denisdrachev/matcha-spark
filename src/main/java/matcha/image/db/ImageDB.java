@@ -6,9 +6,10 @@ import matcha.db.crud.Delete;
 import matcha.db.crud.Insert;
 import matcha.db.crud.Select;
 import matcha.db.crud.Update;
-import matcha.exception.context.image.LoadImageException;
+import matcha.exception.db.DeleteDBException;
+import matcha.exception.db.InsertDBException;
+import matcha.exception.db.SelectDBException;
 import matcha.exception.db.UpdateDBException;
-import matcha.exception.db.image.*;
 import matcha.image.model.Image;
 import org.sql2o.Sql2o;
 
@@ -37,7 +38,7 @@ public class ImageDB {
             return imagesCount.get(0);
         } catch (Exception e) {
             log.warn("Exception. getImageCountById: {}", e.getMessage());
-            throw new GetImageCountByIdDBException();
+            throw new SelectDBException();
         }
     }
 
@@ -55,7 +56,7 @@ public class ImageDB {
             return image.get(0);
         } catch (Exception e) {
             log.warn("Exception. getImageById: {}", e.getMessage());
-            throw new GetImageByIdDBException();
+            throw new SelectDBException();
         }
     }
 
@@ -87,7 +88,7 @@ public class ImageDB {
             return insert;
         } catch (Exception e) {
             log.warn("Exception. insertImage: {}", e.getMessage());
-            throw new InsertImageDBException();
+            throw new InsertDBException();
         }
     }
 
@@ -105,7 +106,7 @@ public class ImageDB {
             log.info("Update image by id result: {}", result);
         } catch (Exception e) {
             log.warn("Exception. updateImageById: {}", e.getMessage());
-            throw new UpdateImageByIdDBException();
+            throw new UpdateDBException();
         }
     }
 
@@ -133,7 +134,7 @@ public class ImageDB {
             log.info("Drop image by id result: {}", result);
         } catch (Exception e) {
             log.warn("Exception. dropImageById: {}", e.getMessage());
-            throw new DropImageByIdDBException();
+            throw new DeleteDBException();
         }
     }
 
@@ -149,7 +150,7 @@ public class ImageDB {
             return images;
         } catch (Exception e) {
             log.warn("Exception. getImagesByProfileId: {}", e.getMessage());
-            throw new LoadImageException();
+            throw new SelectDBException();
         }
     }
 
@@ -164,7 +165,7 @@ public class ImageDB {
             return images;
         } catch (Exception e) {
             log.warn("Exception. getAllImages: {}", e.getMessage());
-            throw new LoadImageException();
+            throw new SelectDBException();
         }
     }
 }

@@ -7,7 +7,9 @@ import matcha.chat.model.ChatMessageSave;
 import matcha.db.crud.Insert;
 import matcha.db.crud.Select;
 import matcha.db.crud.Update;
-import matcha.exception.db.*;
+import matcha.exception.db.InsertDBException;
+import matcha.exception.db.SelectDBException;
+import matcha.exception.db.UpdateDBException;
 import org.sql2o.Sql2o;
 
 import java.util.List;
@@ -33,7 +35,7 @@ public class ChatDB {
             log.info("Insert chat message. Result: {}", result);
         } catch (Exception e) {
             log.warn("Exception. insertChatMessage: {}", e.getMessage());
-            throw new InsertChatMessageDBException();
+            throw new InsertDBException();
         }
     }
 
@@ -49,7 +51,7 @@ public class ChatDB {
         } catch (Exception e) {
             e.printStackTrace();
             log.warn("Exception. updateChatMessage: {}", e.getMessage());
-            throw new UpdateChatMessageDBException();
+            throw new UpdateDBException();
         }
     }
 
@@ -82,7 +84,7 @@ public class ChatDB {
             return chatMessages;
         } catch (Exception e) {
             log.warn("Exception. getChatMessages: {}", e.getMessage());
-            throw new GetChatMessageDBException();
+            throw new SelectDBException();
         }
     }
 
@@ -102,7 +104,7 @@ public class ChatDB {
             log.warn("Exception. getFullChatMessages: {}", e.getMessage());
             //TODO на уровень выше поймать эксепшн и вернуть List.of();
 //            return List.of();
-            throw new GetFullChatMessagesDBException();
+            throw new SelectDBException();
         }
     }
 
@@ -120,7 +122,7 @@ public class ChatDB {
             log.warn("Exception. getNewChatMessages: {}", e.getMessage());
             //TODO на уровень выше поймать эксепшн и вернуть List.of();
 //            return List.of();
-            throw new GetNewChatMessagesDBException();
+            throw new SelectDBException();
         }
     }
 
@@ -137,7 +139,7 @@ public class ChatDB {
             log.warn("Exception. getAllNewChatMessages: {}", e.getMessage());
             //TODO на уровень выше поймать эксепшн и вернуть List.of();
 //            return List.of();
-            throw new GetAllNewChatMessagesDBException();
+            throw new SelectDBException();
         }
     }
 

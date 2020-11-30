@@ -29,8 +29,8 @@ public class TagDB {
                     .addParameter("name", tag)
                     .executeAndFetch(Integer.class);
             conn.commit();
-            log.info("Get tag ID result: {} ", count);
-            return count.size() == 0 ? -1 : count.get(0);
+            log.info("Get tag ID result: {} ", count == null || count.size() == 0 ? -1 : count.get(0));
+            return count == null || count.size() == 0 ? -1 : count.get(0);
         } catch (Exception e) {
             log.warn("Exception. getTagId: {}", e.getMessage());
             throw new SelectDBException();

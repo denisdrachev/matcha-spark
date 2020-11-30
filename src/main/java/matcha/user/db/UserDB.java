@@ -1,19 +1,15 @@
 package matcha.user.db;
 
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import matcha.Sql2oModel;
 import matcha.converter.Utils;
-import matcha.db.crud.Delete;
 import matcha.db.crud.Insert;
 import matcha.db.crud.Select;
 import matcha.db.crud.Update;
-import matcha.exception.db.*;
-import matcha.exception.db.location.GetLocationsException;
-import matcha.exception.service.UserRegistryException;
+import matcha.exception.db.InsertDBException;
+import matcha.exception.db.SelectDBException;
+import matcha.exception.db.UpdateDBException;
 import matcha.exception.user.UserAuthException;
-import matcha.exception.user.UserLoginException;
-import matcha.exception.user.UserNotFoundException;
 import matcha.model.SearchModel;
 import matcha.user.model.UserEntity;
 import matcha.user.model.UserEntity2;
@@ -42,7 +38,7 @@ public class UserDB {
             return login1.get(0);
         } catch (Exception e) {
             log.warn("Exception. getUserCountByLogin: {}", e.getMessage());
-            throw new GetUserCountByLoginDBException();
+            throw new SelectDBException();
         }
     }
 
@@ -63,7 +59,7 @@ public class UserDB {
             return userEntity;
         } catch (Exception e) {
             log.warn("Exception. getUserByLogin: {}", e.getMessage());
-            throw new UserNotFoundException(login);
+            throw new SelectDBException("Пользователь " + login + " не найден");
         }
     }
 
@@ -108,7 +104,7 @@ public class UserDB {
             return userId;
         } catch (Exception e) {
             log.warn("Exception. insertUser: {}", e.getMessage());
-            throw new UserRegistryException();
+            throw new InsertDBException();
         }
     }
 
@@ -137,7 +133,7 @@ public class UserDB {
             log.info("Update user end. result: {}", result);
         } catch (Exception e) {
             log.warn("Exception. updateUserById: {}", e.getMessage());
-            throw new UpdateUserByIdDBException();
+            throw new UpdateDBException();
         }
     }
 
@@ -170,7 +166,7 @@ public class UserDB {
         } catch (Exception e) {
             log.info("Exception. getUserByToken: {}", e.getMessage());
             //мб другое искючение тут?
-            throw new UserAuthException();
+            throw new SelectDBException("Ошибка авторизации");
         }
     }
 
@@ -188,7 +184,7 @@ public class UserDB {
             return users;
         } catch (Exception e) {
             log.info("Exception. checkUserByToken: {}", e.getMessage());
-            throw new UserAuthException();
+            throw new SelectDBException("Ошибка авторизации");
         }
     }
 
@@ -207,7 +203,7 @@ public class UserDB {
             return usersCount.get(0);
         } catch (Exception e) {
             log.info("Exception. checkUserByLoginAndToken: {}", e.getMessage());
-            throw new UserNotFoundException();
+            throw new UserAuthException("Пользователь не найден");
         }
     }
 
@@ -229,7 +225,7 @@ public class UserDB {
             log.info("Update user by login end. result: {}", result);
         } catch (Exception e) {
             log.warn("Exception. updateUserByActivationCode: {}", e.getMessage());
-            throw new UserLoginException("Ошибка");
+            throw new UpdateDBException("Ошибка");
         }
     }
 
@@ -251,7 +247,7 @@ public class UserDB {
             log.info("Update user by login end. result: {}", result);
         } catch (Exception e) {
             log.warn("Exception. updateUserByActivationCode: {}", e.getMessage());
-            throw new UserLoginException("Ошибка");
+            throw new UpdateDBException("Ошибка");
         }
     }
 
@@ -269,7 +265,7 @@ public class UserDB {
             return profileId.get(0);
         } catch (Exception e) {
             log.warn("Exception. getUserProfileIdByLogin: {}", e.getMessage());
-            throw new GetUserProfileIdByLoginDBException();
+            throw new SelectDBException();
         }
     }
 
@@ -286,7 +282,7 @@ public class UserDB {
             return users;
         } catch (Exception e) {
             log.warn("Exception. getLocations: {}", e.getMessage());
-            throw new GetLocationsException();
+            throw new SelectDBException();
         }
     }
 
@@ -298,12 +294,8 @@ public class UserDB {
         String orderBy = Utils.prepareOrderBy(searchModel);
         System.err.println("orderBy: " + orderBy);
 
-//        возрасту, местоположению, «рейтингу славы» и тегам.
         try (org.sql2o.Connection conn = sql2o.open()) {
 
-            //limit ageMax ageMin minX maxX minY maxY tagIds
-            // + рейтинг славы, + общие теги
-            //UserSearchEntity
             List<UserSearchEntity> users;
             if (searchModel.getTags().size() == 0) {
                 users = conn.createQuery(Select.selectUsersWithoutTagsWithFilters + orderBy + limitAndOffset)
@@ -331,6 +323,7 @@ public class UserDB {
                         .addParameter("offset", searchModel.getOffset())
                         .addParameter("tagIds", searchModel.getTags())
                         .addParameter("login", searchModel.getLogin())
+                        .addParameter("preferenceGender", searchModel.getPreference())
                         .executeAndFetch(UserSearchEntity.class);
                 conn.commit();
             }

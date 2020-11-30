@@ -7,10 +7,9 @@ import matcha.db.crud.Select;
 import matcha.db.crud.Update;
 import matcha.event.model.Event;
 import matcha.event.model.EventWithUserInfo;
-import matcha.exception.db.EventNotFoundDBException;
-import matcha.exception.db.InsertEventDBException;
-import matcha.exception.db.LoadEventsException;
-import matcha.exception.db.UpdateEventDBException;
+import matcha.exception.db.InsertDBException;
+import matcha.exception.db.SelectDBException;
+import matcha.exception.db.UpdateDBException;
 import matcha.utils.EventType;
 import org.sql2o.Sql2o;
 
@@ -43,7 +42,7 @@ public class EventDB {
             return eventId;
         } catch (Exception e) {
             log.warn("Exception. insertEvent: {}", e.getMessage());
-            throw new InsertEventDBException();
+            throw new InsertDBException();
         }
     }
 
@@ -59,7 +58,7 @@ public class EventDB {
             return events;
         } catch (Exception e) {
             log.warn("Exception. getAllEvents: {}", e.getMessage());
-            throw new LoadEventsException();
+            throw new SelectDBException();
         }
     }
 
@@ -79,7 +78,7 @@ public class EventDB {
             return event.get(0);
         } catch (Exception e) {
             log.warn("Exception. getLikeEvent: {}", e.getMessage());
-            throw new EventNotFoundDBException();
+            throw new SelectDBException();
         }
     }
 
@@ -105,7 +104,7 @@ public class EventDB {
         } catch (Exception e) {
             e.printStackTrace();
             log.warn("Exception. getHistory: {}", e.getMessage());
-            throw new EventNotFoundDBException();
+            throw new SelectDBException();
         }
     }
 
@@ -153,7 +152,7 @@ public class EventDB {
         } catch (Exception e) {
             e.printStackTrace();
             log.warn("Exception. getNotifications: {}", e.getMessage());
-            throw new EventNotFoundDBException();
+            throw new SelectDBException();
         }
     }
 
@@ -173,7 +172,7 @@ public class EventDB {
         } catch (Exception e) {
             e.printStackTrace();
             log.warn("Exception. findActiveEvents: {}", e.getMessage());
-            throw new EventNotFoundDBException();
+            throw new SelectDBException();
         }
     }
 
@@ -191,7 +190,7 @@ public class EventDB {
         } catch (Exception e) {
             e.printStackTrace();
             log.warn("Exception. saveEventById: {}", e.getMessage());
-            throw new UpdateEventDBException();
+            throw new UpdateDBException();
         }
     }
 
@@ -230,7 +229,7 @@ public class EventDB {
         } catch (Exception e) {
             e.printStackTrace();
             log.warn("Exception. getNotifications: {}", e.getMessage());
-            throw new EventNotFoundDBException();
+            throw new SelectDBException();
         }
     }
 
@@ -247,7 +246,7 @@ public class EventDB {
         } catch (Exception e) {
             e.printStackTrace();
             log.warn("Exception. getNotifications: {}", e.getMessage());
-            throw new EventNotFoundDBException();
+            throw new SelectDBException();
         }
     }
 }

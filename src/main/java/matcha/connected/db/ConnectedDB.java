@@ -7,9 +7,9 @@ import matcha.connected.model.ConnectedWithUserInfo;
 import matcha.db.crud.Insert;
 import matcha.db.crud.Select;
 import matcha.db.crud.Update;
-import matcha.exception.db.InsertBlackListMessageDBException;
-import matcha.exception.db.NotFoundBlackListMessageDBException;
-import matcha.exception.db.UpdateBlackListMessageDBException;
+import matcha.exception.db.InsertDBException;
+import matcha.exception.db.SelectDBException;
+import matcha.exception.db.UpdateDBException;
 import org.sql2o.Sql2o;
 
 import java.util.List;
@@ -35,7 +35,7 @@ public class ConnectedDB {
             log.info("Insert connected entity result: {}", result);
         } catch (Exception e) {
             log.warn("Exception. insertConnected: {}", e.getMessage());
-            throw new InsertBlackListMessageDBException();
+            throw new InsertDBException();
         }
     }
 
@@ -54,7 +54,7 @@ public class ConnectedDB {
             log.info("Update connected result: {}", result);
         } catch (Exception e) {
             log.warn("Exception. updateConnected: {}", e.getMessage());
-            throw new UpdateBlackListMessageDBException();
+            throw new UpdateDBException();
         }
     }
 
@@ -73,7 +73,7 @@ public class ConnectedDB {
             return result.size() > 0 ? result.get(0) : null;
         } catch (Exception e) {
             log.warn("Failed to load connected. Exception message: {}", e.getMessage());
-            throw new NotFoundBlackListMessageDBException();
+            throw new SelectDBException();
         }
     }
 //
@@ -112,7 +112,7 @@ public class ConnectedDB {
             return result;
         } catch (Exception e) {
             log.warn("Failed to load all Connected. Exception message: {}", e.getMessage());
-            throw new NotFoundBlackListMessageDBException();
+            throw new SelectDBException();
         }
     }
 //
@@ -128,7 +128,7 @@ public class ConnectedDB {
             return result;
         } catch (Exception e) {
             log.warn("Failed to load all Connected users. Exception message: {}", e.getMessage());
-            throw new NotFoundBlackListMessageDBException();
+            throw new SelectDBException();
         }
     }
 }

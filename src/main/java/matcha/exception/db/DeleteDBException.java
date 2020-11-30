@@ -1,7 +1,9 @@
 package matcha.exception.db;
 
 
-public class DeleteDBException extends RuntimeException {
+import matcha.exception.BaseException;
+
+public class DeleteDBException extends BaseException {
     public DeleteDBException() {
         super("Ошибка удаления из базы");
     }

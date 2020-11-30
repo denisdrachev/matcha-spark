@@ -87,7 +87,7 @@ public class ValidationMessageService {
                 .map(ConstraintViolation::getMessage)
                 .collect(Collectors.joining(", "));
 
-        log.info("Validator message: {}", validatorMessage);
+        log.info("Validator message: ({}) {}", validatorMessage.length(), validatorMessage);
 
         if (validatorMessage.length() > 0)
             return new ResponseError("error", validatorMessage);

@@ -37,9 +37,12 @@ import matcha.user.model.*;
 import matcha.userprofile.model.UserInfoModel;
 import matcha.utils.EventType;
 import matcha.validator.ValidationMessageService;
+import org.apache.commons.lang3.ArrayUtils;
+import org.json.JSONArray;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -103,8 +106,12 @@ public class UserService implements UserInterface {
 
         Event newEvent = new Event(EventType.REGISTRATION, userRegistry.getLogin(), false, "");
         eventService.saveNewEvent(newEvent);
-        userRegistry.getLocation().setProfileId(newProfileId);
-        locationService.saveLocation(userRegistry.getLocation());
+
+        userEntity.getLocation().setProfileId(newProfileId);
+//        Location location = new Location(userRegistry.getLocation());
+//        location.setProfileId(newProfileId);
+//        userRegistry.getLocation().setProfileId(newProfileId);
+        locationService.saveLocation(userEntity.getLocation());
     }
 
     public Response userLogin(UserInfo user) {
@@ -451,18 +458,8 @@ public class UserService implements UserInterface {
         return validationMessageService.prepareMessageOkOnlyType();
     }
 
-    public Response getUsers(String token, String ageMin, String ageMax, String minRating,
-                             String maxRating, String deltaRadius, String tags, String limit,
-                             String offset, String sortAge, String sortLocation, String sortRating, String sortTags, String needPreference) {
-        log.info("Request /get-users ageMin:{} ageMax:{} minRating:{} maxRating:{} deltaRadius:{} tags:{} limit:{} " +
-                        "offset:{}, sortAge:{}, sortLocation:{}, sortRating:{}, sortTags{}, needPreference{}",
-                ageMin, ageMax, minRating, maxRating, deltaRadius, tags, limit, offset, sortAge, sortLocation, sortRating, sortTags, needPreference);
-
-
-//        req.queryParams("sortAge"),
-//                req.queryParams("sortLocation"),
-//                req.queryParams("sortRating"),
-//                req.queryParams("sortTags")
+    public Response getUsers(String token, String body) {
+        log.info("Request /get-users?{}", body);
 
         if (token == null || token.isEmpty()) {
             log.info("Token: {} Пользователь не авторизован.", token);
@@ -472,19 +469,49 @@ public class UserService implements UserInterface {
         UserEntity user = userManipulator.getUserByToken(token);
         ProfileEntity profile = profileService.getProfileById(user.getProfileId());
         Location location = locationService.getLocationByProfileId(profile.getId());
-        List<Integer> tagsIds = tagService.getTagsIds(tags);
 
-        log.info("Request get users");
         try {
+//            if (body == null)
+//                body = ;
+            String[] split = body == null ? ArrayUtils.toArray() : body.split("&");
+            Map<String, String> params = new HashMap<>();
+
+            LinkedList<String> sortOrderList = new LinkedList<>();
+
+            for (int i = 0; i < split.length; i++) {
+                String[] split1 = split[i].split("=");
+                if (split1[0].equals("sortAge")) {
+                    sortOrderList.add("sortAge");
+                } else if (split1[0].equals("sortLocation")) {
+                    sortOrderList.add("sortLocation");
+                } else if (split1[0].equals("sortRating")) {
+                    sortOrderList.add("sortRating");
+                } else if (split1[0].equals("sortTags")) {
+                    sortOrderList.add("sortTags");
+                }
+                params.put(split1[0], split1[1]);
+            }
+
+            List<Integer> tagsIds = tagService.getTagsIds(params.get("tags"));
+            if (params.get("tags") != null && !params.get("tags").isEmpty() && tagsIds.size() == 0)
+                return validationMessageService.prepareMessageOkData(new JSONArray());
+//?needPreference=1&tags=tag2,tag1&ageMin=0&ageMax=100&minRating=0&maxRating=999&deltaRadius=1000&limit=10&offset=0
             Integer preference;
-            if (Integer.parseInt(needPreference) == 1 && profile.getPreference() != null) {
+            if (params.get("needPreference") != null
+                    && Integer.parseInt(params.get("needPreference")) == 1
+                    && profile.getPreference() != null) {
                 preference = profile.getPreference();
             } else {
                 preference = null;
             }
 
-            SearchModel searchModel = new SearchModel(location, ageMin, ageMax, minRating, maxRating,
-                    deltaRadius, tagsIds, limit, offset, user.getLogin(), preference, sortAge, sortLocation, sortRating, sortTags);
+            SearchModel searchModel = new SearchModel(location, tagsIds, user.getLogin(), preference, params, sortOrderList);
+
+            Response response = validationMessageService.validateMessage(searchModel);
+            if (response != null) {
+                return response;
+            }
+
             return validationMessageService.prepareMessageOkData(gson.toJsonTree(
                     userService.getUsersWithFilters(searchModel)
             ));
