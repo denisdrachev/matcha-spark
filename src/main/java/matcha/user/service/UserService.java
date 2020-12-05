@@ -249,7 +249,7 @@ public class UserService implements UserInterface {
         if (userProfile.getTags() != null) {
             for (String tag : userProfile.getTags()) {
                 if (tag.length() > 10) {
-                    return validationMessageService.prepareErrorMessage("Некорректные параметры запроса.");
+                    return validationMessageService.prepareErrorMessage("Слишкой длинные теги");
                 }
             }
         }
@@ -320,9 +320,9 @@ public class UserService implements UserInterface {
             limit = Integer.parseInt(limitParam);
             offset = Integer.parseInt(offsetParam);
             if (limit <= 0 || limit > 50 || offset < 0)
-                return validationMessageService.prepareErrorMessage("Некорректные параметры запроса.");
+                return validationMessageService.prepareErrorMessage("Некорректные параметры запроса...");
         } catch (Exception e) {
-            return validationMessageService.prepareErrorMessage("Некорректные параметры запроса.");
+            return validationMessageService.prepareErrorMessage("Некорректные параметры запроса....");
         }
 
         if (token == null || token.isEmpty()) {
@@ -346,9 +346,9 @@ public class UserService implements UserInterface {
             limit = Integer.parseInt(limitParam);
             offset = Integer.parseInt(offsetParam);
             if (limit <= 0 || limit > 50 || offset < 0)
-                return validationMessageService.prepareErrorMessage("Некорректные параметры запроса.");
+                return validationMessageService.prepareErrorMessage("Некорректные параметры запроса.....");
         } catch (Exception e) {
-            return validationMessageService.prepareErrorMessage("Некорректные параметры запроса.");
+            return validationMessageService.prepareErrorMessage("Некорректные параметры запроса......");
         }
 
 
@@ -384,10 +384,10 @@ public class UserService implements UserInterface {
             loginParam = map.get("login");
 
             if (loginParam == null || loginParam.isEmpty() || value < 0 || value > 1) {
-                return validationMessageService.prepareErrorMessage("Некорректные параметры запроса.");
+                return validationMessageService.prepareErrorMessage("Некорректные параметры запроса.......");
             }
         } catch (Exception e) {
-            return validationMessageService.prepareErrorMessage("Некорректные параметры запроса.");
+            return validationMessageService.prepareErrorMessage("Некорректные параметры запроса........");
         }
 
         UserEntity userByToken = getUserByToken(token);
@@ -443,10 +443,10 @@ public class UserService implements UserInterface {
             Map<String, String> map = gson.fromJson(body, Map.class);
             fakeLogin = map.get("login");
             if (fakeLogin == null || fakeLogin.isEmpty()) {
-                return validationMessageService.prepareErrorMessage("Некорректные параметры запроса.");
+                return validationMessageService.prepareErrorMessage("Некорректные параметры запроса.........");
             }
         } catch (Exception e) {
-            return validationMessageService.prepareErrorMessage("Некорректные параметры запроса.");
+            return validationMessageService.prepareErrorMessage("Некорректные параметры запроса..........");
         }
 
         UserEntity userByToken = getUserByToken(token);
@@ -528,14 +528,14 @@ public class UserService implements UserInterface {
                     userService.getUsersWithFilters(searchModel)
             ));
         } catch (Exception e) {
-            return validationMessageService.prepareErrorMessage("Некорректные параметры запроса.");
+            return validationMessageService.prepareErrorMessage("Некорректные параметры запроса............");
         }
     }
 
-    public Response getFullMessagesByLimit(String token, String body) {
-        log.info("Request get full chat messages by limit: {}", body);
+    public Response getFullMessagesByLimit(String token, String toLogin, String limit) {
+        log.info("chat/full toLogin: {} limit: {}", toLogin, limit);
 
-        ChatMessageFull chatMessageFull = new Gson().fromJson(body, ChatMessageFull.class);
+        ChatMessageFull chatMessageFull = new ChatMessageFull(toLogin, limit);
         Response response = validationMessageService.validateMessage(chatMessageFull);
         if (response != null) {
             return response;
@@ -547,7 +547,7 @@ public class UserService implements UserInterface {
     }
 
     public Response getNewMessages(String token, String body) {
-        log.info("Request get new message from user: {}", body);
+        log.info("/chat/new {}", body);
         ChatNewMessageFromUser chatNewMessageFromUser = new Gson().fromJson(body, ChatNewMessageFromUser.class);
         Response response = validationMessageService.validateMessage(chatNewMessageFromUser);
         if (response != null) {
@@ -560,7 +560,7 @@ public class UserService implements UserInterface {
     }
 
     public Response getAllNewMessages(String token, String body) {
-        log.info("Request get new message from user: {}", body);
+        log.info("/chat/allnew {}", body);
         ChatAllNewMessage chatNewMessageFromUser = new Gson().fromJson(body, ChatAllNewMessage.class);
         Response response = validationMessageService.validateMessage(chatNewMessageFromUser);
         if (response != null) {

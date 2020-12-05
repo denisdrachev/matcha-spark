@@ -125,8 +125,10 @@ public class ConnectedDB {
                     .executeAndFetch(ConnectedWithUserInfo.class);
             conn.commit();
             log.info("Get all Connected users result size: {}", result.size());
+            result.forEach(System.out::println);
             return result;
         } catch (Exception e) {
+            e.printStackTrace();
             log.warn("Failed to load all Connected users. Exception message: {}", e.getMessage());
             throw new SelectDBException();
         }

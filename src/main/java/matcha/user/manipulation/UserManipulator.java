@@ -137,7 +137,11 @@ public class UserManipulator {
     }
 
     public List<UserSearchEntity> getUsersWithFilters(SearchModel searchModel) {
-        return userDB.getUsersWithFilters(searchModel);
+        List<UserSearchEntity> usersWithFilters = userDB.getUsersWithFilters(searchModel);
+        usersWithFilters.forEach(userSearch -> {
+            userSearch.initDistance(searchModel.getUserLocation().getX(), searchModel.getUserLocation().getY());
+        });
+        return usersWithFilters;
     }
 
     public void updateTimeByLogin(String userLogin) {

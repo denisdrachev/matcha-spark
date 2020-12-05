@@ -6,6 +6,7 @@ package matcha;
 import lombok.extern.slf4j.Slf4j;
 import matcha.exception.BaseException;
 import matcha.validator.ValidationMessageService;
+import org.slf4j.LoggerFactory;
 
 import static spark.Spark.*;
 
@@ -71,7 +72,7 @@ public class Application {
                 });
 
         before((request, res) -> {
-            res.header("Access-Control-Allow-Origin", "http://192.168.29.73:3000");
+            res.header("Access-Control-Allow-Origin", "*");
             res.header("Access-Control-Allow-Credentials", "true");
 
             res.type("application/json");
@@ -89,6 +90,7 @@ public class Application {
             } else {
 
                 response.body(s1);
+                exception.printStackTrace();
             }
         });
         SingletonControllers.init();

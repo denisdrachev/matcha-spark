@@ -3,19 +3,20 @@ package matcha.user.model;
 import com.google.gson.annotations.Expose;
 import lombok.Data;
 import matcha.model.MyObject;
+import org.apache.commons.math3.geometry.euclidean.twod.Line;
+import org.apache.commons.math3.geometry.euclidean.twod.SubLine;
+import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 
 import java.io.Serializable;
 
 @Data
 public class UserSearchEntity implements Serializable, MyObject {
-    //"SELECT u.login, u.fname, u.lname, l.x, l.y, i.src, r.rating
     @Expose
     private String login;
     @Expose
     private String fname;
     @Expose
     private String lname;
-    //    private Date time = Calendar.getInstance().getTime();
     @Expose
     private Double x;
     @Expose
@@ -28,4 +29,20 @@ public class UserSearchEntity implements Serializable, MyObject {
     private String src;
     @Expose
     private Integer age;
+
+    @Expose
+    private Integer gender;
+    @Expose
+    private Integer preference;
+    @Expose
+    private String biography;
+    @Expose
+    private double distance;
+
+    public void initDistance(Double x, Double y) {
+        double ac = Math.abs(x - this.x);
+        double cb = Math.abs(y - this.y);
+
+        this.distance = Math.hypot(ac, cb);
+    }
 }

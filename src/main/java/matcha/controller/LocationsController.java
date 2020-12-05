@@ -4,6 +4,8 @@ import matcha.blacklist.model.BlackListMessage;
 import matcha.blacklist.service.BlackListService;
 import matcha.chat.model.ChatMessage;
 import matcha.chat.service.ChatService;
+import matcha.connected.model.ConnectedEntity;
+import matcha.connected.service.ConnectedService;
 import matcha.location.model.Location;
 import matcha.location.service.LocationService;
 import matcha.rating.model.Rating;
@@ -18,8 +20,6 @@ import java.util.stream.Collectors;
 import static matcha.converter.Utils.clearAllTables;
 import static spark.Spark.get;
 
-//@Controller
-//@RequiredArgsConstructor
 public class LocationsController {
 
     private final LocationService locationService = LocationService.getInstance();
@@ -27,6 +27,7 @@ public class LocationsController {
     private final TagService tagService = TagService.getInstance();
     private final RatingService ratingService = RatingService.getInstance();
     private final ChatService chatService = ChatService.getInstance();
+    private final ConnectedService connectedService = ConnectedService.getInstance();
 
 
     public LocationsController() {
@@ -35,6 +36,7 @@ public class LocationsController {
         getAllTags();
         getAllRatings();
         getAllChatMessages();
+        getAllConnecteds();
         clearTables();
     }
 
@@ -42,10 +44,7 @@ public class LocationsController {
 
         get("/clear", (req, res) -> {
             clearAllTables();
-//            if (allLocations != null)
-                return "{\"type\": \"ok\"}";
-//            else
-//                return "{\"type\": \"error\"}";
+            return "{\"type\": \"ok\"}";
         });
 
     }
@@ -62,6 +61,7 @@ public class LocationsController {
 
     public void registration() {
         get("/locations", (req, res) -> {
+            res.type("text/html");
             List<Location> allLocations = locationService.getAllLocations();
             if (allLocations != null)
                 return allLocations.stream().map(location -> "<p>" + location + "</p>").collect(Collectors.joining());
@@ -72,6 +72,7 @@ public class LocationsController {
 
     public void getAllBlackList() {
         get("/blacklist", (req, res) -> {
+            res.type("text/html");
             List<BlackListMessage> allBlackList = blackListService.getAllBlackList();
             if (allBlackList != null)
                 return allBlackList.stream().map(location -> "<p>" + location + "</p>").collect(Collectors.joining());
@@ -82,6 +83,7 @@ public class LocationsController {
 
     public void getAllTags() {
         get("/tags", (req, res) -> {
+            res.type("text/html");
             System.err.println("/tags");
             List<Tag> allTags = tagService.getAllTags();
             if (allTags != null)
@@ -93,6 +95,7 @@ public class LocationsController {
 
     public void getAllRatings() {
         get("/ratings", (req, res) -> {
+            res.type("text/html");
             System.err.println("/ratings");
             List<Rating> allRatings = ratingService.getAllRatings();
             if (allRatings != null)
@@ -104,10 +107,23 @@ public class LocationsController {
 
     public void getAllChatMessages() {
         get("/chats", (req, res) -> {
+            res.type("text/html");
             System.err.println("/chats");
             List<ChatMessage> allMessages = chatService.getAllMessages();
             if (allMessages != null)
                 return allMessages.stream().map(location -> "<p>" + location + "</p>").collect(Collectors.joining());
+            else
+                return "<p>Filed to load chat messages</p>";
+        });
+    }
+
+    public void getAllConnecteds() {
+        get("/connecteds", (req, res) -> {
+            res.type("text/html");
+            System.err.println("/chats");
+            List<ConnectedEntity> allConnected = connectedService.getAllConnected();
+            if (allConnected != null)
+                return allConnected.stream().map(location -> "<p>" + location + "</p>").collect(Collectors.joining());
             else
                 return "<p>Filed to load chat messages</p>";
         });

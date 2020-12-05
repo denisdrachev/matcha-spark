@@ -13,7 +13,25 @@ public class Select {
     public static String selectBlacklists = "SELECT * FROM blacklist";
     public static String selectRating = "SELECT * FROM rating";
     public static String selectConnectedList = "SELECT * FROM connected";
-    public static String selectConnectedWithUser = "SELECT * FROM connected WHERE (fromLogin = :login OR toLogin = :login)";
+//    public static String selectConnectedWithUser = "SELECT c.toLogin as login, u.fname as fname, u.lname as lname, i.src as src " +
+//            "FROM ((connected c INNER JOIN users u ON u.login <> :login AND (c.toLogin = u.login OR c.fromLogin = u.login)) " +
+//            "INNER JOIN images i ON i.profileId = u.profileId AND i.avatar = TRUE) " +
+//            "WHERE u.login <> :login AND c.isConnected = TRUE AND (c.fromLogin = :login OR c.toLogin = :login)";
+
+//    public static String selectConnectedWithUser = "SELECT c.toLogin as login, u.fname as fname, u.lname as lname, i.src as src " +
+//            "FROM ((users u INNER JOIN connected c ON u.login <> :login AND ((c.toLogin = u.login AND c.fromLogin = :login) OR (c.fromLogin = u.login AND c.toLogin = :login))) " +
+//            "INNER JOIN images i ON i.profileId = u.profileId AND i.avatar = TRUE) " +
+//            "WHERE u.login <> :login AND c.isConnected = TRUE AND ((c.fromLogin = :login AND c.toLogin = u.login) OR (c.toLogin = :login AND c.fromLogin = u.login))";
+
+
+    public static String selectConnectedWithUser =
+            "SELECT u.login, u.fname, u.lname, i.src " +
+            "FROM ((connected c LEFT JOIN users u " +
+                    "ON (u.login = c.toLogin AND :login = c.fromLogin) OR (u.login = c.fromLogin AND c.toLogin = :login)) " +
+            "INNER JOIN images i ON i.profileId = u.profileId AND i.avatar = TRUE) " +
+            "WHERE c.isConnected = TRUE AND u.login <> :login";
+
+
     public static String selectImageLikeEvent = "SELECT * FROM imageLikeEvents";
     public static String selectProfile = "SELECT * FROM profiles";
     public static String selectUsers = "SELECT * FROM users";
@@ -27,7 +45,7 @@ public class Select {
 
     //        HttpUriRequest request = new HttpGet("http://localhost:4567/get-users?tags=tag2,tag4&ageMin=0&ageMax=100&minRating=0&maxRating=999&deltaRadius=1000&limit=10&offset=0");
     public static String selectUsersWithFilters =
-            "SELECT u.login, u.fname, u.lname, p.age, l.x, l.y, i.src, r.rating, t.count as tagsCount " +
+            "SELECT u.login, u.fname, u.lname, p.age, l.x, l.y, i.src, r.rating, t.count as tagsCount, p.gender, p.preference, p.biography " +
                     "FROM ((((((users u INNER JOIN profiles p ON u.profileId = p.id) " +
                     "INNER JOIN locations l ON u.profileId = l.profileId) " +
                     "INNER JOIN rating r ON u.login = r.login) " +
@@ -35,6 +53,7 @@ public class Select {
                     "LEFT JOIN blacklist b ON b.fromLogin = :login AND b.toLogin = u.login) " +
                     "INNER JOIN images i ON i.profileId = u.profileId AND i.avatar = TRUE) " +
                     "WHERE (b.isBlocked IS NULL OR b.isBlocked <> TRUE) " +
+                    "AND u.login <> :login " +
                     "AND p.gender IN (:preferenceGender) " +
                     "AND t.count > 0 " +
                     "AND p.age >= :ageMin AND p.age <= :ageMax " + //возраст
@@ -42,13 +61,14 @@ public class Select {
 //                    " LIMIT :limit OFFSET :offset ";
 
     public static String selectUsersWithoutTagsWithFilters =
-            "SELECT u.login, u.fname, u.lname, p.age, l.x, l.y, i.src, r.rating " +
+            "SELECT u.login, u.fname, u.lname, p.age, l.x, l.y, i.src, r.rating, p.gender, p.preference, p.biography " +
                     "FROM (((((users u INNER JOIN profiles p ON u.profileId = p.id) " +
                     "INNER JOIN locations l ON u.profileId = l.profileId) " +
                     "INNER JOIN rating r ON u.login = r.login) " +
                     "LEFT JOIN blacklist b ON b.fromLogin = :login AND b.toLogin = u.login) " +
                     "INNER JOIN images i ON i.profileId = u.profileId AND i.avatar = TRUE) " +
                     "WHERE (b.isBlocked IS NULL OR b.isBlocked <> TRUE) " +
+                    "AND u.login <> :login " +
                     "AND p.gender IN (:preferenceGender) " +
                     "AND p.age >= :ageMin AND p.age <= :ageMax " + //возраст
                     "AND l.x >= :minX AND l.x <= :maxX AND l.y >= :minY AND l.y <= :maxY "; //растояние
@@ -113,7 +133,7 @@ public class Select {
 
     public static String selectHistoryEvents =
             "SELECT e.type, e.data as login, e.time, e.active, u.fname, u.lname, i.src, p.gender " +
-                    "FROM (((events e INNER JOIN users u ON e.login = u.login) " +
+                    "FROM (((events e INNER JOIN users u ON e.data = u.login) " +
                     "INNER JOIN images i ON u.profileId = i.profileId AND i.avatar = TRUE) " +
                     "INNER JOIN profiles p ON u.profileId = p.id) " +
 // не надо вроде                   "RIGHT JOIN blacklist b ON b.toLogin = e.login AND b.fromLogin = :login) " +
@@ -121,7 +141,7 @@ public class Select {
                     "ORDER BY time DESC LIMIT :limit OFFSET :offset";
     public static String selectNotificationEvents =
             "SELECT e.type, e.login as login, e.time, e.active, u.fname, u.lname, i.src, p.gender " +
-                    "FROM ((((events e INNER JOIN users u ON u.login = e.data) " +
+                    "FROM ((((events e INNER JOIN users u ON u.login = e.login) " +
                     "INNER JOIN images i ON u.profileId = i.profileId AND i.avatar = TRUE) " +
                     "INNER JOIN profiles p ON p.id = u.profileId) " +
                     "LEFT JOIN blacklist b ON b.toLogin = e.login AND b.fromLogin = :data) " +

@@ -35,7 +35,7 @@ public class ChatController {
 //    }
 
     public void getFullMessagesByLimit() {
-        get("chat/full", (req, res) -> userService.getFullMessagesByLimit(req.headers("Authorization"), req.body()));
+        get("chat/full", (req, res) -> userService.getFullMessagesByLimit(req.headers("Authorization"), req.queryParams("toLogin"), req.queryParams("limit")));
     }
 
     public void getNewMessages() {

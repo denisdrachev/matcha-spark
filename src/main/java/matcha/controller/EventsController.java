@@ -20,25 +20,10 @@ public class EventsController {
         confirmRegistration();
     }
 
-    //    @GetMapping("/events")
-//    public String confirmRegistration(Model model) {
-//        List<Event> allEvents = eventService.getAllEvents();
-//        if (allEvents != null)
-//            model.addAttribute("name", allEvents.stream().map(location -> "<p>" + location + "</p>").collect(Collectors.joining()));
-//        else
-//            model.addAttribute("name", String.join("", "Filed to load images"));
-//        return "greeting";
-//    }
-
     public void confirmRegistration() {
-//        List<Image> imagesList = imageService.getAllImages();
-//        if (imagesList != null)
-//            model.addAttribute("name", imagesList.stream().map(location -> "<p>" + location + "</p>").collect(Collectors.joining()));
-//        else
-//            model.addAttribute("name", String.join("", "Filed to load images"));
-//        return "greeting";
 
         get("/events", (req, res) -> {
+            res.type("text/html");
             List<Event> allEvents = eventService.getAllEvents();
 
             if (allEvents != null)
