@@ -13,7 +13,7 @@ public interface ChatInterface {
     @Deprecated
     Response getMessages(String toLogin, String fromLogin, int limit);
 
-    Response getFullMessages(ChatMessageFull message);
+    Response getFullMessages(ChatMessageFull message, String login);
 
     Response getNewMessages(ChatNewMessageFromUser message);
 

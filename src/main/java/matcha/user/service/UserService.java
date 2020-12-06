@@ -543,7 +543,7 @@ public class UserService implements UserInterface {
         String fromLogin = userService.checkUserToToken(token);
         chatMessageFull.setFromLogin(fromLogin);
         userService.checkUserExistsByLogin(chatMessageFull.getToLogin());
-        return chatService.getFullMessages(chatMessageFull);
+        return chatService.getFullMessages(chatMessageFull, fromLogin);
     }
 
     public Response getNewMessages(String token, String body) {

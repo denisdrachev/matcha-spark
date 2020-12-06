@@ -16,10 +16,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-//import org.springframework.stereotype.Service;
-
-//@Service
-//@AllArgsConstructor
 public class ChatService implements ChatInterface {
 
     private ChatManipulator chatManipulator = new ChatManipulator();
@@ -71,11 +67,11 @@ public class ChatService implements ChatInterface {
      * 3. Возвращает их
      */
     @Override
-    public Response getFullMessages(ChatMessageFull message) {
+    public Response getFullMessages(ChatMessageFull message, String login) {
         List<ChatMessage> chatMessages =
                 chatManipulator.getFullChatMessages(message.getToLogin(), message.getFromLogin(), message.getLimit());
         List<Long> ids = chatMessages.stream()
-                .filter(chatMessage -> !chatMessage.isRead())
+                .filter(chatMessage -> !chatMessage.isRead() && !chatMessage.getFromLogin().equals(login))
                 .map(ChatMessage::getId)
                 .collect(Collectors.toList());
         chatManipulator.updateChatMessagesByIds(ids);
