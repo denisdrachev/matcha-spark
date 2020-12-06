@@ -9,7 +9,7 @@ public class Update {
     public static String updateLocationByLogin = "UPDATE locations l set l.active = :active WHERE l.profileId = (SELECT id FROM users WHERE profileId = :profileId)";
     public static String updateRaitingById = "UPDATE rating set rating = ?, profile = ? WHERE id = ?";
     public static String updateBlacklistById = "UPDATE blacklist set isBlocked = :isBlocked WHERE fromLogin = :fromLogin AND toLogin = :toLogin";
-    public static String updateConnected = "UPDATE connected set isConnected = :isConnected WHERE (fromLogin = :fromLogin OR fromLogin = :fromLogin2) AND (toLogin = :toLogin OR toLogin = :toLogin2)";
+    public static String updateConnected = "UPDATE connected set isConnected = :isConnected WHERE (fromLogin = :fromLogin AND toLogin = :toLogin) OR (toLogin = :fromLogin AND fromLogin = :toLogin)";
     public static String updateEventActiveById = "UPDATE events set active = :active WHERE id = :id";
     public static String updateEventNeedShowById = "UPDATE events set needShow = :needShow WHERE id = :id";
     public static String updateIncTagCountById = "UPDATE tags set count = count + 1 WHERE id = :id";
