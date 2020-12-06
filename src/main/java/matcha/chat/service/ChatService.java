@@ -12,6 +12,7 @@ import matcha.userprofile.service.UserProfileService;
 import matcha.utils.EventType;
 import matcha.validator.ValidationMessageService;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -78,6 +79,7 @@ public class ChatService implements ChatInterface {
                 .map(ChatMessage::getId)
                 .collect(Collectors.toList());
         chatManipulator.updateChatMessagesByIds(ids);
+        Collections.reverse(chatMessages);
 
         return validationMessageService.prepareMessageOkData(gson.toJsonTree(chatMessages));
     }
@@ -97,6 +99,7 @@ public class ChatService implements ChatInterface {
                     .collect(Collectors.toList());
             chatManipulator.updateChatMessagesByIds(ids);
         }
+        Collections.reverse(chatMessages);
         return validationMessageService.prepareMessageOkData(gson.toJsonTree(chatMessages));
     }
 
