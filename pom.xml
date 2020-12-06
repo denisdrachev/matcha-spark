@@ -270,23 +270,25 @@
             </plugin>
 
 
-            <!--            <plugin>-->
-            <!--                &lt;!&ndash; Build an executable JAR &ndash;&gt;-->
-            <!--                <groupId>org.apache.maven.plugins</groupId>-->
-            <!--                <artifactId>maven-jar-plugin</artifactId>-->
-            <!--                <version>3.2.0</version>-->
-            <!--                <configuration>-->
-            <!--                    &lt;!&ndash;                    <includes>&ndash;&gt;-->
-            <!--                    &lt;!&ndash;                        <include>**/images/*</include>&ndash;&gt;-->
-            <!--                    &lt;!&ndash;                    </includes>&ndash;&gt;-->
-            <!--                    <archive>-->
-            <!--                        <manifest>-->
-            <!--                            <addClasspath>true</addClasspath>-->
-            <!--                            <mainClass>matcha.Application</mainClass>-->
-            <!--                        </manifest>-->
-            <!--                    </archive>-->
-            <!--                </configuration>-->
-            <!--            </plugin>-->
+            <plugin>
+                <!-- Build an executable JAR -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.2.0</version>
+                <configuration>
+                    <!--                    <includes>-->
+                    <!--                        <include>**/images/*</include>-->
+                    <!--                    </includes>-->
+                    <finalName>matcha</finalName>
+
+                    <!--                                <archive>-->
+                    <!--                                    <manifest>-->
+                    <!--                                        <addClasspath>true</addClasspath>-->
+                    <!--                                        <mainClass>matcha.Application</mainClass>-->
+                    <!--                                    </manifest>-->
+                    <!--                                </archive>-->
+                </configuration>
+            </plugin>
 
 
             <plugin>
