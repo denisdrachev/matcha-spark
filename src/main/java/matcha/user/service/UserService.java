@@ -179,8 +179,10 @@ public class UserService implements UserInterface {
         ProfileEntity profileById = profileService.getProfileByIdWithImagesNotEmpty(user.getProfileId());
         BlackListMessage blackList = blackListService.getBlackListMessage(userByToken.getLogin(), user.getLogin());
 
-        Event newEventLoad = new Event(EventType.PROFILE_LOAD, userByToken.getLogin(), true, login);
-        eventService.saveNewEvent(newEventLoad);
+        if (login != null) {
+            Event newEventLoad = new Event(EventType.PROFILE_LOAD, userByToken.getLogin(), true, login);
+            eventService.saveNewEvent(newEventLoad);
+        }
 
 //        BlackListMessage blackListMessage = blackListService.getBlackListMessage(user.getLogin(), login);
 //        Event newEventLoaded = new Event(EventType.PROFILE_LOADED, login, !blackListMessage.isBlocked(), userByToken.getLogin(), !blackListMessage.isBlocked());
