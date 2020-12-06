@@ -3,9 +3,6 @@ package matcha.user.model;
 import com.google.gson.annotations.Expose;
 import lombok.Data;
 import matcha.model.MyObject;
-import org.apache.commons.math3.geometry.euclidean.twod.Line;
-import org.apache.commons.math3.geometry.euclidean.twod.SubLine;
-import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 
 import java.io.Serializable;
 

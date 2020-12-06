@@ -247,12 +247,6 @@
             <version>6.0.10.Final</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-math3</artifactId>
-            <version>3.6.1</version>
-        </dependency>
-
     </dependencies>
 
     <build>
@@ -325,21 +319,21 @@
                     <appendAssemblyId>false</appendAssemblyId>
                 </configuration>
             </plugin>
-            <!--            <plugin>-->
-            <!--                <groupId>com.heroku.sdk</groupId>-->
-            <!--                <artifactId>heroku-maven-plugin</artifactId>-->
-            <!--                <version>0.4.4</version>-->
-            <!--                <configuration>-->
-            <!--                    <jdkVersion>11</jdkVersion>-->
-            <!--                    &lt;!&ndash; Use your own application name &ndash;&gt;-->
-            <!--                    <appName>matcha-spark</appName>-->
-            <!--                    <processTypes>-->
-            <!--                        &lt;!&ndash; Tell Heroku how to launch your application &ndash;&gt;-->
-<!--                        &lt;!&ndash; You might have to remove the ./ in front   &ndash;&gt;-->
-<!--                        <web>java -jar ./target/matcha-spark-1.0-SNAPSHOT-jar-with-dependencies.jar&ndash;&gt;</web>-->
-<!--                    </processTypes>-->
-<!--                </configuration>-->
-<!--            </plugin>-->
+            <plugin>
+                <groupId>com.heroku.sdk</groupId>
+                <artifactId>heroku-maven-plugin</artifactId>
+                <version>0.4.4</version>
+                <configuration>
+                    <jdkVersion>11</jdkVersion>
+                    <!-- Use your own application name -->
+                    <appName>matcha</appName>
+                    <processTypes>
+                        <!-- Tell Heroku how to launch your application -->
+                        <!-- You might have to remove the ./ in front   -->
+                        <web>java -jar ./target/matcha.jar</web>
+                    </processTypes>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 </project>
