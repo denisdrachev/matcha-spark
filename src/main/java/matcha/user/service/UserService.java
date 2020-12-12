@@ -210,10 +210,10 @@ public class UserService implements UserInterface {
         if (userInfo.getLocation() != null) {
             Location location = new Location(userInfo.getLocation());
             locationService.initLocationAndUpdate(location, currentUser.getProfileId(), true, true);
-        } else {
+        } /*else {
             Location locationByProfileId = locationService.getLocationByProfileId(currentUser.getProfileId());
             locationService.initLocationAndUpdate(locationByProfileId, currentUser.getProfileId(), false, true);
-        }
+        }*/
 
 //        Integer userProfileId = userManipulator.getUserProfileId(userInfo.getLogin());
         ProfileEntity newProfile = new ProfileEntity(currentUser.getProfileId(), userInfo);
