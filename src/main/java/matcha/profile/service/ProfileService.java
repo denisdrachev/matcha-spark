@@ -3,21 +3,17 @@ package matcha.profile.service;
 import lombok.extern.slf4j.Slf4j;
 import matcha.image.model.Image;
 import matcha.image.service.ImageService;
-import matcha.location.service.LocationService;
 import matcha.profile.manipulation.ProfileManipulator;
 import matcha.profile.model.ProfileEntity;
+import matcha.profile.model.ProfileEntityWithoutImages;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Slf4j
-//@Service
-//@AllArgsConstructor
-//@NoArgsConstructor
 public class ProfileService {
 
     private ImageService imageService = ImageService.getInstance();
-    private LocationService locationService = LocationService.getInstance();
     private ProfileManipulator profileManipulator = new ProfileManipulator();
 
     private static ProfileService profileService;
@@ -27,10 +23,6 @@ public class ProfileService {
             profileService = new ProfileService();
         }
         return profileService;
-    }
-
-    public void init() {
-//        registration();
     }
 
     public void saveProfile(ProfileEntity profile) {
@@ -105,5 +97,9 @@ public class ProfileService {
         Integer newProfileId = profileManipulator.createNewProfile();
         imageService.createNewImages(newProfileId);
         return newProfileId;
+    }
+
+    public List<ProfileEntityWithoutImages> getAllProfiles() {
+        return profileManipulator.getAllProfiles();
     }
 }

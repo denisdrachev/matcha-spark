@@ -125,4 +125,20 @@ public class ProfileDB {
             throw new DeleteDBException();
         }
     }
+
+    public List<ProfileEntityWithoutImages> getAllProfiles() {
+        log.info("Get all profiles");
+        try (org.sql2o.Connection conn = sql2o.open()) {
+            List<ProfileEntityWithoutImages> profiles = conn.createQuery(Select.selectProfile)
+                    .executeAndFetch(ProfileEntityWithoutImages.class);
+            conn.commit();
+            log.info("Get all profiles done. Result size: {}", profiles.size());
+
+            return profiles;
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.warn("Exception. getAllProfiles: {}", e.getMessage());
+            throw new SelectDBException("Ошибка. Не удалось загрузить профили");
+        }
+    }
 }

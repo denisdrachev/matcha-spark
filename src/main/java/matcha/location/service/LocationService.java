@@ -1,12 +1,11 @@
 package matcha.location.service;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import matcha.location.manipulation.LocationManipulator;
 import matcha.location.model.Location;
-//import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+//import org.springframework.stereotype.Service;
 
 //@Service
 //@AllArgsConstructor
@@ -30,8 +29,8 @@ public class LocationService {
 
     public Location getLocationIfActiveByProfileId(int profileId) {
         Location location = locationManipulator.getLocationByProfileId(profileId);
-        if (!location.isActive())
-            return null;
+//        if (!location.isActive())
+//            return null;
         return location;
     }
 

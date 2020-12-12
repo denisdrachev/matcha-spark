@@ -1,10 +1,11 @@
 package matcha.profile.manipulation;
 
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import matcha.profile.db.ProfileDB;
 import matcha.profile.model.ProfileEntity;
+import matcha.profile.model.ProfileEntityWithoutImages;
+
+import java.util.List;
 
 @Slf4j
 public class ProfileManipulator {
@@ -25,5 +26,9 @@ public class ProfileManipulator {
 
     public void dropProfileById(int id) {
         profileDB.dropProfileById(id);
+    }
+
+    public List<ProfileEntityWithoutImages> getAllProfiles() {
+        return profileDB.getAllProfiles();
     }
 }
