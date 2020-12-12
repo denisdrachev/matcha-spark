@@ -27,10 +27,10 @@ public class Location extends LocationLight implements Serializable {
 //    @NotNull(message = "Поле location.y не может быть пустым")
 //    private Double y;
 
-    @ToString.Exclude
+//    @ToString.Exclude
     private boolean active = false;
 
-    @ToString.Exclude
+    //    @ToString.Exclude
     private boolean userSet = false;
 
     private Date time = Calendar.getInstance().getTime();
