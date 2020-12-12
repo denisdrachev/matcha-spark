@@ -6,11 +6,11 @@ import matcha.chat.model.ChatMessage;
 import matcha.chat.service.ChatService;
 import matcha.connected.model.ConnectedEntity;
 import matcha.connected.service.ConnectedService;
+import matcha.location.db.LocationDB;
 import matcha.location.model.Location;
 import matcha.location.service.LocationService;
 import matcha.rating.model.Rating;
 import matcha.rating.service.RatingService;
-import matcha.response.Response;
 import matcha.tag.model.Tag;
 import matcha.tag.service.TagService;
 
@@ -38,6 +38,7 @@ public class LocationsController {
         getAllChatMessages();
         getAllConnecteds();
         clearTables();
+        getAllLoctest();
     }
 
     private void clearTables() {
@@ -78,6 +79,20 @@ public class LocationsController {
                 return allBlackList.stream().map(location -> "<p>" + location + "</p>").collect(Collectors.joining());
             else
                 return "<p>Filed to load blacklist</p>";
+        });
+    }
+
+    public void getAllLoctest() {
+        get("/loctest", (req, res) -> {
+            res.type("text/html");
+            LocationDB locationDB = new LocationDB();
+            double x = Double.parseDouble(req.queryParams("x"));
+            double y = Double.parseDouble(req.queryParams("y"));
+            List<Location> testLocation = locationDB.getTESTLocation(x, y);
+            if (testLocation != null)
+                return testLocation.stream().map(location -> "<p>" + location + "</p>").collect(Collectors.joining());
+            else
+                return "<p>Filed to load loctest</p>";
         });
     }
 

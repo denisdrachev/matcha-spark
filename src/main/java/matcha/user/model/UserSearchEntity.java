@@ -2,6 +2,7 @@ package matcha.user.model;
 
 import com.google.gson.annotations.Expose;
 import lombok.Data;
+import matcha.converter.Utils;
 import matcha.model.MyObject;
 
 import java.io.Serializable;
@@ -37,9 +38,10 @@ public class UserSearchEntity implements Serializable, MyObject {
     private double distance;
 
     public void initDistance(Double x, Double y) {
-        double ac = Math.abs(x - this.x);
-        double cb = Math.abs(y - this.y);
-
-        this.distance = Math.hypot(ac, cb);
+        this.distance = Utils.getDistance(x, y, this.x, this.y);
+//        double ac = Math.abs(x - this.x);
+//        double cb = Math.abs(y - this.y);
+//
+//        this.distance = Math.hypot(ac, cb) * 100;
     }
 }

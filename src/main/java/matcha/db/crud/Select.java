@@ -43,6 +43,10 @@ public class Select {
 //    private Integer rating;
 //    private Integer tagsCount;
 
+    public static String selectTEST =
+            "SELECT * FROM locations l WHERE GET_DISTANCE(:x, :y, l.x, l.y) > 0";
+
+
     //        HttpUriRequest request = new HttpGet("http://localhost:4567/get-users?tags=tag2,tag4&ageMin=0&ageMax=100&minRating=0&maxRating=999&deltaRadius=1000&limit=10&offset=0");
     public static String selectUsersWithFilters =
             "SELECT u.login, u.fname, u.lname, p.age, l.x, l.y, i.src, r.rating, t.count as tagsCount, p.gender, p.preference, p.biography " +
@@ -57,7 +61,8 @@ public class Select {
                     "AND p.gender IN (:preferenceGender) " +
                     "AND t.count > 0 " +
                     "AND p.age >= :ageMin AND p.age <= :ageMax " + //возраст
-                    "AND l.x >= :minX AND l.x <= :maxX AND l.y >= :minY AND l.y <= :maxY "; //растояние
+                    "AND GET_DISTANCE(:x, :y, l.x, l.y) <= :radius "; //растояние
+//                    "AND l.x >= :minX AND l.x <= :maxX AND l.y >= :minY AND l.y <= :maxY "; //растояние
 //                    " LIMIT :limit OFFSET :offset ";
 
     public static String selectUsersWithoutTagsWithFilters =
@@ -71,7 +76,8 @@ public class Select {
                     "AND u.login <> :login " +
                     "AND p.gender IN (:preferenceGender) " +
                     "AND p.age >= :ageMin AND p.age <= :ageMax " + //возраст
-                    "AND l.x >= :minX AND l.x <= :maxX AND l.y >= :minY AND l.y <= :maxY "; //растояние
+                    "AND GET_DISTANCE(:x, :y, l.x, l.y) <= :radius "; //растояние
+//                    "AND l.x >= :minX AND l.x <= :maxX AND l.y >= :minY AND l.y <= :maxY "; //растояние
 //                    " LIMIT :limit OFFSET :offset ";
 
 //    public static String selectUsersWithFilters = "SELECT u.login, u.fname, u.lname, l.x, l.y, r.rating FROM users u inner join blacklist b inner join profiles p inner join locations l " +

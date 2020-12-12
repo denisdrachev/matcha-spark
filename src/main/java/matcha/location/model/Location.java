@@ -13,6 +13,7 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString(callSuper = true)
 @JsonIgnoreProperties(value = {"id", "profileId", "active", "userSet", "time"})
 public class Location extends LocationLight implements Serializable {
 

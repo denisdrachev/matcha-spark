@@ -150,4 +150,14 @@ public class Utils {
             log.warn("Exception. {}: {}", query, e.getMessage());
         }
     }
+
+    public static Double getDistance(Double x1, Double y1, Double x2, Double y2) {
+        Double d2r = (Math.PI / 180.0);
+        Double dlong = (y2 - y1) * d2r;
+        Double dlat = (x2 - x1) * d2r;
+        Double a = Math.pow(Math.sin(dlat / 2.0), 2) + Math.cos(x1 * d2r) * Math.cos(x2 * d2r) * Math.pow(Math.sin(dlong / 2.0), 2);
+        Double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        Double d = 6367 * c;
+        return d;
+    }
 }

@@ -299,12 +299,11 @@ public class UserDB {
             List<UserSearchEntity> users;
             if (searchModel.getTags().size() == 0) {
                 users = conn.createQuery(Select.selectUsersWithoutTagsWithFilters + orderBy + limitAndOffset)
+                        .addParameter("x", searchModel.getUserLocation().getX())
+                        .addParameter("y", searchModel.getUserLocation().getY())
                         .addParameter("ageMax", searchModel.getMaxAge())
                         .addParameter("ageMin", searchModel.getMinAge())
-                        .addParameter("minX", searchModel.getMinX())
-                        .addParameter("maxX", searchModel.getMaxX())
-                        .addParameter("minY", searchModel.getMinY())
-                        .addParameter("maxY", searchModel.getMaxY())
+                        .addParameter("radius", searchModel.getDeltaRadius())
                         .addParameter("limit", searchModel.getLimit())
                         .addParameter("offset", searchModel.getOffset())
                         .addParameter("login", searchModel.getLogin())
@@ -313,12 +312,11 @@ public class UserDB {
                 conn.commit();
             } else {
                 users = conn.createQuery(Select.selectUsersWithFilters + orderBy + limitAndOffset)
+                        .addParameter("x", searchModel.getUserLocation().getX())
+                        .addParameter("y", searchModel.getUserLocation().getY())
                         .addParameter("ageMax", searchModel.getMaxAge())
                         .addParameter("ageMin", searchModel.getMinAge())
-                        .addParameter("minX", searchModel.getMinX())
-                        .addParameter("maxX", searchModel.getMaxX())
-                        .addParameter("minY", searchModel.getMinY())
-                        .addParameter("maxY", searchModel.getMaxY())
+                        .addParameter("radius", searchModel.getDeltaRadius())
                         .addParameter("limit", searchModel.getLimit())
                         .addParameter("offset", searchModel.getOffset())
                         .addParameter("tagIds", searchModel.getTags())

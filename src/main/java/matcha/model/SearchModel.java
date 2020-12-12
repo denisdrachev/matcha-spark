@@ -147,7 +147,8 @@ public class SearchModel implements MyObject {
             distance = Integer.parseInt(deltaRadius);
         else
             distance = 100;
-        this.deltaRadius = distance * oneKmConst;
+        this.deltaRadius = distance;
+//        this.deltaRadius = distance * oneKmConst;
     }
 
 //    public void setTags(String tags) {

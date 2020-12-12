@@ -74,6 +74,25 @@ public class LocationDB {
         }
     }
 
+    public List<Location> getTESTLocation(Double x, Double y) {
+        log.info("getTESTLocation");
+        try (org.sql2o.Connection conn = sql2o.open()) {
+
+            List<Location> locations = conn.createQuery(Select.selectTEST)
+                    .addParameter("x", x)
+                    .addParameter("y", y)
+                    .executeAndFetch(Location.class);
+            conn.commit();
+
+            log.info("getTESTLocation done. Result: {}", locations);
+            return locations;
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.warn("Exception. getTESTLocation: {}", e.getMessage());
+            throw new SelectDBException();
+        }
+    }
+
     public Integer updateLocation(Location location) {
         try (org.sql2o.Connection conn = sql2o.open()) {
             log.info("Update location {}", location);
