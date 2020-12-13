@@ -92,14 +92,14 @@ public class EventDB {
                     .addParameter("offset", offset)
                     .executeAndFetch(EventWithUserInfo.class);
 
-            int updateResult = conn.createQuery(Update.updateHistoryNeedShowEvents)
-                    .addParameter("login", fromLogin)
-                    .addParameter("limit", limit)
-                    .addParameter("offset", offset)
-                    .executeUpdate().getResult();
+//            int updateResult = conn.createQuery(Update.updateHistoryNeedShowEvents)
+//                    .addParameter("login", fromLogin)
+//                    .addParameter("limit", limit)
+//                    .addParameter("offset", offset)
+//                    .executeUpdate().getResult();
 
             conn.commit();
-            log.info("Get history Events result size: {} updateResult: {}", events.size(), updateResult);
+            log.info("Get history Events result size: {}", events.size());
             return events;
         } catch (Exception e) {
             e.printStackTrace();
