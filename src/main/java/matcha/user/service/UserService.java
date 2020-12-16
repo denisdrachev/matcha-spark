@@ -588,7 +588,7 @@ public class UserService implements UserInterface {
     }
 
     public Response resetPasswordEmail(String token) {
-        log.info("Request /password-reset");
+        log.info("Request /reset-password");
         String fromLogin = userService.checkUserToToken(token);
         UserEntity user = userService.getUserByLogin(fromLogin);
         userManipulator.userUpdateToken(user);

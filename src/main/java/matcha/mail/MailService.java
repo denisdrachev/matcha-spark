@@ -6,6 +6,11 @@ import lombok.extern.slf4j.Slf4j;
 import matcha.Application;
 import matcha.exception.db.SendRegistrationMailException;
 import matcha.properties.ConfigProperties;
+
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import java.util.Properties;
 //import org.springframework.mail.SimpleMailMessage;
 //import org.springframework.mail.javamail.JavaMailSender;
 //import org.springframework.stereotype.Component;
@@ -52,7 +57,7 @@ public class MailService {
 //                return true;
 //            String subject = "Reset password";
 //            String confirmationUrl = "/password-reset.html?token=".concat(userActivationCode);
-//            String message = "hello manz";
+//            String« message = "hello manz";
 //
 //            SimpleMailMessage email = new SimpleMailMessage();
 //            email.setTo(userEmail);
@@ -68,6 +73,46 @@ public class MailService {
 //            log.warn("Exception. sendRegistrationMail: {}", e.getMessage());
 //            throw new SendRegistrationMailException();
 //        }
+        return true;
+    }
+
+    public boolean sendMessage(String email, String subject, String text) {
+
+        final String username = "matcha0aamxqo91@gmail.com";
+        final String password = "wdih287182g2uheiuhHYATSA";
+
+        Properties prop = new Properties();
+        prop.put("mail.smtp.host", "smtp.gmail.com");
+        prop.put("mail.smtp.port", "587");
+        prop.put("mail.smtp.auth", "true");
+        prop.put("mail.smtp.starttls.enable", "true"); //TLS
+
+        Session session = Session.getInstance(prop,
+                new javax.mail.Authenticator() {
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(username, password);
+                    }
+                });
+
+        try {
+
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress("matcha0aamxqo91@gmail.com"));
+            message.setRecipients(
+                    Message.RecipientType.TO,
+                    InternetAddress.parse(email)
+            );
+            message.setSubject(subject);
+            message.setText(text);
+
+            Transport.send(message);
+
+            log.info("Send message to '{}', with subject '{}' done.", email, subject);
+
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+
         return true;
     }
 }

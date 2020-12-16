@@ -10,6 +10,8 @@ import matcha.user.model.UserRegistry;
 import matcha.user.service.UserService;
 import matcha.validator.ValidationMessageService;
 
+import java.util.Map;
+
 import static spark.Spark.get;
 import static spark.Spark.post;
 
@@ -53,7 +55,7 @@ public class UserController {
     }
 
     public void resetPassword() {
-        post("/password-reset", (req, res) -> userService.resetPasswordEmail(req.headers("Authorization")));
+        post("/reset-password", (req, res) -> userService.resetPasswordEmail(req.headers("Authorization")));
     }
 
     public void changeResetPassword() {
@@ -135,32 +137,26 @@ public class UserController {
         get("/logout", (req, res) -> userService.userLogout(req.headers("Authorization")));
     }
 
-    //
-    //TODO переделать в рабочую форму. Пока не работает
     public void confirmRegistration() {
+        get("/registration-check", (req, res) -> {
 
-        get("/regitrationConfirm.html", (req, res) -> {
-
-            String token = req.headers("Authorization");
-
-            if (token == null || token.isEmpty()) {
-                log.info("Token: {} Пользователь не авторизован.", token);
-                return validationMessageService.prepareErrorMessage("Вы не авторизованы.");
+            String token;
+            try {
+                Map<String, String> map = gson.fromJson(req.body(), Map.class);
+                token = map.get("token");
+                if (token == null || token.isEmpty()) {
+                    return validationMessageService.prepareErrorMessage("Невалидный токен");
+                }
+            } catch (Exception e) {
+                return validationMessageService.prepareErrorMessage("Некорректные параметры запроса");
             }
 
-//            Locale locale = req.getLocale();
             boolean verificationToken = userService.activationUserByToken(token);
 
             if (!verificationToken) {
-                String message = "auth.message.invalidToken"; //messages.getMessage("auth.message.invalidToken", null, locale);
-//                model.addAttribute("message", message);
-//                return "redirect:/badUser.html?lang=" + locale.getLanguage();
-//                return "redirect:/badUser.html?lang=ru";
-                res.redirect("/badUser.html?lang=ru");
+                return validationMessageService.prepareErrorMessage("Невалидный токен");
             }
-            res.redirect("/redirect:?lang=ru");
-            return "";
-//            return "redirect:?lang=" + request.getLocale().getLanguage();
+            return validationMessageService.prepareMessageOkOnlyType();
         });
     }
 }
