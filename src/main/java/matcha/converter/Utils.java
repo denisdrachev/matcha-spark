@@ -86,28 +86,28 @@ public class Utils {
         LinkedList<String> sortOrderList = searchModel.getSortOrderList();
 
         for (String s : sortOrderList) {
-            if (s.equals("sortAge")) {
+            if (s.equals("sortAge") && searchModel.getSortAge() != 0) {
                 if (searchModel.getSortAge() == -1) {
                     order.add("p.age DESC");
                 } else if (searchModel.getSortAge() == 1) {
                     order.add("p.age");
                 }
             }
-            if (s.equals("sortLocation")) {
+            if (s.equals("sortLocation") && searchModel.getSortLocation() != 0) {
                 if (searchModel.getSortLocation() == -1) {
                     order.add("l.x DESC, l.y DESC");
                 } else if (searchModel.getSortLocation() == 1) {
                     order.add("l.x, l.y");
                 }
             }
-            if (s.equals("sortRating")) {
+            if (s.equals("sortRating") && searchModel.getSortRating() != 0) {
                 if (searchModel.getSortRating() == -1) {
                     order.add("r.rating DESC");
                 } else if (searchModel.getSortRating() == 1) {
                     order.add("r.rating");
                 }
             }
-            if (s.equals("sortTags")) {
+            if (s.equals("sortTags") && searchModel.getSortTags() != 0) {
                 if (searchModel.getTags().size() != 0) {
                     if (searchModel.getSortTags() == -1) {
                         order.add("t.count DESC");
