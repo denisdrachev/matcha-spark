@@ -4,9 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import matcha.rating.manipulation.RatingManipulator;
 import matcha.rating.model.Rating;
-//import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+//import org.springframework.stereotype.Service;
 
 //@Service
 @AllArgsConstructor
@@ -49,5 +50,9 @@ public class RatingService {
 
     public List<Rating> getAllRatings() {
         return ratingManipulator.getAllRatings();
+    }
+
+    public void decRatingByLogin(String login) {
+        ratingManipulator.decRatingByLogin(login);
     }
 }

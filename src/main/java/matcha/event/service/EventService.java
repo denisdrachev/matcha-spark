@@ -48,7 +48,11 @@ public class EventService {
         if (event == null)
             return;
         eventManipulator.insertEvent(event);
-        ratingService.incRatingByLogin(event.getLogin());
+        if (EventType.LIKE.equals(event.getType())) {
+            ratingService.incRatingByLogin(event.getData());
+        } else if (EventType.UNLIKE.equals(event.getType())) {
+            ratingService.decRatingByLogin(event.getData());
+        }
 
         try {
             if (webSocketConnection.containsKey(event.getData())) {

@@ -36,7 +36,7 @@ public class RatingDB {
     }
 
     public void incRatingByLogin(String login) {
-        log.info("Inc Rating by login: {}", log);
+        log.info("Inc Rating by login: {}", login);
         try (org.sql2o.Connection conn = sql2o.open()) {
             int result = conn.createQuery(Update.updateIncRatingByLogin)
                     .addParameter("login", login)
@@ -121,6 +121,21 @@ public class RatingDB {
         } catch (Exception e) {
             log.warn("Exception. getAllRatings: {}", e.getMessage());
             throw new SelectDBException();
+        }
+    }
+
+    public void decRatingByLogin(String login) {
+        log.info("Dec Rating by login: {}", login);
+        try (org.sql2o.Connection conn = sql2o.open()) {
+            int result = conn.createQuery(Update.updateDecRatingByLogin)
+                    .addParameter("login", login)
+                    .executeUpdate().getResult();
+            conn.commit();
+            log.info("Dec Rating by login. Result: {}", result);
+        } catch (Exception e) {
+            log.warn("Exception. decRatingByLogin: {}", e.getMessage());
+            e.printStackTrace();
+            throw new UpdateDBException();
         }
     }
 }

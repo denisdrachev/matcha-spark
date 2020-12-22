@@ -34,4 +34,8 @@ public class RatingManipulator {
     public List<Rating> getAllRatings() {
         return ratingDB.getAllRatings();
     }
+
+    public void decRatingByLogin(String login) {
+        ratingDB.decRatingByLogin(login);
+    }
 }
