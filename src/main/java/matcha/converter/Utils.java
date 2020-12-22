@@ -119,7 +119,7 @@ public class Utils {
         }
 
         if (order.size() > 0) {
-            return " ORDER BY " + order.stream().collect(Collectors.joining(", ")) + " u.fname, u.lname ";
+            return " ORDER BY " + order.stream().collect(Collectors.joining(", ")) + " u.fname, u.lname, u.login ";
         }
         return "";
     }
