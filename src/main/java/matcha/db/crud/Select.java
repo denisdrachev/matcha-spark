@@ -54,7 +54,7 @@ public class Select {
                     "INNER JOIN locations l ON u.profileId = l.profileId) " +
                     "INNER JOIN rating r ON u.login = r.login) " +
                     "INNER JOIN (SELECT r.login as login, COUNT(r.login) as count FROM tagRelations r WHERE r.tagId IN (:tagIds) GROUP BY r.login) t  ON u.login = t.login) " +
-                    "LEFT JOIN blacklist b ON b.fromLogin = :login AND b.toLogin = u.login) " +
+                    "INNER JOIN blacklist b ON b.fromLogin = :login AND b.toLogin = u.login) " +
                     "INNER JOIN images i ON i.profileId = u.profileId AND i.avatar = TRUE) " +
                     "WHERE (b.isBlocked IS NULL OR b.isBlocked <> TRUE) " +
                     "AND u.login <> :login " +
@@ -70,7 +70,7 @@ public class Select {
                     "FROM (((((users u INNER JOIN profiles p ON u.profileId = p.id) " +
                     "INNER JOIN locations l ON u.profileId = l.profileId) " +
                     "INNER JOIN rating r ON u.login = r.login) " +
-                    "LEFT JOIN blacklist b ON b.fromLogin = :login AND b.toLogin = u.login) " +
+                    "INNER JOIN blacklist b ON b.fromLogin = :login AND b.toLogin = u.login) " +
                     "INNER JOIN images i ON i.profileId = u.profileId AND i.avatar = TRUE) " +
                     "WHERE (b.isBlocked IS NULL OR b.isBlocked <> TRUE) " +
                     "AND u.login <> :login " +
