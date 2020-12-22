@@ -292,7 +292,7 @@ public class UserDB {
         String limitAndOffset = " LIMIT :limit OFFSET :offset ";
 
         String orderBy = Utils.prepareOrderBy(searchModel);
-        System.err.println("orderBy: " + orderBy);
+        log.info("OrderBy: {}", orderBy);
 
         try (org.sql2o.Connection conn = sql2o.open()) {
 
