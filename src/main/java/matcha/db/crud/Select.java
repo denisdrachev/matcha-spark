@@ -49,7 +49,7 @@ public class Select {
 
     //        HttpUriRequest request = new HttpGet("http://localhost:4567/get-users?tags=tag2,tag4&ageMin=0&ageMax=100&minRating=0&maxRating=999&deltaRadius=1000&limit=10&offset=0");
     public static String selectUsersWithFilters =
-            "SELECT u.login, u.fname, u.lname, p.age, l.x, l.y, i.src, r.rating, t.count as tagsCount, p.gender, p.preference, p.biography " +
+            "SELECT u.login, u.fname, u.lname, p.age, l.x, l.y, i.src, r.rating, t.count as tagsCount, p.gender, p.preference, p.biography, GET_DISTANCE(:x, :y, l.x, l.y) as distance " +
                     "FROM ((((((users u INNER JOIN profiles p ON u.profileId = p.id) " +
                     "INNER JOIN locations l ON u.profileId = l.profileId) " +
                     "INNER JOIN rating r ON u.login = r.login) " +
@@ -66,7 +66,7 @@ public class Select {
 //                    " LIMIT :limit OFFSET :offset ";
 
     public static String selectUsersWithoutTagsWithFilters =
-            "SELECT u.login, u.fname, u.lname, p.age, l.x, l.y, i.src, r.rating, p.gender, p.preference, p.biography " +
+            "SELECT u.login, u.fname, u.lname, p.age, l.x, l.y, i.src, r.rating, p.gender, p.preference, p.biography, GET_DISTANCE(:x, :y, l.x, l.y) as distance " +
                     "FROM (((((users u INNER JOIN profiles p ON u.profileId = p.id) " +
                     "INNER JOIN locations l ON u.profileId = l.profileId) " +
                     "INNER JOIN rating r ON u.login = r.login) " +

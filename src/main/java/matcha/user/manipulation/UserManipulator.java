@@ -138,9 +138,9 @@ public class UserManipulator {
 
     public List<UserSearchEntity> getUsersWithFilters(SearchModel searchModel) {
         List<UserSearchEntity> usersWithFilters = userDB.getUsersWithFilters(searchModel);
-        usersWithFilters.forEach(userSearch -> {
-            userSearch.initDistance(searchModel.getUserLocation().getX(), searchModel.getUserLocation().getY());
-        });
+//        usersWithFilters.forEach(userSearch -> {
+//            userSearch.initDistance(searchModel.getUserLocation().getX(), searchModel.getUserLocation().getY());
+//        });
         return usersWithFilters;
     }
 

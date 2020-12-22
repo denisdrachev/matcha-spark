@@ -95,9 +95,9 @@ public class Utils {
             }
             if (s.equals("sortLocation") && searchModel.getSortLocation() != 0) {
                 if (searchModel.getSortLocation() == -1) {
-                    order.add("l.x DESC, l.y DESC");
+                    order.add("distance DESC");
                 } else if (searchModel.getSortLocation() == 1) {
-                    order.add("l.x, l.y");
+                    order.add("distance ");
                 }
             }
             if (s.equals("sortRating") && searchModel.getSortRating() != 0) {
