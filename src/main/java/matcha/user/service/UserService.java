@@ -94,13 +94,14 @@ public class UserService implements UserInterface {
         Integer newProfileId = profileService.createNewProfile();
 
         UserEntity userEntity = new UserEntity(userRegistry);
-        userEntity.setActive(configProperties.isUsersDefaultActive());
+        //TODO дефолтная активность пользователя!!!
+        userEntity.setActive(ConfigProperties.usersDefaultActive);
         userEntity.setProfileId(newProfileId);
         initRegistryUser(userEntity);
         userManipulator.userRegistry(userEntity);
 
         //TODO рефактор отправки EMAIL
-//        mailService.sendRegistrationMail(userEntity.getEmail(), userEntity.getActivationCode());
+        mailService.sendRegistrationMail(userEntity.getEmail(), userEntity.getActivationCode());
 
         ratingService.createRating(userRegistry.getLogin());
 

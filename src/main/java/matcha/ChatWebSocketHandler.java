@@ -47,12 +47,23 @@ public class ChatWebSocketHandler {
     @OnWebSocketClose
     public void onClose(Session user, int statusCode, String reason) {
         System.out.println("onClose! ");
+        String keyFroRemove = null;
+        for (Map.Entry<String, Session> stringSessionEntry : webSocketConnection.entrySet()) {
+            if (stringSessionEntry.getValue() == user) {
+                keyFroRemove = stringSessionEntry.getKey();
+                break;
+            }
+        }
+        if (keyFroRemove != null) {
+            webSocketConnection.remove(keyFroRemove);
+        }
 //        webSocketConnection.re
 //        String username = Chat.userUsernameMap.get(user);
 //        Chat.userUsernameMap.remove(user);
 //        Chat.broadcastMessage(sender = "Server", msg = (username + " left the chat"));
     }
 
+    //TODO убрать лишнее
     @OnWebSocketMessage
     public void onMessage(Session user, String message) {
         System.out.println("onMessage! " + message);

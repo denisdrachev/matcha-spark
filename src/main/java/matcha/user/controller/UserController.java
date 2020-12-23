@@ -36,6 +36,7 @@ public class UserController {
         testExecute();
         resetPassword();
         changeResetPassword();
+        confirmRegistration();
     }
 
     private UserService userService = UserService.getInstance();
@@ -125,10 +126,10 @@ public class UserController {
 
     public void getUsers() {
         get("/get-users", (req, res) -> {
-            return userService.getUsers(
-                    req.headers("Authorization"),
-                    req.queryString()
-            );
+                    return userService.getUsers(
+                            req.headers("Authorization"),
+                            req.queryString()
+                    );
                 }
         );
     }
@@ -139,11 +140,10 @@ public class UserController {
 
     public void confirmRegistration() {
         get("/registration-check", (req, res) -> {
-
+            log.info("Request /registration-check {}", req.queryString());
             String token;
             try {
-                Map<String, String> map = gson.fromJson(req.body(), Map.class);
-                token = map.get("token");
+                token = req.queryParams("token");
                 if (token == null || token.isEmpty()) {
                     return validationMessageService.prepareErrorMessage("Невалидный токен");
                 }

@@ -32,8 +32,8 @@ public class SpringJdbcConfig {
 
 //        createUsers(500);
 
-        createUser();
-        createUser2();
+//        createUser();
+//        createUser2();
 //        createUser3();
 
 //        jdbcTemplate.update(Insert.insertImage, 0, "ABCD");

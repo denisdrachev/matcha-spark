@@ -10,28 +10,16 @@ import java.util.List;
 
 @Getter
 @Setter
-//@Component
-//@ConfigurationProperties("schema")
 public class ConfigProperties {
 
     String folder;
     List<String> schemasList;
 
-//    @Value("${options.users.default.active}")
-    boolean usersDefaultActive = true;
-
-//    @Value("${options.users.default.init.active}")
-    boolean usersDefaultInitActive = true;
-
-//    @Value("${options.users.default.init.login}")
-    String usersDefaultInitLogin;
-
-//    @Value("${options.users.default.init.password}")
-    String usersDefaultInitPassword;
-
-//    @Value("${options.users.default.init.code}")
-    String usersDefaultInitCode;
-
-//    @Value("${options.mail.send}")
-    boolean mailSend;
+    public static boolean usersDefaultActive = true;
+    public static String baseUrl = "http://localhost";
+    public static String basePort = "4567";
+    public static String usersDefaultInitLogin;
+    public static String usersDefaultInitPassword;
+    public static String usersDefaultInitCode;
+    public static boolean emailSend = false;
 }

@@ -10,7 +10,6 @@ import matcha.event.manipulation.EventManipulator;
 import matcha.event.model.Event;
 import matcha.event.model.EventWithUserInfo;
 import matcha.rating.service.RatingService;
-import matcha.reactive.EventUnicastService;
 import matcha.utils.EventType;
 import org.eclipse.jetty.websocket.api.Session;
 
@@ -22,8 +21,6 @@ import static matcha.ChatWebSocketHandler.webSocketConnection;
 @Slf4j
 public class EventService {
 
-    //TODO тут добавить реактивщину
-    private EventUnicastService eventUnicastService;
     private ConnectedService connectedService = ConnectedService.getInstance();
     private BlackListService blackListService = BlackListService.getInstance();
     private RatingService ratingService = RatingService.getInstance();
@@ -55,7 +52,13 @@ public class EventService {
         }
 
         try {
-            if (webSocketConnection.containsKey(event.getData())) {
+            if ((EventType.LIKE.equals(event.getType()) ||
+                    EventType.CONNECTED.equals(event.getType()) ||
+                    EventType.DISCONNECTED.equals(event.getType()) ||
+                    EventType.PROFILE_LOAD.equals(event.getType()) ||
+                    EventType.SEND_MESSAGE.equals(event.getType())) &&
+                    webSocketConnection.containsKey(event.getData())) {
+
                 Session session = webSocketConnection.get(event.getData());
                 session.getRemote().sendString(gson.toJson(event));
             }

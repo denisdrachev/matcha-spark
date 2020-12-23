@@ -1,9 +1,6 @@
 package matcha.mail;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import matcha.Application;
 import matcha.exception.db.SendRegistrationMailException;
 import matcha.properties.ConfigProperties;
 
@@ -26,29 +23,20 @@ public class MailService {
 
     //TODO return void
     public boolean sendRegistrationMail(String userEmail, String userActivationCode) {
-//        try {
-//            if (!configProperties.isMailSend())
-//                return true;
-//            String subject = "Registration Confirmation";
-//            String confirmationUrl = "/regitrationConfirm.html?token=".concat(userActivationCode);
-//            String message = "hello manz";
-//
-//            SimpleMailMessage email = new SimpleMailMessage();
-//            email.setTo(userEmail);
-//            email.setSubject(subject);
-////        email.setText(message.concat("\r\n<a href=https://matcha-server.herokuapp.com").concat(confirmationUrl).concat(" target=\"_blank\">Активация</a>"));
-//            email.setText(message.concat("\r\n<a href=http://localhost:8888").concat(confirmationUrl).concat(" target=\"_blank\">Активация</a>"));
-//
-//            log.info("Sending mail: ".concat(email.toString()));
-//            mailSender.send(email);
-//            log.info("Message sent.");
-//            return true;
-//        } catch (Exception e) {
-//            log.warn("Exception. sendRegistrationMail: {}", e.getMessage());
-//            throw new SendRegistrationMailException();
-//        }
-
-        return true;
+        try {
+//            String url = "<a href=\"http://localhost:4567/registration-check?token=\" " + userActivationCode + " target=\"_blank\">ссылка</a>";
+            String url = ConfigProperties.baseUrl + ":" + ConfigProperties.basePort + "/verification?token=" + userActivationCode;
+            String subject = "Регистрация Matcha";
+            String text = "Воу воу, ковбой, ты зарегался, поздравляю! Осталось активировать учетную запись по ссылке:\n" + url;
+            if (ConfigProperties.emailSend) {
+                sendMessage(userEmail, subject, text);
+            }
+            log.info("Registration message send to '{}' need message send? {}", userEmail, ConfigProperties.emailSend);
+            return true;
+        } catch (Exception e) {
+            log.warn("Exception. sendRegistrationMail: {}", e.getMessage());
+            throw new SendRegistrationMailException();
+        }
     }
 
     public boolean sendResetPasswordEmail(String userEmail, String userActivationCode) {
@@ -76,7 +64,7 @@ public class MailService {
         return true;
     }
 
-    public boolean sendMessage(String email, String subject, String text) {
+    private boolean sendMessage(String email, String subject, String text) {
 
         final String username = "matcha0aamxqo91@gmail.com";
         final String password = "wdih287182g2uheiuhHYATSA";

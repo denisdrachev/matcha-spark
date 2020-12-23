@@ -5,8 +5,8 @@ package matcha;
 
 import lombok.extern.slf4j.Slf4j;
 import matcha.exception.BaseException;
+import matcha.properties.ConfigProperties;
 import matcha.validator.ValidationMessageService;
-import org.slf4j.LoggerFactory;
 
 import static spark.Spark.*;
 
@@ -25,6 +25,31 @@ public class Application {
 
 
     public static void main(String[] args) {
+
+        for (String arg : args) {
+            try {
+                String[] split = arg.split("=");
+                if ("active".equals(split[0])) {
+                    boolean active = Boolean.parseBoolean(split[1]);
+                    ConfigProperties.usersDefaultActive = active;
+                    log.info("Set property default active user: {}", active);
+                } else if ("email".equals(split[0])) {
+                    boolean isSendEmail = Boolean.parseBoolean(split[1]);
+                    ConfigProperties.emailSend = isSendEmail;
+                    log.info("Set property is send emails: {}", isSendEmail);
+                } else if ("baseUrl".equals(split[0])) {
+                    String baseUrl = split[1];
+                    ConfigProperties.baseUrl = baseUrl;
+                    log.info("Set property base url: {}", baseUrl);
+                } else if ("port".equals(split[0])) {
+                    String basePort = split[1];
+                    ConfigProperties.basePort = basePort;
+                    log.info("Set property base port: {}", basePort);
+                }
+            } catch (Exception e) {
+                log.info("incorrect argument: {}", arg);
+            }
+        }
 //        System.setProperty(org.slf4j.simple.SimpleLogger.DEFAULT_LOG_LEVEL_KEY, "INFO");
 //
 //

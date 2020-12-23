@@ -45,7 +45,6 @@ public class Utils {
         return Arrays.equals(currentPassword, prepearPassword);
     }
 
-
     public static byte[] getSalt() {
         SecureRandom random = new SecureRandom();
         byte[] salt = new byte[16];
