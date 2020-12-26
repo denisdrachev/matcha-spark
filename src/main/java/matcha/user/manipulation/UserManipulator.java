@@ -70,6 +70,10 @@ public class UserManipulator {
         userDB.updateUserById(user);
     }
 
+    public void updateUserPasswordById(UserEntity user) {
+        userDB.updatePasswordUserById(user);
+    }
+
     //TODO подумать, мб переделать, чтобы изолировать от получения пользователя из бд
     public void userUpdate(UserUpdateEntity user) {
         userDB.updateUserByLogin(user);

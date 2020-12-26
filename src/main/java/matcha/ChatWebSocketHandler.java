@@ -3,10 +3,7 @@ package matcha;
 import matcha.user.model.UserEntity;
 import matcha.user.service.UserService;
 import org.eclipse.jetty.websocket.api.Session;
-import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
-import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
-import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
-import org.eclipse.jetty.websocket.api.annotations.WebSocket;
+import org.eclipse.jetty.websocket.api.annotations.*;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -62,6 +59,29 @@ public class ChatWebSocketHandler {
 //        String username = Chat.userUsernameMap.get(user);
 //        Chat.userUsernameMap.remove(user);
 //        Chat.broadcastMessage(sender = "Server", msg = (username + " left the chat"));
+    }
+
+    @OnWebSocketError
+    public void onError(Session user, int statusCode, String reason) {
+        try {
+            System.out.println("onError! ");
+            String keyFroRemove = null;
+            for (Map.Entry<String, Session> stringSessionEntry : webSocketConnection.entrySet()) {
+                if (stringSessionEntry.getValue() == user) {
+                    keyFroRemove = stringSessionEntry.getKey();
+                    break;
+                }
+            }
+            if (keyFroRemove != null) {
+                webSocketConnection.remove(keyFroRemove);
+            }
+//        webSocketConnection.re
+//        String username = Chat.userUsernameMap.get(user);
+//        Chat.userUsernameMap.remove(user);
+//        Chat.broadcastMessage(sender = "Server", msg = (username + " left the chat"));
+        } catch (Exception e) {
+
+        }
     }
 
     //TODO убрать лишнее

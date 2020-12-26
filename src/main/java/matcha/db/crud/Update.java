@@ -18,6 +18,7 @@ public class Update {
     public static String updateDecTagCountById = "UPDATE tags set count = count - 1 WHERE id = :id";
     public static String updateProfileById = "UPDATE profiles set age = :age, gender = :gender, preference = :preference, biography = :biography, isFilled = :isFilled WHERE id = :id";
     public static String updateUserById = "UPDATE users set login = :login, activationCode = :activationCode, fname = :fname, lname = :lname, email = :email, active = :active, blocked = :blocked, time = :time, profileId = :profileId WHERE id = :id";
+    public static String updatePasswordUserById = "UPDATE users set password = :password, activationCode = :activationCode, active = :active, blocked = :blocked, salt = :salt WHERE id = :id";
     public static String updateUserByLogin = "UPDATE users set fname = :fname, lname = :lname, email = :email, time = :time WHERE login = :login";
     public static String updateChatMessage = "UPDATE chat set read = :read WHERE id = id";
     public static String updateChatMessagesByIds = "UPDATE chat set read = :read WHERE id in (:ids)";

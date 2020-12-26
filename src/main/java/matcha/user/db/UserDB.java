@@ -137,6 +137,27 @@ public class UserDB {
         }
     }
 
+
+    public void updatePasswordUserById(UserEntity user) {
+        log.info("Update full user: {}", user);
+        try (org.sql2o.Connection conn = sql2o.open()) {
+
+            int result = conn.createQuery(Update.updatePasswordUserById)
+                    .addParameter("id", user.getId())
+                    .addParameter("activationCode", user.getActivationCode())
+                    .addParameter("active", user.isActive())
+                    .addParameter("blocked", user.isBlocked())
+                    .addParameter("salt", user.getSalt())
+                    .addParameter("password", user.getPasswordBytes())
+                    .executeUpdate().getResult();
+            conn.commit();
+            log.info("Update user end. result: {}", result);
+        } catch (Exception e) {
+            log.warn("Exception. updateUserById: {}", e.getMessage());
+            throw new UpdateDBException();
+        }
+    }
+
 //    public void dropUserByLogin(String login) {
 //        log.info("Drop user by login: {}", login);
 //        try {

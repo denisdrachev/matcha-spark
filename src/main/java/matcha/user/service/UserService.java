@@ -620,7 +620,8 @@ public class UserService implements UserInterface {
         initRegistryUser(user);
         user.setActive(true);
 //        userManipulator.updateUserToken();
-        userManipulator.userUpdate(user);
+//        userManipulator.userUpdate(user);
+        userManipulator.updateUserPasswordById(user);
         return validationMessageService.prepareMessageOkOnlyType();
     }
 
