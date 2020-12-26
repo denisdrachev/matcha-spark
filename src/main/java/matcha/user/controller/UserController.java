@@ -59,7 +59,7 @@ public class UserController {
     }
 
     public void changeResetPassword() {
-        post("/change-reset-password", (req, res) -> userService.resetPassword(req.body()));
+        post("/change-reset-password", (req, res) -> userService.resetPassword(req.headers("Authorization"), req.body()));
     }
 
     //
