@@ -45,7 +45,7 @@ public class UserManipulator {
                 if (Utils.checkPassword(userLogin.getPassword(), user.getSalt(), user.getPasswordBytes())) {
 //                    user.setActivationCode("TEST_TEST_TEST");
                     //TODO первнуть строку
-                    userUpdateToken(user);
+                    updateUserToken(user);
                     return new ResponseOk(user.getActivationCode());
                 } else {
                     log.info("Логин или пароль неверны. User: {}", userLogin);
@@ -64,7 +64,7 @@ public class UserManipulator {
         }
     }
 
-    public void userUpdateToken(UserEntity user) {
+    public void updateUserToken(UserEntity user) {
         user.setActivationCode(UUID.randomUUID().toString());
         user.setTime(Calendar.getInstance().getTime());
         userDB.updateUserById(user);
@@ -87,8 +87,8 @@ public class UserManipulator {
         return userDB.getUserByToken(token);
     }
 
-    public String checkUserByToken(String token) {
-        List<String> users = userDB.checkUserByToken(token);
+    public UserEntity checkUserByToken(String token) {
+        List<UserEntity> users = userDB.checkUserByToken(token);
         if (users.size() != 1) {
             throw new UserAuthException();
         }

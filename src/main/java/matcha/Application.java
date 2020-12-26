@@ -8,6 +8,10 @@ import matcha.exception.BaseException;
 import matcha.properties.ConfigProperties;
 import matcha.validator.ValidationMessageService;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
+
 import static spark.Spark.*;
 
 //import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -25,6 +29,35 @@ public class Application {
 
 
     public static void main(String[] args) {
+//        System.setProperty(org.slf4j.simple.SimpleLogger.DEFAULT_LOG_LEVEL_KEY, "INFO");
+
+        System.out.println("log.isDebugEnabled(): " + log.isDebugEnabled());
+        System.out.println("log.isInfoEnabled(): " + log.isInfoEnabled());
+        System.out.println("log.isWarnEnabled(): " + log.isWarnEnabled());
+        System.out.println("log.isErrorEnabled(): " + log.isErrorEnabled());
+
+        log.trace("trace");
+        log.info("info");
+        log.warn("warn");
+        log.error("error");
+
+        if (!ConfigProperties.debug) {
+            Thread.setDefaultUncaughtExceptionHandler((t, e) -> {
+            });
+//        LogManager.getLogManager().reset();
+            System.setOut(new PrintStream(new OutputStream() {
+                @Override
+                public void write(int arg0) throws IOException {
+
+                }
+            }));
+            System.setErr(new PrintStream(new OutputStream() {
+                @Override
+                public void write(int arg0) throws IOException {
+
+                }
+            }));
+        }
 
         for (String arg : args) {
             try {
@@ -50,7 +83,6 @@ public class Application {
                 log.info("incorrect argument: {}", arg);
             }
         }
-//        System.setProperty(org.slf4j.simple.SimpleLogger.DEFAULT_LOG_LEVEL_KEY, "INFO");
 //
 //
 //        final org.slf4j.Logger log = LoggerFactory.getLogger(Application.class);

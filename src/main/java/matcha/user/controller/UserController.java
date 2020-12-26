@@ -5,12 +5,11 @@ import com.google.gson.GsonBuilder;
 import lombok.extern.slf4j.Slf4j;
 import matcha.converter.JsonTransformer;
 import matcha.response.Response;
+import matcha.user.model.UserEntity;
 import matcha.user.model.UserInfo;
 import matcha.user.model.UserRegistry;
 import matcha.user.service.UserService;
 import matcha.validator.ValidationMessageService;
-
-import java.util.Map;
 
 import static spark.Spark.get;
 import static spark.Spark.post;
@@ -94,9 +93,9 @@ public class UserController {
                 return validationMessageService.prepareErrorMessage("Вы не авторизованы.");
             }
 
-            String userLogin = userService.checkUserToToken(token);
+            UserEntity user = userService.checkUserToToken(token);
 
-            userService.updateTimeByLogin(userLogin);
+            userService.updateTimeByLogin(user.getLogin());
 
             log.info("Request get user profile by login: {}", login);
             return validationMessageService.prepareMessageOkData(gson.toJsonTree(userService.getUserProfile(token, login)));
@@ -116,8 +115,8 @@ public class UserController {
                 return validationMessageService.prepareErrorMessage("Вы не авторизованы.");
             }
 
-            String userLogin = userService.checkUserToToken(token);
-            userService.updateTimeByLogin(userLogin);
+            UserEntity user = userService.checkUserToToken(token);
+            userService.updateTimeByLogin(user.getLogin());
 
             log.info("Request get self user profile");
             return validationMessageService.prepareMessageOkData(gson.toJsonTree(userService.getUserProfile(token, null)));

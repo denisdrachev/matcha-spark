@@ -82,7 +82,7 @@ public class SpringJdbcConfig {
 
         userInfo.setImages(List.of(image));
 
-        userService.saveUserInfo(userInfo, user_1.getLogin());
+        userService.saveUserInfo(userInfo, user_1);
 
 //        profileService.updateProfile(profileByIdWithImages.getId(), profileByIdWithImages);
     }
@@ -120,7 +120,7 @@ public class SpringJdbcConfig {
 
         userInfo.setImages(List.of(image));
 
-        userService.saveUserInfo(userInfo, user_1.getLogin());
+        userService.saveUserInfo(userInfo, user_1);
 
 //        profileService.updateProfile(profileByIdWithImages.getId(), profileByIdWithImages);
     }
@@ -158,7 +158,7 @@ public class SpringJdbcConfig {
 
         userInfo.setImages(List.of(image));
 
-        userService.saveUserInfo(userInfo, user_1.getLogin());
+        userService.saveUserInfo(userInfo, user_1);
 
 //        profileService.updateProfile(profileByIdWithImages.getId(), profileByIdWithImages);
     }
@@ -196,7 +196,7 @@ public class SpringJdbcConfig {
 
         userInfo.setImages(List.of(image));
 
-        userService.saveUserInfo(userInfo, user_1.getLogin());
+        userService.saveUserInfo(userInfo, user_1);
 
 //        profileService.updateProfile(profileByIdWithImages.getId(), profileByIdWithImages);
     }

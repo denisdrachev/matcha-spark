@@ -1,5 +1,6 @@
 package matcha;
 
+import matcha.user.model.UserEntity;
 import matcha.user.service.UserService;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
@@ -31,8 +32,8 @@ public class ChatWebSocketHandler {
             String token = userSession.getUpgradeRequest().getParameterMap().get("token").get(0);
             System.out.println(token);
 //            String login = "login";
-            String login = userService.checkUserToToken(token);
-            webSocketConnection.put(login, userSession);
+            UserEntity user = userService.checkUserToToken(token);
+            webSocketConnection.put(user.getLogin(), userSession);
 
 
 //            userSession.getRemote().sendString(String.valueOf(new JSONObject()

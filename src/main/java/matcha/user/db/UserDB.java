@@ -170,13 +170,13 @@ public class UserDB {
         }
     }
 
-    public List<String> checkUserByToken(String token) {
+    public List<UserEntity> checkUserByToken(String token) {
         log.info("Check user by Activation Code.");
         try (org.sql2o.Connection conn = sql2o.beginTransaction()) {
 
-            List<String> users = conn.createQuery(Select.selectUsersCountByActivationCode)
+            List<UserEntity> users = conn.createQuery(Select.selectUsersCountByActivationCode)
                     .addParameter("activationCode", token)
-                    .executeAndFetch(String.class);
+                    .executeAndFetch(UserEntity.class);
             conn.commit();
 
 //            Integer count = jdbcTemplate.queryForObject(Select.selectUsersCountByActivationCode, Integer.class, token);

@@ -130,7 +130,7 @@ public class UserService implements UserInterface {
         }
 
         UserEntity user = getUserByToken(token);
-        userManipulator.userUpdateToken(user);
+        userManipulator.updateUserToken(user);
 
         Event newEvent = new Event(EventType.LOGOUT, user.getLogin(), false, "");
         eventService.saveNewEvent(newEvent);
@@ -138,7 +138,7 @@ public class UserService implements UserInterface {
         return validationMessageService.prepareMessageOkOnlyType();
     }
 
-    public String checkUserToToken(String token) {
+    public UserEntity checkUserToToken(String token) {
         return userManipulator.checkUserByToken(token);
     }
 
@@ -171,8 +171,7 @@ public class UserService implements UserInterface {
 
     public Object getUserProfile(String token, String login) {
 
-        checkUserToToken(token);
-        UserEntity userByToken = getUserByToken(token);
+        UserEntity userByToken = checkUserToToken(token);
 
         UserEntity user = getUserByLogin(login != null ? login : userByToken.getLogin());
         Location activeUserLocation = locationService.getLocationIfActiveByProfileId(user.getProfileId());
@@ -203,9 +202,7 @@ public class UserService implements UserInterface {
     }
 
     //TODO рефакторинг
-    public void saveUserInfo(UserInfoModel userInfo, String login) {
-
-        UserEntity currentUser = getUserByLogin(login);
+    public void saveUserInfo(UserInfoModel userInfo, UserEntity currentUser) {
 
         saveUser(new UserUpdateEntity(userInfo, currentUser.getLogin()), currentUser.getProfileId());
         if (userInfo.getLocation() != null) {
@@ -220,10 +217,10 @@ public class UserService implements UserInterface {
         ProfileEntity newProfile = new ProfileEntity(currentUser.getProfileId(), userInfo);
         newProfile.setFilled(true);
 
-        tagService.saveTags(login, userInfo.getTags());
+        tagService.saveTags(currentUser.getLogin(), userInfo.getTags());
         profileService.updateProfile(currentUser.getProfileId(), newProfile);
 
-        Event newEvent = new Event(EventType.PROFILE_UPDATE, login, true, "");
+        Event newEvent = new Event(EventType.PROFILE_UPDATE, currentUser.getLogin(), true, "");
         eventService.saveNewEvent(newEvent);
     }
 
@@ -237,7 +234,7 @@ public class UserService implements UserInterface {
             return validationMessageService.prepareErrorMessage("Вы не авторизованы.");
         }
 
-        String requestUserLogin = checkUserToToken(token);
+        UserEntity user = checkUserToToken(token);
 
         UserInfoModel userProfile = new Gson().fromJson(body, UserInfoModel.class);
 
@@ -256,7 +253,7 @@ public class UserService implements UserInterface {
                 }
             }
         }
-        saveUserInfo(userProfile, requestUserLogin);
+        saveUserInfo(userProfile, user);
         return validationMessageService.prepareMessageOkOnlyType();
     }
 
@@ -266,8 +263,7 @@ public class UserService implements UserInterface {
 
     public Response saveBlackList(String token, BlackListMessage message) {
 
-        checkUserToToken(token);
-        UserEntity userByToken = getUserByToken(token);
+        UserEntity userByToken = checkUserToToken(token);
         //TODO нужна ли строчка снизу???
         getUserByLogin(message.getToLogin());
 
@@ -543,10 +539,10 @@ public class UserService implements UserInterface {
         if (response != null) {
             return response;
         }
-        String fromLogin = userService.checkUserToToken(token);
-        chatMessageFull.setFromLogin(fromLogin);
+        UserEntity user = userService.checkUserToToken(token);
+        chatMessageFull.setFromLogin(user.getLogin());
         userService.checkUserExistsByLogin(chatMessageFull.getToLogin());
-        return chatService.getFullMessages(chatMessageFull, fromLogin);
+        return chatService.getFullMessages(chatMessageFull, user.getLogin());
     }
 
     public Response getNewMessages(String token, String body) {
@@ -556,8 +552,8 @@ public class UserService implements UserInterface {
         if (response != null) {
             return response;
         }
-        String toLogin = userService.checkUserToToken(token);
-        chatNewMessageFromUser.setToLogin(toLogin);
+        UserEntity user = userService.checkUserToToken(token);
+        chatNewMessageFromUser.setToLogin(user.getLogin());
         userService.checkUserExistsByLogin(chatNewMessageFromUser.getToLogin());
         return chatService.getNewMessages(chatNewMessageFromUser);
     }
@@ -569,8 +565,8 @@ public class UserService implements UserInterface {
         if (response != null) {
             return response;
         }
-        String fromLogin = userService.checkUserToToken(token);
-        chatNewMessageFromUser.setFromLogin(fromLogin);
+        UserEntity user = userService.checkUserToToken(token);
+        chatNewMessageFromUser.setFromLogin(user.getLogin());
         userService.checkUserExistsByLogin(chatNewMessageFromUser.getToLogin());
         return chatService.getAllNewMessages(chatNewMessageFromUser);
     }
@@ -582,17 +578,17 @@ public class UserService implements UserInterface {
         if (response != null) {
             return response;
         }
-        String fromLogin = userService.checkUserToToken(token);
-        chatMessageSave.setFromLogin(fromLogin);
+        UserEntity user = userService.checkUserToToken(token);
+        chatMessageSave.setFromLogin(user.getLogin());
         userService.checkUserExistsByLogin(chatMessageSave.getToLogin());
         return chatService.saveMessage(chatMessageSave);
     }
 
     public Response resetPasswordEmail(String token) {
         log.info("Request /reset-password");
-        String fromLogin = userService.checkUserToToken(token);
-        UserEntity user = userService.getUserByLogin(fromLogin);
-        userManipulator.userUpdateToken(user);
+        UserEntity user = userService.checkUserToToken(token);
+        user.setActive(false);
+        userManipulator.updateUserToken(user);
         mailService.sendResetPasswordEmail(user.getEmail(), user.getActivationCode());
         return validationMessageService.prepareMessageOkOnlyType();
     }
@@ -600,15 +596,16 @@ public class UserService implements UserInterface {
     public Response resetPassword(String token, String body) {
         log.info("Request /change-reset-password {}", body);
         Map<String, String> map = gson.fromJson(body, HashMap.class);
-        String fromLogin = userService.checkUserToToken(token);
 
         String password = map.get("password");
         if (password == null || password.isEmpty())
             return validationMessageService.prepareErrorMessage("Указан недопустимый пароль");
 
-        UserEntity user = userService.getUserByLogin(fromLogin);
+        UserEntity user = userService.checkUserToToken(token);
         user.setPassword(password);
         initRegistryUser(user);
+        user.setActive(true);
+        userManipulator.userUpdate(user);
         return validationMessageService.prepareMessageOkOnlyType();
     }
 
