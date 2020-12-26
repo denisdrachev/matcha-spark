@@ -17,8 +17,7 @@ public class ConfigProperties {
     List<String> schemasList;
 
     public static boolean usersDefaultActive = true;
-    public static String baseUrl = "http://localhost";
-    public static String basePort = "4567";
+    public static String baseUrl = "https://matcha-42-front.herokuapp.com";
     public static String usersDefaultInitLogin;
     public static String usersDefaultInitPassword;
     public static String usersDefaultInitCode;

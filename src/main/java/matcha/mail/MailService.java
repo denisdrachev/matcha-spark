@@ -25,7 +25,7 @@ public class MailService {
     public boolean sendRegistrationMail(String userEmail, String userActivationCode) {
         try {
 //            String url = "<a href=\"http://localhost:4567/registration-check?token=\" " + userActivationCode + " target=\"_blank\">ссылка</a>";
-            String url = ConfigProperties.baseUrl + ":" + ConfigProperties.basePort + "/verification?token=" + userActivationCode;
+            String url = ConfigProperties.baseUrl + /*":" + ConfigProperties.basePort +*/ "/verification?token=" + userActivationCode;
             String subject = "Регистрация Matcha";
             String text = "Воу воу, ковбой, ты зарегался, поздравляю! Осталось активировать учетную запись по ссылке:\n" + url;
             if (ConfigProperties.emailSend) {
@@ -40,28 +40,20 @@ public class MailService {
     }
 
     public boolean sendResetPasswordEmail(String userEmail, String userActivationCode) {
-//        try {
-//            if (!configProperties.isMailSend())
-//                return true;
-//            String subject = "Reset password";
-//            String confirmationUrl = "/password-reset.html?token=".concat(userActivationCode);
-//            String« message = "hello manz";
-//
-//            SimpleMailMessage email = new SimpleMailMessage();
-//            email.setTo(userEmail);
-//            email.setSubject(subject);
-////        email.setText(message.concat("\r\n<a href=https://matcha-server.herokuapp.com").concat(confirmationUrl).concat(" target=\"_blank\">Активация</a>"));
-//            email.setText(message.concat("\r\n<a href=http://localhost:" + Application.getHerokuAssignedPort()).concat(confirmationUrl).concat(" target=\"_blank\">Сбросить </a>"));
-//
-//            log.info("Sending mail: ".concat(email.toString()));
-//            mailSender.send(email);
-//            log.info("Message sent.");
-//            return true;
-//        } catch (Exception e) {
-//            log.warn("Exception. sendRegistrationMail: {}", e.getMessage());
-//            throw new SendRegistrationMailException();
-//        }
-        return true;
+        try {
+//            String url = "<a href=\"http://localhost:4567/registration-check?token=\" " + userActivationCode + " target=\"_blank\">ссылка</a>";
+            String url = ConfigProperties.baseUrl + /*":" + ConfigProperties.basePort +*/ "/verification?token=" + userActivationCode;
+            String subject = "Смена пароля Matcha";
+            String text = "Воу воу, ковбой, ты хочешь сменить пароль - ноу проблем. Переходи по ссылке и делай свои делишки:\n" + url;
+            if (ConfigProperties.emailSend) {
+                sendMessage(userEmail, subject, text);
+            }
+            log.info("Reset password email send to '{}' need message send? {}", userEmail, ConfigProperties.emailSend);
+            return true;
+        } catch (Exception e) {
+            log.warn("Exception. sendResetPasswordEmail: {}", e.getMessage());
+            throw new SendRegistrationMailException();
+        }
     }
 
     private boolean sendMessage(String email, String subject, String text) {

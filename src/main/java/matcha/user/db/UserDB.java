@@ -149,7 +149,7 @@ public class UserDB {
 //    }
 
     //TODO рефакторинг метода
-    public UserEntity getUserByToken(String activationCode) {
+    public List<UserEntity> getUserByToken(String activationCode) {
         log.info("Get user by Activation Code");
         try (org.sql2o.Connection conn = sql2o.beginTransaction()) {
 
@@ -161,8 +161,7 @@ public class UserDB {
 //            UserEntity user = jdbcTemplate.queryForObject(Select.selectUserByActivationCode,
 //                    new Object[]{activationCode}, new UserRowMapper());
             log.info("Get user by Activation Code. Result user: {}", users.get(0));
-            users.get(0).setTime(Calendar.getInstance().getTime());
-            return users.get(0);
+            return users;
         } catch (Exception e) {
             log.info("Exception. getUserByToken: {}", e.getMessage());
             //мб другое искючение тут?

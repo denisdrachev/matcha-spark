@@ -84,7 +84,12 @@ public class UserManipulator {
     }
 
     public UserEntity getUserByToken(String token) {
-        return userDB.getUserByToken(token);
+        List<UserEntity> users = userDB.getUserByToken(token);
+        if (users.size() != 1) {
+            throw new UserAuthException();
+        }
+        users.get(0).setTime(Calendar.getInstance().getTime());
+        return users.get(0);
     }
 
     public UserEntity checkUserByToken(String token) {
@@ -100,7 +105,8 @@ public class UserManipulator {
             UserEntity userByToken = getUserByToken(token);
             userByToken.setActive(true);
             userByToken.setActivationCode(null);
-            userUpdate(userByToken);
+//            userUpdate(userByToken);
+            userDB.updateUserById(userByToken);
             return true;
         } catch (Exception e) {
             log.info("Failed activation user by token: {}", token);

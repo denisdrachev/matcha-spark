@@ -74,26 +74,16 @@ public class Application {
                     String baseUrl = split[1];
                     ConfigProperties.baseUrl = baseUrl;
                     log.info("Set property base url: {}", baseUrl);
-                } else if ("port".equals(split[0])) {
+                } /*else if ("port".equals(split[0])) {
                     String basePort = split[1];
                     ConfigProperties.basePort = basePort;
                     log.info("Set property base port: {}", basePort);
-                }
+                }*/
             } catch (Exception e) {
                 log.info("incorrect argument: {}", arg);
             }
         }
-//
-//
-//        final org.slf4j.Logger log = LoggerFactory.getLogger(Application.class);
-////
-////        log.trace("trace");
-////        log.debug("debug");
-//        log.info("info");
-////        log.warn("warning");
-////        log.error("error");
 
-//        Thread thread = new Thread(Spark::awaitInitialization);
         port(getHerokuAssignedPort());
 
 //        webSocket("/socket.io", EchoWebSocket.class);
@@ -110,28 +100,21 @@ public class Application {
         get("/hello", (req, res) -> "Hello Heroku World");
         options("/*",
                 (request, response) -> {
-
-                    String accessControlRequestHeaders = request
-                            .headers("Access-Control-Request-Headers");
+                    String accessControlRequestHeaders = request.headers("Access-Control-Request-Headers");
                     if (accessControlRequestHeaders != null) {
-                        response.header("Access-Control-Allow-Headers",
-                                accessControlRequestHeaders);
+                        response.header("Access-Control-Allow-Headers", accessControlRequestHeaders);
                     }
 
-                    String accessControlRequestMethod = request
-                            .headers("Access-Control-Request-Method");
+                    String accessControlRequestMethod = request.headers("Access-Control-Request-Method");
                     if (accessControlRequestMethod != null) {
-                        response.header("Access-Control-Allow-Methods",
-                                accessControlRequestMethod);
+                        response.header("Access-Control-Allow-Methods", accessControlRequestMethod);
                     }
-
                     return "OK";
                 });
 
         before((request, res) -> {
             res.header("Access-Control-Allow-Origin", "*");
             res.header("Access-Control-Allow-Credentials", "true");
-
             res.type("application/json");
         });
         String s1 = validationMessageService.prepareErrorMessage("Некорректные параметры запроса").toString();
