@@ -55,11 +55,11 @@ public class UserController {
     }
 
     public void resetPassword() {
-        post("/reset-password", (req, res) -> userService.resetPasswordEmail(req.headers("Authorization")));
+        post("/reset-password", (req, res) -> userService.resetPasswordEmail(req.body()));
     }
 
     public void changeResetPassword() {
-        post("/change-reset-password", (req, res) -> userService.resetPassword(req.headers("Authorization"), req.body()));
+        post("/change-reset-password", (req, res) -> userService.resetPassword(req.body()));
     }
 
     //

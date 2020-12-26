@@ -50,7 +50,7 @@ public class ValidationMessageService {
 
     public ResponseError prepareErrorMessage(String message) {
         ResponseError error = new ResponseError("error", message);
-        log.info("Response: {}", error);
+        log.info("Response error: {}", error);
         return error;
     }
 

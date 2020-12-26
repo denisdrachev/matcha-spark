@@ -18,6 +18,7 @@ import matcha.event.model.Event;
 import matcha.event.model.EventWithUserInfo;
 import matcha.event.service.EventService;
 import matcha.exception.context.IncorrectInputParamsException;
+import matcha.exception.db.SelectDBException;
 import matcha.image.service.ImageService;
 import matcha.location.model.Location;
 import matcha.location.service.LocationService;
@@ -153,6 +154,14 @@ public class UserService implements UserInterface {
         Location locationByLogin = locationService.getLocationByProfileId(userByLogin.getProfileId());
         userByLogin.setLocation(locationByLogin);
         return userByLogin;
+    }
+
+    public UserEntity getSimpleUserByLogin(String login) {
+        try {
+            return userManipulator.getUserByLogin(login);
+        } catch (Exception e) {
+            throw new SelectDBException("Пользователь не найден");
+        }
     }
 
     public UserEntity getUserByToken(String token) {
@@ -584,17 +593,22 @@ public class UserService implements UserInterface {
         return chatService.saveMessage(chatMessageSave);
     }
 
-    public Response resetPasswordEmail(String token) {
-        log.info("Request /reset-password");
-        UserEntity user = userService.checkUserToToken(token);
-        user.setActive(false);
-        userManipulator.updateUserToken(user);
-        mailService.sendResetPasswordEmail(user.getEmail(), user.getActivationCode());
+    public Response resetPasswordEmail(String body) {
+        log.info("Request /reset-password {}", body);
+        Map<String, String> map = gson.fromJson(body, HashMap.class);
+        UserEntity user = userService.getSimpleUserByLogin(map.get("login"));
+        if (user.getEmail().equals(map.get("email")) && user.isActive()) {
+            user.setActive(false);
+            userManipulator.updateUserToken(user);
+            mailService.sendResetPasswordEmail(user.getEmail(), user.getActivationCode());
+        } else {
+            return validationMessageService.prepareErrorMessage("Указанный пользователь не найден.");
+        }
         return validationMessageService.prepareMessageOkOnlyType();
     }
 
     public Response resetPassword(String token, String body) {
-        log.info("Request /change-reset-password {}", body);
+        log.info("Request /change-reset-password {} {}", token, body);
         Map<String, String> map = gson.fromJson(body, HashMap.class);
 
         String password = map.get("password");
@@ -605,6 +619,7 @@ public class UserService implements UserInterface {
         user.setPassword(password);
         initRegistryUser(user);
         user.setActive(true);
+//        userManipulator.updateUserToken();
         userManipulator.userUpdate(user);
         return validationMessageService.prepareMessageOkOnlyType();
     }

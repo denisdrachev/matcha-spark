@@ -42,7 +42,7 @@ public class MailService {
     public boolean sendResetPasswordEmail(String userEmail, String userActivationCode) {
         try {
 //            String url = "<a href=\"http://localhost:4567/registration-check?token=\" " + userActivationCode + " target=\"_blank\">ссылка</a>";
-            String url = ConfigProperties.baseUrl + /*":" + ConfigProperties.basePort +*/ "/verification?token=" + userActivationCode;
+            String url = ConfigProperties.baseUrl + /*":" + ConfigProperties.basePort +*/ "/change-password?token=" + userActivationCode;
             String subject = "Смена пароля Matcha";
             String text = "Воу воу, ковбой, ты хочешь сменить пароль - ноу проблем. Переходи по ссылке и делай свои делишки:\n" + url;
             if (ConfigProperties.emailSend) {
