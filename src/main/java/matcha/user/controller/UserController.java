@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import lombok.extern.slf4j.Slf4j;
 import matcha.converter.JsonTransformer;
-import matcha.converter.Utils;
 import matcha.response.Response;
 import matcha.user.model.UserEntity;
 import matcha.user.model.UserInfo;
@@ -53,7 +52,7 @@ public class UserController {
 
     private void init() {
         try {
-            Path path = Paths.get(Utils.class.getClassLoader().getResource("passwords").toURI());
+            Path path = Paths.get(getClass().getClassLoader().getResource("passwords").toURI());
             Stream<String> lines = Files.lines(path);
             passwords = lines.collect(Collectors.toList());
             lines.close();
