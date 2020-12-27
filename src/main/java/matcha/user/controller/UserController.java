@@ -53,6 +53,7 @@ public class UserController {
     private void init() {
         try {
             Path path = Paths.get(getClass().getClassLoader().getResource("passwords").toURI());
+            log.info("path: {}", path.getFileName());
             Stream<String> lines = Files.lines(path);
             passwords = lines.collect(Collectors.toList());
             lines.close();
@@ -71,7 +72,7 @@ public class UserController {
             if (response != null) {
                 return response;
             }
-            if (passwords.contains(user.getPassword())) {
+            if (passwords != null && passwords.contains(user.getPassword())) {
                 return validationMessageService.prepareErrorMessage("Указанный пароль скомпрометирован, укажите другой пароль");
             }
             userService.userRegistration(user);
@@ -131,7 +132,7 @@ public class UserController {
         get("/password-validate/:password", (req, res) -> {
             String password = req.params(":password");
             log.info("Request /password-validate/{}", password);
-            if (passwords.contains(password)) {
+            if (passwords != null && passwords.contains(password)) {
                 return validationMessageService.prepareErrorMessage("");
             }
             return validationMessageService.prepareMessageOkOnlyType();
