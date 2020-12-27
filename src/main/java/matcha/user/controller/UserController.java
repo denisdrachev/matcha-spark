@@ -4,12 +4,22 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import lombok.extern.slf4j.Slf4j;
 import matcha.converter.JsonTransformer;
+import matcha.converter.Utils;
 import matcha.response.Response;
 import matcha.user.model.UserEntity;
 import matcha.user.model.UserInfo;
 import matcha.user.model.UserRegistry;
 import matcha.user.service.UserService;
 import matcha.validator.ValidationMessageService;
+
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static spark.Spark.get;
 import static spark.Spark.post;
@@ -19,6 +29,7 @@ import static spark.Spark.post;
 public class UserController {
 
     private ValidationMessageService validationMessageService = ValidationMessageService.getInstance();
+    private List<String> passwords;
     private Gson gson = new GsonBuilder()
             .setPrettyPrinting()
             .excludeFieldsWithoutExposeAnnotation()
@@ -36,6 +47,19 @@ public class UserController {
         resetPassword();
         changeResetPassword();
         confirmRegistration();
+        validatePassword();
+        init();
+    }
+
+    private void init() {
+        try {
+            Path path = Paths.get(Utils.class.getClassLoader().getResource("passwords").toURI());
+            Stream<String> lines = Files.lines(path);
+            passwords = lines.collect(Collectors.toList());
+            lines.close();
+        } catch (URISyntaxException | IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private UserService userService = UserService.getInstance();
@@ -99,6 +123,23 @@ public class UserController {
 
             log.info("Request get user profile by login: {}", login);
             return validationMessageService.prepareMessageOkData(gson.toJsonTree(userService.getUserProfile(token, login)));
+        });
+    }
+
+    public void validatePassword() {
+        get("/password-validate/:password", (req, res) -> {
+            String password = req.params(":password");
+            log.info("Request /password-validate/{}", password);
+
+            if (password == null || password.isEmpty()) {
+                return validationMessageService.prepareErrorMessage("Пустой пароль жиесь");
+            }
+            if (passwords.contains(password)) {
+                return validationMessageService.prepareErrorMessage("Очень популярный пароль");
+            } else if (password.length() <= 6) {
+                return validationMessageService.prepareErrorMessage("Короткий пароль");
+            }
+            return validationMessageService.prepareMessageOkOnlyType();
         });
     }
 
