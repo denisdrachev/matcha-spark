@@ -117,6 +117,25 @@ public class Application {
             res.header("Access-Control-Allow-Credentials", "true");
             res.type("application/json");
         });
+        /*afterAfter((request, response) -> {
+            log.info("After fater");
+            response.header("foo", "set by afterAfter filter");
+        });
+        notFound((req, res) -> {
+            log.info("404!");
+            return validationMessageService.prepare404Message();
+        });
+        after((request, response) -> {
+            if (response.status() == 404) {
+                log.info("404!");
+//                return validationMessageService.prepare404Message();
+            }
+            log.info("QQQ");
+        });*/
+
+        // Using Route
+
+
         String s1 = validationMessageService.prepareErrorMessage("Некорректные параметры запроса").toString();
         exception(Exception.class, (exception, request, response) -> {
             exception.printStackTrace();
@@ -128,12 +147,20 @@ public class Application {
                     response.body(validationMessageService.prepareErrorMessage(exception.getMessage()).toString());
                 }
             } else {
-
                 response.body(s1);
-                exception.printStackTrace();
+//                exception.printStackTrace();
             }
         });
         SingletonControllers.init();
+
+        get("/*", (req, res) -> {
+            log.info("Request GET 404");
+            return validationMessageService.prepare404Message();
+        });
+        post("/*", (req, res) -> {
+            log.info("Request POST 404");
+            return validationMessageService.prepare404Message();
+        });
 
     }
 

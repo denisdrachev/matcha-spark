@@ -44,12 +44,16 @@ public class EventService {
     public void saveNewEvent(Event event) {
         if (event == null)
             return;
-        eventManipulator.insertEvent(event);
         if (EventType.LIKE.equals(event.getType())) {
-            ratingService.incRatingByLogin(event.getData());
+            if (!isLikeEvent(event.getLogin(), event.getData())) {
+                ratingService.incRatingByLogin(event.getData());
+            }
         } else if (EventType.UNLIKE.equals(event.getType())) {
-            ratingService.decRatingByLogin(event.getData());
+            if (isLikeEvent(event.getLogin(), event.getData())) {
+                ratingService.decRatingByLogin(event.getData());
+            }
         }
+        eventManipulator.insertEvent(event);
 
         try {
             if ((EventType.LIKE.equals(event.getType()) ||

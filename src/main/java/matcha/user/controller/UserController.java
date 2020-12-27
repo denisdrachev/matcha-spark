@@ -128,7 +128,7 @@ public class UserController {
                 return validationMessageService.prepareErrorMessage("Вы не авторизованы.");
             }
 
-            UserEntity user = userService.checkUserToToken(token);
+            UserEntity user = userService.checkUserByToken(token);
 
             userService.updateTimeByLogin(user.getLogin());
 
@@ -161,8 +161,6 @@ public class UserController {
                 return validationMessageService.prepareErrorMessage("Вы не авторизованы.");
             }
 
-            UserEntity user = userService.checkUserToToken(token);
-            userService.updateTimeByLogin(user.getLogin());
 
             log.info("Request get self user profile");
             return validationMessageService.prepareMessageOkData(gson.toJsonTree(userService.getUserProfile(token, null)));

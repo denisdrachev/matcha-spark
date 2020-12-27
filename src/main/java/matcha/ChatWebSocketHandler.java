@@ -29,7 +29,7 @@ public class ChatWebSocketHandler {
             String token = userSession.getUpgradeRequest().getParameterMap().get("token").get(0);
             System.out.println(token);
 //            String login = "login";
-            UserEntity user = userService.checkUserToToken(token);
+            UserEntity user = userService.checkUserByToken(token);
             webSocketConnection.put(user.getLogin(), userSession);
 
 

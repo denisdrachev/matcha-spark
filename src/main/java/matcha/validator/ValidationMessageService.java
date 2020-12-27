@@ -48,6 +48,10 @@ public class ValidationMessageService {
         return new ResponseError("error", "Request body is empty");
     }
 
+    public ResponseError prepare404Message() {
+        return new ResponseError("404", "");
+    }
+
     public ResponseError prepareErrorMessage(String message) {
         ResponseError error = new ResponseError("error", message);
         log.info("Response error: {}", error);
