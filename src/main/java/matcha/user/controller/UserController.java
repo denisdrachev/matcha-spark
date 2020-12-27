@@ -3,6 +3,7 @@ package matcha.user.controller;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import lombok.extern.slf4j.Slf4j;
+import matcha.Application;
 import matcha.converter.JsonTransformer;
 import matcha.response.Response;
 import matcha.user.model.UserEntity;
@@ -10,15 +11,11 @@ import matcha.user.model.UserInfo;
 import matcha.user.model.UserRegistry;
 import matcha.user.service.UserService;
 import matcha.validator.ValidationMessageService;
+import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.InputStream;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static spark.Spark.get;
 import static spark.Spark.post;
@@ -52,12 +49,24 @@ public class UserController {
 
     private void init() {
         try {
-            Path path = Paths.get(getClass().getClassLoader().getResource("passwords").toURI());
-            log.info("path: {}", path.getFileName());
-            Stream<String> lines = Files.lines(path);
-            passwords = lines.collect(Collectors.toList());
-            lines.close();
-        } catch (URISyntaxException | IOException e) {
+//            byte[] data;
+//            try (InputStream in = getClass().getResourceAsStream("/elasticsearch/segmentsIndex.json")) {
+//                data = in.readAllBytes(); // usable in Java 9+
+//                // data = IOUtils.toByteArray(in); // uses Apache commons IO library
+//            }
+//            log.info("java.class.path: " + System.getProperty("java.class.path"));
+//            log.info(Application.class.getProtectionDomain().getCodeSource().getLocation().getPath());
+//            log.info(getClass().getResource("password").getPath());
+//            Path path2 = Paths.get(Application.class.getProtectionDomain().getCodeSource().getLocation().getPath());
+//            log.info("path2.getFileName(): " + path2.getFileName());
+//            URL password = getClass().getClassLoader().getResource("password");
+//            log.info("url: {}", password.getPath());
+//            log.info("!!!!!!: {}\n\n", Paths.get("/passwords").getFileName());
+            InputStream stream = Application.class.getClassLoader().getResourceAsStream("passwords");
+            this.passwords = IOUtils.readLines(stream, "UTF-8");
+            stream.close();
+            log.info("Read passwords done");
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
