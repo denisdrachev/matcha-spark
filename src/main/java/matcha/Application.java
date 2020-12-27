@@ -153,14 +153,14 @@ public class Application {
         });
         SingletonControllers.init();
 
-        get("/*", (req, res) -> {
-            log.info("Request GET 404");
-            return validationMessageService.prepare404Message();
-        });
-        post("/*", (req, res) -> {
-            log.info("Request POST 404");
-            return validationMessageService.prepare404Message();
-        });
+//        get("/*", (req, res) -> {
+//            log.info("Request GET 404");
+//            return validationMessageService.prepare404Message();
+//        });
+//        post("/*", (req, res) -> {
+//            log.info("Request POST 404");
+//            return validationMessageService.prepare404Message();
+//        });
 
     }
 
