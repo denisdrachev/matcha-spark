@@ -294,6 +294,11 @@ public class UserService implements UserInterface {
         }
         Event newEvent = new Event(eventType, message.getFromLogin(), false, message.getToLogin(), false);
         eventService.saveNewEvent(newEvent);
+
+        if (eventService.isLikeEvent(userByToken.getLogin(), message.getToLogin())) {
+            eventService.setLikeOrUnlike(userByToken.getLogin(), message.getToLogin(), 0);
+        }
+
 //        updateTimeByLogin(userByToken.getLogin());
         return validationMessageService.prepareMessageOkOnlyType();
     }
@@ -421,7 +426,10 @@ public class UserService implements UserInterface {
         if (userByToken.getLogin().equals(loginParam)) {
             return validationMessageService.prepareErrorMessage("Себя лайкнут нельзя :)");
         }
-
+        BlackListMessage blackListMessage = blackListService.getBlackListMessage(userByToken.getLogin(), loginParam);
+        if (blackListMessage.isBlocked()) {
+            return validationMessageService.prepareErrorMessage("Невозможно лайкнуть пользователя, он заблокирован");
+        }
 
         eventService.setLikeOrUnlike(userByToken.getLogin(), loginParam, value);
 
