@@ -26,10 +26,12 @@ public class Select {
 
     public static String selectConnectedWithUser =
             "SELECT u.login, u.fname, u.lname, i.src " +
-            "FROM ((connected c LEFT JOIN users u " +
+                    "FROM (((connected c LEFT JOIN users u " +
                     "ON (u.login = c.toLogin AND :login = c.fromLogin) OR (u.login = c.fromLogin AND c.toLogin = :login)) " +
-            "INNER JOIN images i ON i.profileId = u.profileId AND i.avatar = TRUE) " +
-            "WHERE c.isConnected = TRUE AND u.login <> :login";
+                    "INNER JOIN images i ON i.profileId = u.profileId AND i.avatar = TRUE) " +
+                    "LEFT JOIN blacklist b ON b.fromLogin = :login AND b.toLogin = u.login) " +
+                    "WHERE (b.isBlocked IS NULL OR b.isBlocked <> TRUE) " +
+                    "AND c.isConnected = TRUE AND u.login <> :login";
 
 
     public static String selectImageLikeEvent = "SELECT * FROM imageLikeEvents";

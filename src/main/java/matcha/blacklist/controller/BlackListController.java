@@ -25,6 +25,7 @@ public class BlackListController {
     public void saveBlackListMessage() {
 
         post("/blacklist/save", (req, res) -> {
+            log.info("Request /blacklist/save {}", req.body());
             String token = req.headers("Authorization");
 
             if (token == null || token.isEmpty()) {

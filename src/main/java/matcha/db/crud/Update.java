@@ -30,4 +30,5 @@ public class Update {
             "WHERE id IN (SELECT e.id FROM events e WHERE data = :data AND data <> login " +
             "ORDER BY time DESC LIMIT :limit OFFSET :offset)";
     public static String updateUserTimeByLogin = "UPDATE users set time = :time WHERE login = :login";
+    public static String updateUserTimeByToken = "UPDATE users set time = :time WHERE activationCode = :token";
 }

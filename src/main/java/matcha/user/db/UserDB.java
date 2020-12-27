@@ -197,10 +197,20 @@ public class UserDB {
             List<UserEntity> users = conn.createQuery(Select.selectUsersCountByActivationCode)
                     .addParameter("activationCode", token)
                     .executeAndFetch(UserEntity.class);
+
+            int result = 0;
+            if (users != null && users.size() == 1) {
+                result = conn.createQuery(Update.updateUserTimeByToken)
+                        .addParameter("token", token)
+                        .addParameter("time", Calendar.getInstance().getTime())
+                        .executeUpdate().getResult();
+            }
             conn.commit();
+
 
 //            Integer count = jdbcTemplate.queryForObject(Select.selectUsersCountByActivationCode, Integer.class, token);
             log.info("Check user by Activation Code. Result: {}", users);
+            log.info("Update user time by login end. Result: {}", result);
             return users;
         } catch (Exception e) {
             log.info("Exception. checkUserByToken: {}", e.getMessage());

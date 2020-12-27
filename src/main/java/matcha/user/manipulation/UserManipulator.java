@@ -106,7 +106,7 @@ public class UserManipulator {
 
     public boolean activationUserByToken(String token) {
         try {
-            UserEntity userByToken = getUserByToken(token);
+            UserEntity userByToken = checkUserByToken(token);
             userByToken.setActive(true);
             userByToken.setActivationCode(null);
 //            userUpdate(userByToken);

@@ -130,7 +130,8 @@ public class UserService implements UserInterface {
             return validationMessageService.prepareErrorMessage("Вы не авторизованы.");
         }
 
-        UserEntity user = getUserByToken(token);
+//        UserEntity user = getUserByToken(token);
+        UserEntity user = checkUserToToken(token);
         userManipulator.updateUserToken(user);
 
         Event newEvent = new Event(EventType.LOGOUT, user.getLogin(), false, "");
@@ -273,8 +274,9 @@ public class UserService implements UserInterface {
     public Response saveBlackList(String token, BlackListMessage message) {
 
         UserEntity userByToken = checkUserToToken(token);
+
         //TODO нужна ли строчка снизу???
-        getUserByLogin(message.getToLogin());
+//        getUserByLogin(message.getToLogin());
 
         message.setFromLogin(userByToken.getLogin());
 
@@ -292,7 +294,7 @@ public class UserService implements UserInterface {
         }
         Event newEvent = new Event(eventType, message.getFromLogin(), false, message.getToLogin(), false);
         eventService.saveNewEvent(newEvent);
-
+//        updateTimeByLogin(userByToken.getLogin());
         return validationMessageService.prepareMessageOkOnlyType();
     }
 
@@ -311,7 +313,8 @@ public class UserService implements UserInterface {
             log.info("Token: {} Пользователь не авторизован.", token);
             return validationMessageService.prepareErrorMessage("Вы не авторизованы.");
         }
-        UserEntity userByToken = getUserByToken(token);
+//        UserEntity userByToken = getUserByToken(token);
+        UserEntity userByToken = checkUserToToken(token);
         List<ConnectedWithUserInfo> allConnectedWithUser = connectedService.getAllConnectedWithUser(userByToken.getLogin());
         return validationMessageService.prepareMessageOkData(gson.toJsonTree(allConnectedWithUser));
     }
@@ -338,7 +341,8 @@ public class UserService implements UserInterface {
             return validationMessageService.prepareErrorMessage("Вы не авторизованы.");
         }
 
-        UserEntity userByToken = getUserByToken(token);
+        UserEntity userByToken = checkUserToToken(token);
+//        UserEntity userByToken = getUserByToken(token);
         List<EventWithUserInfo> notifications = eventService.getNotifications(userByToken.getLogin(), limit, offset);
         return validationMessageService.prepareMessageOkData(gson.toJsonTree(notifications));
     }
@@ -367,7 +371,8 @@ public class UserService implements UserInterface {
 
         log.info("Request get history by token: {}", token);
 
-        UserEntity userByToken = userService.getUserByToken(token);
+        UserEntity userByToken = userService.checkUserToToken(token);
+//        UserEntity userByToken = userService.getUserByToken(token);
         List<EventWithUserInfo> history = eventService.getHistory(userByToken.getLogin(), limit, offset);
 
         return validationMessageService.prepareMessageOkData(gson.toJsonTree(history));
@@ -398,7 +403,8 @@ public class UserService implements UserInterface {
             return validationMessageService.prepareErrorMessage("Некорректные параметры запроса........");
         }
 
-        UserEntity userByToken = getUserByToken(token);
+        UserEntity userByToken = checkUserToToken(token);
+//        UserEntity userByToken = getUserByToken(token);
 
         ProfileEntity profileById = profileService.getProfileByIdWithImages(userByToken.getProfileId());
 //        profileService.getProfileByIdWithImages(userByToken.getProfileId()).getImages().stream().noneMatch(image -> image.isAvatar() && image.getSrc().isEmpty())
@@ -430,7 +436,8 @@ public class UserService implements UserInterface {
             return validationMessageService.prepareErrorMessage("Вы не авторизованы.");
         }
 
-        UserEntity userByToken = getUserByToken(token);
+//        UserEntity userByToken = getUserByToken(token);
+        UserEntity userByToken = checkUserToToken(token);
         Integer unreadEventsCount = eventService.getUnreadUserActivityByLogin(userByToken.getLogin());
 
         return validationMessageService.prepareMessageOkData(unreadEventsCount);
@@ -457,7 +464,8 @@ public class UserService implements UserInterface {
             return validationMessageService.prepareErrorMessage("Некорректные параметры запроса..........");
         }
 
-        UserEntity userByToken = getUserByToken(token);
+//        UserEntity userByToken = getUserByToken(token);
+        UserEntity userByToken = checkUserToToken(token);
 
         if (!userManipulator.isUserExistByLogin(fakeLogin)) {
             return validationMessageService.prepareErrorMessage("Указанный пользователь не найден.");
@@ -486,7 +494,7 @@ public class UserService implements UserInterface {
             return validationMessageService.prepareErrorMessage("Вы не авторизованы.");
         }
 
-        UserEntity user = userManipulator.getUserByToken(token);
+        UserEntity user = userManipulator.checkUserByToken(token);
         ProfileEntity profile = profileService.getProfileById(user.getProfileId());
         Location location = locationService.getLocationByProfileId(profile.getId());
 
