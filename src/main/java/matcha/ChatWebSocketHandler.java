@@ -62,7 +62,7 @@ public class ChatWebSocketHandler {
     }
 
     @OnWebSocketError
-    public void onError(Session user, int statusCode, String reason) {
+    public void onError(Session user, Throwable reason) {
         try {
             System.out.println("onError! ");
             String keyFroRemove = null;

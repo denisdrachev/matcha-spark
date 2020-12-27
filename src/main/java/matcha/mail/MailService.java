@@ -25,9 +25,9 @@ public class MailService {
     public boolean sendRegistrationMail(String userEmail, String userActivationCode) {
         try {
 //            String url = "<a href=\"http://localhost:4567/registration-check?token=\" " + userActivationCode + " target=\"_blank\">ссылка</a>";
-            String url = ConfigProperties.baseUrl + /*":" + ConfigProperties.basePort +*/ "/verification?token=" + userActivationCode;
+            String url = "<a href=\"" + ConfigProperties.baseUrl + "/verification?token=" + userActivationCode + "\" target=\"_blank\">клац</a>";
             String subject = "Регистрация Matcha";
-            String text = "Воу воу, ковбой, ты зарегался, поздравляю! Осталось активировать учетную запись по ссылке:\n" + url;
+            String text = "Воу воу, ковбой, ты зарегался, поздравляю!</br>Осталось активировать учетную запись по ссылке:</br>" + url;
             if (ConfigProperties.emailSend) {
                 sendMessage(userEmail, subject, text);
             }
@@ -42,9 +42,10 @@ public class MailService {
     public boolean sendResetPasswordEmail(String userEmail, String userActivationCode) {
         try {
 //            String url = "<a href=\"http://localhost:4567/registration-check?token=\" " + userActivationCode + " target=\"_blank\">ссылка</a>";
-            String url = ConfigProperties.baseUrl + /*":" + ConfigProperties.basePort +*/ "/change-password?token=" + userActivationCode;
+//            String url = ConfigProperties.baseUrl + /*":" + ConfigProperties.basePort +*/ "/change-password?token=" + userActivationCode;
+            String url = "<a href=\"" + ConfigProperties.baseUrl + "/change-password?token=" + userActivationCode + "\" target=\"_blank\">клац</a>";
             String subject = "Смена пароля Matcha";
-            String text = "Воу воу, ковбой, ты хочешь сменить пароль - ноу проблем. Переходи по ссылке и делай свои делишки:\n" + url;
+            String text = "Воу воу, ковбой, ты хочешь сменить пароль - ноу проблем.</br>Переходи по ссылке и делай свои делишки:</br>" + url;
             if (ConfigProperties.emailSend) {
                 sendMessage(userEmail, subject, text);
             }
@@ -75,15 +76,14 @@ public class MailService {
                 });
 
         try {
-
             Message message = new MimeMessage(session);
+            message.setContent(text, "text/html; charset=utf-8");
             message.setFrom(new InternetAddress("matcha0aamxqo91@gmail.com"));
             message.setRecipients(
                     Message.RecipientType.TO,
                     InternetAddress.parse(email)
             );
             message.setSubject(subject);
-            message.setText(text);
 
             Transport.send(message);
 

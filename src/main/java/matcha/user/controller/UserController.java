@@ -68,10 +68,12 @@ public class UserController {
         post("/register", (req, res) -> {
             log.info("Request /register Body: {}", req.body());
             UserRegistry user = new Gson().fromJson(req.body(), UserRegistry.class);
-            System.out.println(user);
             Response response = validationMessageService.validateMessage(user);
             if (response != null) {
                 return response;
+            }
+            if (passwords.contains(user.getPassword())) {
+                return validationMessageService.prepareErrorMessage("Указанный пароль скомпрометирован, укажите другой пароль");
             }
             userService.userRegistration(user);
             return validationMessageService.prepareMessageOkOnlyType();
@@ -130,14 +132,8 @@ public class UserController {
         get("/password-validate/:password", (req, res) -> {
             String password = req.params(":password");
             log.info("Request /password-validate/{}", password);
-
-            if (password == null || password.isEmpty()) {
-                return validationMessageService.prepareErrorMessage("Пустой пароль жиесь");
-            }
             if (passwords.contains(password)) {
-                return validationMessageService.prepareErrorMessage("Очень популярный пароль");
-            } else if (password.length() <= 6) {
-                return validationMessageService.prepareErrorMessage("Короткий пароль");
+                return validationMessageService.prepareErrorMessage("");
             }
             return validationMessageService.prepareMessageOkOnlyType();
         });
