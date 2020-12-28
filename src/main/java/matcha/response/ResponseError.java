@@ -1,8 +1,8 @@
 package matcha.response;
 
-import lombok.*;
-import matcha.converter.Converter;
-import matcha.model.MyObject;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.json.JSONObject;
 
 @AllArgsConstructor
@@ -15,6 +15,5 @@ public class ResponseError extends ResponseBase{
     @Override
     public String toString() {
         return new JSONObject(this).toString();
-//        return Converter.objectToJson(this).get();
     }
 }

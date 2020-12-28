@@ -29,14 +29,6 @@ public class Utils {
         KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, 128);
         SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
         byte[] hash = factory.generateSecret(spec).getEncoded();
-//        String s = Arrays.toString(hash);
-//
-//        String[] byteValues = s.substring(1, s.length() - 1).split(",");
-//        byte[] bytes = new byte[byteValues.length];
-//        for (int i=0, len=bytes.length; i<len; i++) {
-//            bytes[i] = Byte.parseByte(byteValues[i].trim());
-//        }
-//        String str = new String(bytes);
         return hash;
     }
 
@@ -65,12 +57,10 @@ public class Utils {
     }
 
     public static String saveImageBase64ToFile(String encodedString) throws IOException {
-
         int length = 10;
         boolean useLetters = true;
         boolean useNumbers = true;
         String generatedString = RandomStringUtils.random(length, useLetters, useNumbers);
-        System.out.println(generatedString);
 
         String outputFileName = "images\\".concat(generatedString);
         byte[] decodedBytes = Base64.getDecoder().decode(encodedString);

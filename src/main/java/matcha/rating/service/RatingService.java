@@ -7,9 +7,6 @@ import matcha.rating.model.Rating;
 
 import java.util.List;
 
-//import org.springframework.stereotype.Service;
-
-//@Service
 @AllArgsConstructor
 @NoArgsConstructor
 public class RatingService {
@@ -28,14 +25,6 @@ public class RatingService {
     public Rating getRatingByLogin(String login) {
         return ratingManipulator.getRatingByLogin(login);
     }
-
-//    public boolean isBlackListExists(String fromLogin, String toLogin) {
-//        return ratingManipulator.isBlackListExists(fromLogin, toLogin);
-//    }
-
-//    public void updateBlackListMessage(BlackListMessage message) {
-//        ratingManipulator.updateBlackListMessage(message);
-//    }
 
     public void createRating(String login) {
         Rating rating = new Rating();

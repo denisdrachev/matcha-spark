@@ -27,7 +27,6 @@ public class RatingDB {
                     .addParameter("login", rating.getLogin())
                     .executeUpdate().getResult();
             conn.commit();
-
             log.info("Insert Rating. Result: {}", result);
         } catch (Exception e) {
             log.warn("Exception. insertRating: {}", e.getMessage());
@@ -45,30 +44,9 @@ public class RatingDB {
             log.info("Inc Rating by login. Result: {}", result);
         } catch (Exception e) {
             log.warn("Exception. incRatingByLogin: {}", e.getMessage());
-            e.printStackTrace();
             throw new UpdateDBException();
         }
     }
-
-//    public void updateBlackListMessage(BlackListMessage message) {
-//        log.info("Update BlackList message '{}'", message);
-//        try (org.sql2o.Connection conn = sql2o.open()) {
-//
-//            int result = conn.createQuery(Update.updateBlacklistById)
-//                    .addParameter("fromLogin", message.getFromLogin())
-//                    .addParameter("toLogin", message.getToLogin())
-//                    .addParameter("isBlocked", message.isBlocked())
-//                    .executeUpdate().getResult();
-//            conn.commit();
-//
-////            int update = jdbcTemplate.update(Update.updateBlacklistById,
-////                    message.isBlocked(), message.getFromLogin(), message.getToLogin());
-//            log.info("Update BlackList message result: {}", result);
-//        } catch (Exception e) {
-//            log.warn("Exception. updateBlackListMessage: {}", e.getMessage());
-//            throw new UpdateBlackListMessageDBException();
-//        }
-//    }
 
     public Rating getRatingByLogin(String login) {
         log.info("Get Rating by login. {}", login);
@@ -78,7 +56,6 @@ public class RatingDB {
                     .addParameter("login", login)
                     .executeAndFetch(Rating.class);
             conn.commit();
-
             log.info("Get Rating by login. Result: {}", result);
             return result.get(0);
         } catch (Exception e) {
@@ -87,27 +64,6 @@ public class RatingDB {
         }
     }
 
-//    public Boolean isBlackListExists(String fromLogin, String toLogin) {
-//        log.info("Get BlackList message: [fromLogin:{}][toLogin:{}]", fromLogin, toLogin);
-//        try (org.sql2o.Connection conn = sql2o.open()) {
-//
-//            //SELECT COUNT(*) FROM blacklist WHERE fromLogin = :fromLogin AND toLogin = :toLogin
-//            List<Integer> integer = conn.createQuery(Select.selectBlackListCount)
-//                    .addParameter("fromLogin", fromLogin)
-//                    .addParameter("toLogin", toLogin)
-//                    .executeAndFetch(Integer.class);
-//            conn.commit();
-//
-////            Integer integer = jdbcTemplate.queryForObject(Select.selectBlackListCount,
-////                    Integer.class, fromLogin, toLogin);
-//            log.info("Get BlackList message result: {}", integer);
-//            return integer.get(0) > 0;
-//        } catch (Exception e) {
-//            log.warn("Exception. isBlackListExists: {}", e.getMessage());
-//            return false;
-//        }
-//    }
-
     public List<Rating> getAllRatings() {
         log.info("Get all Ratings");
         try (org.sql2o.Connection conn = sql2o.open()) {
@@ -115,7 +71,6 @@ public class RatingDB {
             List<Rating> result = conn.createQuery(Select.selectRating)
                     .executeAndFetch(Rating.class);
             conn.commit();
-
             log.info("Get all Ratings. Result size: {}", result.size());
             return result;
         } catch (Exception e) {
@@ -134,7 +89,6 @@ public class RatingDB {
             log.info("Dec Rating by login. Result: {}", result);
         } catch (Exception e) {
             log.warn("Exception. decRatingByLogin: {}", e.getMessage());
-            e.printStackTrace();
             throw new UpdateDBException();
         }
     }

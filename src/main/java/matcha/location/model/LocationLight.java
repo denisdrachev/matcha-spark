@@ -16,8 +16,8 @@ import java.io.Serializable;
 public class LocationLight implements Serializable {
 
     @Expose
-    @DecimalMin(value = "-180.0", message = "Допустимое значение location.y от -180 до 180")
-    @DecimalMax(value = "180.0", message = "Допустимое значение location.y от -180 до 180")
+    @DecimalMin(value = "-180.0", message = "Допустимое значение location.x от -180 до 180")
+    @DecimalMax(value = "180.0", message = "Допустимое значение location.x от -180 до 180")
     @NotNull(message = "Поле location.x не может быть пустым")
     protected Double x;
 

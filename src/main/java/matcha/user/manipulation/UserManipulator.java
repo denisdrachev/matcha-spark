@@ -21,11 +21,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
 
-//import org.springframework.stereotype.Service;
-
 @Slf4j
-//@Service
-//@RequiredArgsConstructor
 public class UserManipulator {
 
     private final UserDB userDB = new UserDB();
@@ -43,8 +39,6 @@ public class UserManipulator {
             locationService.initLocationAndUpdate(location, user.getProfileId(), false, false);
             if (user.isActive() && !user.isBlocked()) {
                 if (Utils.checkPassword(userLogin.getPassword(), user.getSalt(), user.getPasswordBytes())) {
-//                    user.setActivationCode("TEST_TEST_TEST");
-                    //TODO первнуть строку
                     updateUserToken(user);
                     return new ResponseOk(user.getActivationCode());
                 } else {
@@ -59,7 +53,6 @@ public class UserManipulator {
         } catch (InsertDBException | UpdateDBException ile) {
             String format = String.format("Ошибка авторизации пользователя %s.", userLogin.getLogin());
             log.info(format);
-            ile.printStackTrace();
             throw new UserAuthException(format);
         }
     }
@@ -74,7 +67,6 @@ public class UserManipulator {
         userDB.updatePasswordUserById(user);
     }
 
-    //TODO подумать, мб переделать, чтобы изолировать от получения пользователя из бд
     public void userUpdate(UserUpdateEntity user) {
         userDB.updateUserByLogin(user);
     }
@@ -109,7 +101,6 @@ public class UserManipulator {
             UserEntity userByToken = checkUserByToken(token);
             userByToken.setActive(true);
             userByToken.setActivationCode(null);
-//            userUpdate(userByToken);
             userDB.updateUserById(userByToken);
             return true;
         } catch (Exception e) {
@@ -147,11 +138,7 @@ public class UserManipulator {
     }
 
     public List<UserSearchEntity> getUsersWithFilters(SearchModel searchModel) {
-        List<UserSearchEntity> usersWithFilters = userDB.getUsersWithFilters(searchModel);
-//        usersWithFilters.forEach(userSearch -> {
-//            userSearch.initDistance(searchModel.getUserLocation().getX(), searchModel.getUserLocation().getY());
-//        });
-        return usersWithFilters;
+        return userDB.getUsersWithFilters(searchModel);
     }
 
     public void updateTimeByLogin(String userLogin) {

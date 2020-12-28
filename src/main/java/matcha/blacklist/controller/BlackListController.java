@@ -10,9 +10,6 @@ import matcha.validator.ValidationMessageService;
 import static spark.Spark.post;
 
 @Slf4j
-//@RestController
-//@AllArgsConstructor
-//@RequestMapping
 public class BlackListController {
 
     private UserService userService = UserService.getInstance();

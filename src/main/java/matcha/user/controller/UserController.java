@@ -49,25 +49,13 @@ public class UserController {
 
     private void init() {
         try {
-//            byte[] data;
-//            try (InputStream in = getClass().getResourceAsStream("/elasticsearch/segmentsIndex.json")) {
-//                data = in.readAllBytes(); // usable in Java 9+
-//                // data = IOUtils.toByteArray(in); // uses Apache commons IO library
-//            }
-//            log.info("java.class.path: " + System.getProperty("java.class.path"));
-//            log.info(Application.class.getProtectionDomain().getCodeSource().getLocation().getPath());
-//            log.info(getClass().getResource("password").getPath());
-//            Path path2 = Paths.get(Application.class.getProtectionDomain().getCodeSource().getLocation().getPath());
-//            log.info("path2.getFileName(): " + path2.getFileName());
-//            URL password = getClass().getClassLoader().getResource("password");
-//            log.info("url: {}", password.getPath());
-//            log.info("!!!!!!: {}\n\n", Paths.get("/passwords").getFileName());
             InputStream stream = Application.class.getClassLoader().getResourceAsStream("passwords");
             this.passwords = IOUtils.readLines(stream, "UTF-8");
             stream.close();
             log.info("Read passwords done");
         } catch (IOException e) {
             e.printStackTrace();
+            log.warn("Error read passwords");
         }
     }
 
@@ -97,7 +85,6 @@ public class UserController {
         post("/change-reset-password", (req, res) -> userService.resetPassword(req.headers("Authorization"), req.body()));
     }
 
-    //
     public void login() {
         post("/login", (req, res) -> {
             log.info("Request /login {}", req.body());
@@ -127,11 +114,8 @@ public class UserController {
                 log.info("Token: {} Пользователь не авторизован.", token);
                 return validationMessageService.prepareErrorMessage("Вы не авторизованы.");
             }
-
             UserEntity user = userService.checkUserByToken(token);
-
             userService.updateTimeByLogin(user.getLogin());
-
             log.info("Request get user profile by login: {}", login);
             return validationMessageService.prepareMessageOkData(gson.toJsonTree(userService.getUserProfile(token, login)));
         });
@@ -152,16 +136,11 @@ public class UserController {
 
         get("/profile-get", (req, res) -> {
             log.info("Request /profile-get");
-
             String token = req.headers("Authorization");
-
-
             if (token == null || token.isEmpty()) {
                 log.info("Token: {} Пользователь не авторизован.", token);
                 return validationMessageService.prepareErrorMessage("Вы не авторизованы.");
             }
-
-
             log.info("Request get self user profile");
             return validationMessageService.prepareMessageOkData(gson.toJsonTree(userService.getUserProfile(token, null)));
         });

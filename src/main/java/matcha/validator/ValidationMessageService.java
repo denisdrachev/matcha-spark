@@ -9,24 +9,14 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-//import org.springframework.context.support.DefaultMessageSourceResolvable;
-//import org.springframework.validation.BindingResult;
-//import javax.validation.Validation;
-//import javax.validation.Validator;
-
-//@Service
 @Slf4j
-//@NoArgsConstructor
 public class ValidationMessageService {
 
     private ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
     private Validator validator = factory.getValidator();
-
-
     private static ValidationMessageService validationMessageService;
 
     public static ValidationMessageService getInstance() {
@@ -36,30 +26,10 @@ public class ValidationMessageService {
         return validationMessageService;
     }
 
-//    public ResponseError prepareValidateMessage(BindingResult bindingResult) {
-//        String validatorMessage = bindingResult.getFieldErrors().stream()
-//                .map(DefaultMessageSourceResolvable::getDefaultMessage)
-//                .collect(Collectors.joining(","));
-//        log.info("Validator message: {}", validatorMessage);
-//        return new ResponseError("error", validatorMessage);
-//    }
-
-    public ResponseError prepareMessageNullObject() {
-        return new ResponseError("error", "Request body is empty");
-    }
-
-    public ResponseError prepare404Message() {
-        return new ResponseError("404", "");
-    }
-
     public ResponseError prepareErrorMessage(String message) {
         ResponseError error = new ResponseError("error", message);
         log.info("Response error: {}", error);
         return error;
-    }
-
-    public ResponseError prepareErrorMessage(StringBuilder message) {
-        return prepareErrorMessage(message.toString());
     }
 
     public ResponseOnlyType prepareMessageOkOnlyType() {
@@ -97,36 +67,4 @@ public class ValidationMessageService {
             return new ResponseError("error", validatorMessage);
         return null;
     }
-
-    public ResponseDataList prepareMessageOkDataList(List list) {
-        ResponseDataList ok = new ResponseDataList("ok", list);
-        log.info("Response: {}", ok);
-        return ok;
-    }
-//    public boolean validateJsonBySchema(String schemaName, String json) {
-////        try {
-//        validatorFactory.getValidatorMap().get(schemaName).validate(json);
-//        return true;
-////        } catch (ValidationException e) {
-////            String clientMessage;
-////            if (e.getCausingExceptions().size() != 0) {
-////                clientMessage = Utils.clearValidateMessage(e.getCausingExceptions());
-////            } else {
-////                if (e.getMessage().matches(StringConstants.validationDelimiter))
-////                    clientMessage = e.getMessage().split(StringConstants.validationDelimiter)[1];
-////                else
-////                    clientMessage = e.getMessage();
-////            }
-////            StringBuilder sb = new StringBuilder()
-////                    .append("Failed schema validate. Schema: ")
-////                    .append(schemaName)
-////                    .append(" json: ")
-////                    .append(json)
-////                    .append(" Message: ")
-////                    .append(clientMessage);
-////            String result = sb.toString();
-////            log.warn(result);
-////            return new ResponseError("error", clientMessage);
-////        }
-//    }
 }

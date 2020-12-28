@@ -96,13 +96,12 @@ public class UserService implements UserInterface {
         Integer newProfileId = profileService.createNewProfile();
 
         UserEntity userEntity = new UserEntity(userRegistry);
-        //TODO дефолтная активность пользователя!!!
+
         userEntity.setActive(ConfigProperties.usersDefaultActive);
         userEntity.setProfileId(newProfileId);
         initRegistryUser(userEntity);
         userManipulator.userRegistry(userEntity);
 
-        //TODO рефактор отправки EMAIL
         mailService.sendRegistrationMail(userEntity.getEmail(), userEntity.getActivationCode());
 
         ratingService.createRating(userRegistry.getLogin());
@@ -111,9 +110,6 @@ public class UserService implements UserInterface {
         eventService.saveNewEvent(newEvent);
 
         userEntity.getLocation().setProfileId(newProfileId);
-//        Location location = new Location(userRegistry.getLocation());
-//        location.setProfileId(newProfileId);
-//        userRegistry.getLocation().setProfileId(newProfileId);
         locationService.saveLocation(userEntity.getLocation());
     }
 
@@ -131,7 +127,6 @@ public class UserService implements UserInterface {
             return validationMessageService.prepareErrorMessage("Вы не авторизованы.");
         }
 
-//        UserEntity user = getUserByToken(token);
         UserEntity user = checkUserByToken(token);
         userManipulator.updateUserToken(user);
 
@@ -175,9 +170,7 @@ public class UserService implements UserInterface {
         return userManipulator.getUserByToken(token);
     }
 
-    public void saveUser(UserUpdateEntity user, int profileId) {
-        //TODO ВМЕСТО ЛОГИНА НУЖНО ПРОФИЛЬ_ИД кидать
-//        locationService.deactivationLocationByLogin(profileId);
+    public void saveUser(UserUpdateEntity user) {
         userManipulator.userUpdate(user);
     }
 
@@ -186,10 +179,8 @@ public class UserService implements UserInterface {
     }
 
     public Object getUserProfile(String token, String login) {
-
         UserEntity userByToken = getUserByToken(token);
         userService.updateTimeByLogin(userByToken.getLogin());
-//        UserEntity userByToken = checkUserByToken(token);
 
         UserEntity user = getUserByLogin(login != null ? login : userByToken.getLogin());
         Location activeUserLocation = locationService.getLocationIfActiveByProfileId(user.getProfileId());
@@ -201,10 +192,6 @@ public class UserService implements UserInterface {
             Event newEventLoad = new Event(EventType.PROFILE_LOAD, userByToken.getLogin(), true, login);
             eventService.saveNewEvent(newEventLoad);
         }
-
-//        BlackListMessage blackListMessage = blackListService.getBlackListMessage(user.getLogin(), login);
-//        Event newEventLoaded = new Event(EventType.PROFILE_LOADED, login, !blackListMessage.isBlocked(), userByToken.getLogin(), !blackListMessage.isBlocked());
-//        eventService.saveNewEvent(newEventLoaded);
 
         Rating rating = ratingService.getRatingByLogin(user.getLogin());
         List<String> userTags = tagService.getUserTags(user.getLogin());
@@ -219,19 +206,12 @@ public class UserService implements UserInterface {
         return new UserProfileWithoutEmail(user, profileById, blackList.isBlocked(), likeEventFrom, likeEventTo, rating.getRating(), userTags);
     }
 
-    //TODO рефакторинг
     public void saveUserInfo(UserInfoModel userInfo, UserEntity currentUser) {
-
-        saveUser(new UserUpdateEntity(userInfo, currentUser.getLogin()), currentUser.getProfileId());
+        saveUser(new UserUpdateEntity(userInfo, currentUser.getLogin()));
         if (userInfo.getLocation() != null) {
             Location location = new Location(userInfo.getLocation());
             locationService.initLocationAndUpdate(location, currentUser.getProfileId(), true, true);
-        } /*else {
-            Location locationByProfileId = locationService.getLocationByProfileId(currentUser.getProfileId());
-            locationService.initLocationAndUpdate(locationByProfileId, currentUser.getProfileId(), false, true);
-        }*/
-
-//        Integer userProfileId = userManipulator.getUserProfileId(userInfo.getLogin());
+        }
         ProfileEntity newProfile = new ProfileEntity(currentUser.getProfileId(), userInfo);
         newProfile.setFilled(true);
 
@@ -244,28 +224,18 @@ public class UserService implements UserInterface {
 
 
     public Response profileUpdate(String token, String body) {
-
         log.info("Request /profile-update {}", body);
 
         if (token == null || token.isEmpty()) {
             log.info("Token: {} Пользователь не авторизован.", token);
             return validationMessageService.prepareErrorMessage("Вы не авторизованы.");
         }
-
-
         UserInfoModel userProfile = new Gson().fromJson(body, UserInfoModel.class);
-
         Response response = validationMessageService.validateMessage(userProfile);
         if (response != null) {
             return response;
         }
-
-//        UserEntity user = checkUserToToken(token);
         UserEntity user = getUserByToken(token);
-//        userManipulator.updateTimeByLogin(user);
-
-//        checkUserByLoginAndActivationCode(userProfile.getLogin(), token);
-
         imageService.checkImagesIsCorrect(userProfile.getImages());
         if (userProfile.getTags() != null) {
             for (String tag : userProfile.getTags()) {
@@ -283,20 +253,13 @@ public class UserService implements UserInterface {
     }
 
     public Response saveBlackList(String token, BlackListMessage message) {
-
         UserEntity userByToken = checkUserByToken(token);
-
-        //TODO нужна ли строчка снизу???
-//        getUserByLogin(message.getToLogin());
-
         message.setFromLogin(userByToken.getLogin());
-
         if (blackListService.isBlackListExists(message.getFromLogin(), message.getToLogin())) {
             blackListService.updateBlackListMessage(message);
         } else {
             blackListService.insertBlackListMessage(message);
         }
-
         String eventType;
         if (message.isBlocked()) {
             eventType = EventType.USER_BLOCK;
@@ -309,8 +272,6 @@ public class UserService implements UserInterface {
         if (eventService.isLikeEvent(userByToken.getLogin(), message.getToLogin())) {
             eventService.setLikeOrUnlike(userByToken.getLogin(), message.getToLogin(), 0);
         }
-
-//        updateTimeByLogin(userByToken.getLogin());
         return validationMessageService.prepareMessageOkOnlyType();
     }
 
@@ -329,7 +290,6 @@ public class UserService implements UserInterface {
             log.info("Token: {} Пользователь не авторизован.", token);
             return validationMessageService.prepareErrorMessage("Вы не авторизованы.");
         }
-//        UserEntity userByToken = getUserByToken(token);
         UserEntity userByToken = checkUserByToken(token);
         List<ConnectedWithUserInfo> allConnectedWithUser = connectedService.getAllConnectedWithUser(userByToken.getLogin());
         return validationMessageService.prepareMessageOkData(gson.toJsonTree(allConnectedWithUser));
@@ -358,18 +318,14 @@ public class UserService implements UserInterface {
         }
 
         UserEntity userByToken = checkUserByToken(token);
-//        UserEntity userByToken = getUserByToken(token);
         List<EventWithUserInfo> notifications = eventService.getNotifications(userByToken.getLogin(), limit, offset);
         return validationMessageService.prepareMessageOkData(gson.toJsonTree(notifications));
     }
 
     public Response getHistory(String token, String limitParam, String offsetParam) {
-
         log.info("Request /history?limit={}?offset={}", limitParam, offsetParam);
-
         int limit;
         int offset;
-
         try {
             limit = Integer.parseInt(limitParam);
             offset = Integer.parseInt(offsetParam);
@@ -378,24 +334,17 @@ public class UserService implements UserInterface {
         } catch (Exception e) {
             return validationMessageService.prepareErrorMessage("Некорректные параметры запроса......");
         }
-
-
         if (token == null || token.isEmpty()) {
             log.info("Token: {} Пользователь не авторизован.", token);
             return validationMessageService.prepareErrorMessage("Вы не авторизованы.");
         }
-
         log.info("Request get history by token: {}", token);
-
         UserEntity userByToken = userService.checkUserByToken(token);
-//        UserEntity userByToken = userService.getUserByToken(token);
         List<EventWithUserInfo> history = eventService.getHistory(userByToken.getLogin(), limit, offset);
-
         return validationMessageService.prepareMessageOkData(gson.toJsonTree(history));
     }
 
     public Response likeUser(String token, String body) {
-
         log.info("Request /like-user body: {}", body);
         Integer value;
         String loginParam;
@@ -420,11 +369,7 @@ public class UserService implements UserInterface {
         }
 
         UserEntity userByToken = checkUserByToken(token);
-//        UserEntity userByToken = getUserByToken(token);
-
         ProfileEntity profileById = profileService.getProfileByIdWithImages(userByToken.getProfileId());
-//        profileService.getProfileByIdWithImages(userByToken.getProfileId()).getImages().stream().noneMatch(image -> image.isAvatar() && image.getSrc().isEmpty())
-//        profileById.getImages().stream().filter(Image::isAvatar).flatMap(image -> image.getSrc().isEmpty())
 
         if (profileById.getImages().stream().anyMatch(image -> image.isAvatar() && image.getSrc().isEmpty())) {
             return validationMessageService.prepareErrorMessage("Вы не можете лайкать. У вас не установлен аватар.");
@@ -443,7 +388,6 @@ public class UserService implements UserInterface {
         }
 
         eventService.setLikeOrUnlike(userByToken.getLogin(), loginParam, value);
-
         return validationMessageService.prepareMessageOkOnlyType();
     }
 
@@ -454,11 +398,8 @@ public class UserService implements UserInterface {
             log.info("Token: {} Пользователь не авторизован.", token);
             return validationMessageService.prepareErrorMessage("Вы не авторизованы.");
         }
-
-//        UserEntity userByToken = getUserByToken(token);
         UserEntity userByToken = checkUserByToken(token);
         Integer unreadEventsCount = eventService.getUnreadUserActivityByLogin(userByToken.getLogin());
-
         return validationMessageService.prepareMessageOkData(unreadEventsCount);
     }
 
@@ -469,8 +410,6 @@ public class UserService implements UserInterface {
             log.info("Token: {} Пользователь не авторизован.", token);
             return validationMessageService.prepareErrorMessage("Вы не авторизованы.");
         }
-
-
         String fakeLogin;
 
         try {
@@ -482,8 +421,6 @@ public class UserService implements UserInterface {
         } catch (Exception e) {
             return validationMessageService.prepareErrorMessage("Некорректные параметры запроса..........");
         }
-
-//        UserEntity userByToken = getUserByToken(token);
         UserEntity userByToken = checkUserByToken(token);
 
         if (!userManipulator.isUserExistByLogin(fakeLogin)) {
@@ -518,8 +455,6 @@ public class UserService implements UserInterface {
         Location location = locationService.getLocationByProfileId(profile.getId());
 
         try {
-//            if (body == null)
-//                body = ;
             String[] split = body == null ? ArrayUtils.toArray() : body.split("&");
             Map<String, String> params = new HashMap<>();
 
@@ -542,7 +477,6 @@ public class UserService implements UserInterface {
             List<Integer> tagsIds = tagService.getTagsIds(params.get("tags"));
             if (params.get("tags") != null && !params.get("tags").isEmpty() && tagsIds.size() == 0)
                 return validationMessageService.prepareMessageOkData(new JSONArray());
-//?needPreference=1&tags=tag2,tag1&ageMin=0&ageMax=100&minRating=0&maxRating=999&deltaRadius=1000&limit=10&offset=0
             Integer preference;
             if (params.get("needPreference") != null
                     && Integer.parseInt(params.get("needPreference")) == 1
@@ -558,7 +492,6 @@ public class UserService implements UserInterface {
             if (response != null) {
                 return response;
             }
-
             return validationMessageService.prepareMessageOkData(gson.toJsonTree(
                     userService.getUsersWithFilters(searchModel)
             ));
@@ -646,8 +579,6 @@ public class UserService implements UserInterface {
         user.setPassword(password);
         initRegistryUser(user);
         user.setActive(true);
-//        userManipulator.updateUserToken();
-//        userManipulator.userUpdate(user);
         userManipulator.updateUserPasswordById(user);
         return validationMessageService.prepareMessageOkOnlyType();
     }

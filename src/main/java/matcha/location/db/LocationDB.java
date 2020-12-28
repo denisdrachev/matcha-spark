@@ -20,13 +20,11 @@ public class LocationDB {
 
     public List<Location> getLocations() {
         log.info("Get all locations");
-        try (org.sql2o.Connection conn = sql2o.beginTransaction()) {
+        try (org.sql2o.Connection conn = sql2o.open()) {
 
             List<Location> locations = conn.createQuery(Select.selectLocations)
                     .executeAndFetch(Location.class);
             conn.commit();
-
-//            List<Location> query = jdbcTemplate.query(Select.selectLocations, new LocationRowMapper());
             log.info("Get all locations result count: {}", locations.size());
             return locations;
         } catch (Exception e) {
@@ -68,7 +66,6 @@ public class LocationDB {
             log.info("Get active location by login done. Result: {}", locations);
             return locations.get(0);
         } catch (Exception e) {
-            e.printStackTrace();
             log.warn("Exception. getActiveLocationByLogin: {}", e.getMessage());
             throw new SelectDBException();
         }
@@ -87,7 +84,6 @@ public class LocationDB {
             log.info("getTESTLocation done. Result: {}", locations);
             return locations;
         } catch (Exception e) {
-            e.printStackTrace();
             log.warn("Exception. getTESTLocation: {}", e.getMessage());
             throw new SelectDBException();
         }
@@ -106,8 +102,6 @@ public class LocationDB {
                     .addParameter("userSet", location.isUserSet())
                     .executeUpdate().getResult();
             conn.commit();
-
-//            int update = jdbcTemplate.update(Update.updateLocationById, location.isActive(), location.getId());
             log.info("Update location. Result: {}", update);
             return update;
         } catch (Exception e) {
@@ -118,19 +112,17 @@ public class LocationDB {
 
     public void updateActiveLocationByLogin(boolean isActive, int profileId) {
         log.info("Update active:{} location by login: {}", isActive, profileId);
-        try (org.sql2o.Connection conn = sql2o.beginTransaction()) {
+        try (org.sql2o.Connection conn = sql2o.open()) {
 
             Integer update = conn.createQuery(Update.updateLocationByLogin)
                     .addParameter("active", isActive)
                     .addParameter("profileId", profileId)
                     .executeUpdate().getResult();
             conn.commit();
-
-//            int update = jdbcTemplate.update(Update.updateLocationByLogin, isActive, login);
             log.info("Update active location by login result: {}", update);
         } catch (Exception e) {
             log.warn("Exception. updateActiveLocationByLogin: {}", e.getMessage());
-//            throw new UpdateLocationException();
+            throw new UpdateDBException();
         }
     }
 
@@ -142,15 +134,11 @@ public class LocationDB {
                     .addParameter("profileId", profileId)
                     .executeAndFetch(Location.class);
             conn.commit();
-
-//            Location location = jdbcTemplate.queryForObject(Select.selectLocationByUserIdAndActive,
-//                    new LocationRowMapper(), userId);
             log.info("Get last inactive location by profileId. Result: {}", locations);
             if (locations.isEmpty())
                 return null;
             return locations.get(0);
         } catch (Exception e) {
-            e.printStackTrace();
             log.warn("Exception. getLastInactiveLocationByProfileId: {}", e.getMessage());
             throw new SelectDBException();
         }

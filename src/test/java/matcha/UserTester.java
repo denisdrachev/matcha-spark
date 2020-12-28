@@ -46,12 +46,6 @@ public class UserTester {
         // When
         HttpResponse httpResponse = HttpClientBuilder.create().build().execute(httpPost);
         return httpResponse;
-
-        // Then
-//        String responseString = new BasicResponseHandler().handleResponse(httpResponse);
-//
-//        HashMap hashMap = new Gson().fromJson(responseString, HashMap.class);
-//        assertEquals("ok", hashMap.get("type"));
     }
 
     public HttpResponse loginUser(String login, Double x, Double y) throws IOException {
@@ -75,51 +69,11 @@ public class UserTester {
         HttpResponse httpResponse = HttpClientBuilder.create().build().execute(httpPost);
 
         return httpResponse;
-
-        // Then
-//        String responseString = new BasicResponseHandler().handleResponse(httpResponse);
-//        assertEquals(HttpStatus.SC_OK, httpResponse.getStatusLine().getStatusCode(), responseString);
-//
-//        Map<String, String> hashMap = new Gson().fromJson(responseString, HashMap.class);
-//
-//        assertEquals("ok", hashMap.get("type"));
-//        assertFalse(hashMap.get("token").isEmpty());
-//
-//        test2token = hashMap.get("token");
-//        System.err.println(test2token);
     }
 
     public HttpResponse updateUserProfile(String token, String login, Double x, Double y, List<String> tags) throws IOException {
         HttpPost httpPost = new HttpPost("http://localhost:4567/profile-update");
         httpPost.setHeader("Authorization", token);
-
-        /*{
-  "login": "test2",
-  "fname":"first name",
-  "lname":"last name",
-  "password": "test",
-  "email": "email@gmail.com",
-  "age": 55,
-  "gender": 1,
-  "preference": [0, 1],
-  "biography": "my name is Jack",
-  "tags": [
-    "aaa",
-    "bbb"
-  ],
-  "images": [{
-        "index": 0,
-        "src": "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png",
-        "avatar": true
-    },
-    {
-        "index": 1,
-        "src": "https://images.thenorthface.com/is/image/TheNorthFaceEU/CF8C_15Q_hero?$638x745$",
-        "avatar": false
-    }
-  ],
-      "location": null
-}*/
 
         Image image = new Image();
         image.setAvatar(true);
@@ -153,18 +107,6 @@ public class UserTester {
         HttpResponse httpResponse = HttpClientBuilder.create().build().execute(httpPost);
 
         return httpResponse;
-
-        // Then
-//        String responseString = new BasicResponseHandler().handleResponse(httpResponse);
-//        assertEquals(HttpStatus.SC_OK, httpResponse.getStatusLine().getStatusCode(), responseString);
-//
-//        Map<String, String> hashMap = new Gson().fromJson(responseString, HashMap.class);
-//
-//        assertEquals("ok", hashMap.get("type"));
-//        assertFalse(hashMap.get("token").isEmpty());
-//
-//        test2token = hashMap.get("token");
-//        System.err.println(test2token);
     }
 
     @Test
@@ -183,9 +125,6 @@ public class UserTester {
         HashMap hashMap = new Gson().fromJson(responseString, HashMap.class);
 
         System.err.println(hashMap);
-//        for (Map.Entry<String, String> stringStringEntry : hashMap.entrySet()) {
-//            System.err.println(stringStringEntry.getKey() + " " + stringStringEntry.getValue());
-//        }
 
         assertEquals(httpResponse.getStatusLine().getStatusCode(), HttpStatus.SC_OK, responseString);
     }

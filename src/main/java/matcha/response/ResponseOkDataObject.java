@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import matcha.model.MyObject;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -22,9 +21,4 @@ public class ResponseOkDataObject  extends ResponseBase {
                 ", \"data\":" + data +
                 '}';
     }
-
-    //    @Override
-//    public String toString() {
-//        return Converter.objectToJson(this).get();
-//    }
 }

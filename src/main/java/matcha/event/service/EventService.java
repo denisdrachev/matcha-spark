@@ -38,7 +38,6 @@ public class EventService {
     }
 
     public void init() {
-//        registration();
     }
 
     public void saveNewEvent(Event event) {
@@ -68,14 +67,7 @@ public class EventService {
             }
         } catch (IOException e) {
             log.warn("Exception WebSocket Event sending.");
-            e.printStackTrace();
         }
-    }
-
-    public void updateEventActiveById(Event event) {
-        if (event == null)
-            return;
-        eventManipulator.updateEventActiveById(event);
     }
 
     public List<Event> getAllEvents() {
@@ -93,10 +85,6 @@ public class EventService {
     public List<EventWithUserInfo> getNotifications(String toLogin, Integer limit, Integer offset) {
         return eventManipulator.getNotifications(toLogin, limit, offset);
     }
-
-//    public List<Event> findActiveEvents(String type, String login, String data) {
-//        return eventManipulator.findActiveLikeOrUnlikeEvents(type, login, data);
-//    }
 
     public void setLikeOrUnlike(String fromLogin, String toLogin, int likeValue) {
 
@@ -118,7 +106,6 @@ public class EventService {
                 saveNewEvent(eventConnectedTo);
             }
         } else {
-//            boolean isConnected = eventManipulator.isConnectedEvent(fromLogin, toLogin);
             Event event = new Event(EventType.UNLIKE, fromLogin, false, toLogin);
             saveNewEvent(event);
 
@@ -135,31 +122,6 @@ public class EventService {
                 saveNewEvent(eventDisconnectedFrom);
             }
         }
-
-//        Event newEventLoaded = new Event(
-//                likeValue == 1 ? EventType.LIKED : EventType.UNLIKED,
-//                toLogin,
-//                likeValue == 1 && !blackListFrom.isBlocked(),
-//                fromLogin,
-//                likeValue == 1 && !blackListFrom.isBlocked()
-//        );
-//        eventService.saveNewEvent(newEventLoaded);
-
-
-//        List event = new Event(eventType, fromLogin, true, toLogin);
-        //TODO надо ли это? мб можно просто смотреть последний лайк или дислайк
-        /*activeEvents = eventManipulator.findActiveLikeOrUnlikeEvents(fromLogin, toLogin);
-        activeEvents.forEach(event1 -> event1.setActive(false));
-        activeEvents.forEach(this::updateEventActiveById);*/
-//        saveNewEvent(event);
-//        boolean isBackLike = eventManipulator.isLikeEvent(fromLogin, toLogin);
-//        if (isBackLike) {
-//
-//        }
-    }
-
-    public Integer getUserRatingByLogin(String login) {
-        return eventManipulator.getUserActivityByLogin(login);
     }
 
     public Integer getUnreadUserActivityByLogin(String login) {

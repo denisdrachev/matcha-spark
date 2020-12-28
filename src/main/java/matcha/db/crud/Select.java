@@ -13,16 +13,6 @@ public class Select {
     public static String selectBlacklists = "SELECT * FROM blacklist";
     public static String selectRating = "SELECT * FROM rating";
     public static String selectConnectedList = "SELECT * FROM connected";
-//    public static String selectConnectedWithUser = "SELECT c.toLogin as login, u.fname as fname, u.lname as lname, i.src as src " +
-//            "FROM ((connected c INNER JOIN users u ON u.login <> :login AND (c.toLogin = u.login OR c.fromLogin = u.login)) " +
-//            "INNER JOIN images i ON i.profileId = u.profileId AND i.avatar = TRUE) " +
-//            "WHERE u.login <> :login AND c.isConnected = TRUE AND (c.fromLogin = :login OR c.toLogin = :login)";
-
-//    public static String selectConnectedWithUser = "SELECT c.toLogin as login, u.fname as fname, u.lname as lname, i.src as src " +
-//            "FROM ((users u INNER JOIN connected c ON u.login <> :login AND ((c.toLogin = u.login AND c.fromLogin = :login) OR (c.fromLogin = u.login AND c.toLogin = :login))) " +
-//            "INNER JOIN images i ON i.profileId = u.profileId AND i.avatar = TRUE) " +
-//            "WHERE u.login <> :login AND c.isConnected = TRUE AND ((c.fromLogin = :login AND c.toLogin = u.login) OR (c.toLogin = :login AND c.fromLogin = u.login))";
-
 
     public static String selectConnectedWithUser =
             "SELECT u.login, u.fname, u.lname, i.src " +
@@ -36,18 +26,9 @@ public class Select {
     public static String selectProfile = "SELECT * FROM profiles";
     public static String selectUsers = "SELECT * FROM users";
 
-//    private String login;
-//    private String fname;
-//    private String lname;
-//    private Location location;
-//    private Integer rating;
-//    private Integer tagsCount;
-
     public static String selectTEST =
             "SELECT * FROM locations l WHERE GET_DISTANCE(:x, :y, l.x, l.y) > 0";
 
-
-    //        HttpUriRequest request = new HttpGet("http://localhost:4567/get-users?tags=tag2,tag4&ageMin=0&ageMax=100&minRating=0&maxRating=999&deltaRadius=1000&limit=10&offset=0");
     public static String selectUsersWithFilters =
             "SELECT u.login, u.fname, u.lname, p.age, l.x, l.y, i.src, r.rating, t.count as tagsCount, p.gender, p.preference, p.biography, GET_DISTANCE(:x, :y, l.x, l.y) as distance " +
                     "FROM ((((((users u INNER JOIN profiles p ON u.profileId = p.id) " +
@@ -62,8 +43,6 @@ public class Select {
                     "AND t.count > 0 " +
                     "AND p.age >= :ageMin AND p.age <= :ageMax " + //возраст
                     "AND GET_DISTANCE(:x, :y, l.x, l.y) <= :radius "; //растояние
-//                    "AND l.x >= :minX AND l.x <= :maxX AND l.y >= :minY AND l.y <= :maxY "; //растояние
-//                    " LIMIT :limit OFFSET :offset ";
 
     public static String selectUsersWithoutTagsWithFilters =
             "SELECT u.login, u.fname, u.lname, p.age, l.x, l.y, i.src, r.rating, p.gender, p.preference, p.biography, GET_DISTANCE(:x, :y, l.x, l.y) as distance " +
@@ -77,23 +56,6 @@ public class Select {
                     "AND p.gender IN (:preferenceGender) " +
                     "AND p.age >= :ageMin AND p.age <= :ageMax " + //возраст
                     "AND GET_DISTANCE(:x, :y, l.x, l.y) <= :radius "; //растояние
-//                    "AND l.x >= :minX AND l.x <= :maxX AND l.y >= :minY AND l.y <= :maxY "; //растояние
-//                    " LIMIT :limit OFFSET :offset ";
-
-//    public static String selectUsersWithFilters = "SELECT u.login, u.fname, u.lname, l.x, l.y, r.rating FROM users u inner join blacklist b inner join profiles p inner join locations l " +
-////            "inner join (SELECT r.login as login, COUNT(r.login) as count FROM tagRelations r WHERE r.tagId IN (:tagIds) GROUP BY r.login) t " +
-//            "inner join rating r " +
-//
-//            "WHERE u.profileId = p.id " +
-//            "AND u.login = r.login " +
-////            "AND b.fromLogin = :login AND u.login = b.toLogin AND b.isBlocked <> TRUE " + //как будет вести себя, если нет записи в блэклисте??? //прочерка на черный список (добавить ли проверку на забаненность пользователя?)
-////            "AND p.age >= :ageMin AND p.age <= :ageMax " + //возраст
-//            "AND u.profileId = l.profileId " +
-////            "AND l.x >= :minX AND l.x <= :maxX AND l.y >= :minY AND l.y <= :maxY " + //растояние
-////            "AND u.login = t.login " + //Теги
-//            "ORDER BY r.rating DESC LIMIT :limit";
-
-    //limit ageMax ageMin minX maxX minY maxY tagIds
 
     public static String selectAllTags = "SELECT * FROM tags";
     public static String selectAllTagRelations = "SELECT * FROM tagRelations";
@@ -132,17 +94,11 @@ public class Select {
     public static String selectEventByLogin = "SELECT * FROM events WHERE (type = :type1 OR type = :type2) AND login = :login AND data = :data ORDER BY time DESC LIMIT 1";
     public static String selectEventConnectedOrUnlike = "SELECT * FROM events WHERE (type = :type1 OR type = :type2) AND login = :login AND data = :data ORDER BY time DESC LIMIT 1";
 
-//    public static String selectHistoryEvents = "SELECT e.type, e.data as login, e.time, e.active, u.fname, u.lname FROM events e inner join users u " +
-//            "WHERE e.login = :login AND e.login = u.login AND e.data <> '' AND e.data <> e.login ORDER BY time DESC LIMIT :limit OFFSET :offset";
-//    public static String selectNotificationEvents = "SELECT e.type, e.login as login, e.time, e.active, u.fname, u.lname FROM events e inner join users u " +
-//            "WHERE e.data = :data AND e.login = u.login AND e.data <> e.login ORDER BY time DESC LIMIT :limit OFFSET :offset";
-
     public static String selectHistoryEvents =
             "SELECT e.type, e.data as login, e.time, e.active, u.fname, u.lname, i.src, p.gender " +
                     "FROM (((events e INNER JOIN users u ON e.data = u.login) " +
                     "INNER JOIN images i ON u.profileId = i.profileId AND i.avatar = TRUE) " +
                     "INNER JOIN profiles p ON u.profileId = p.id) " +
-// не надо вроде                   "RIGHT JOIN blacklist b ON b.toLogin = e.login AND b.fromLogin = :login) " +
                     "WHERE e.active = TRUE AND e.login = :login AND e.data <> '' AND e.data <> e.login " +
                     "ORDER BY time DESC LIMIT :limit OFFSET :offset";
     public static String selectNotificationEvents =
@@ -153,7 +109,6 @@ public class Select {
                     "LEFT JOIN blacklist b ON b.toLogin = e.login AND b.fromLogin = :data) " +
                     "WHERE (b.isBlocked IS NULL OR b.isBlocked <> TRUE) AND e.active = TRUE AND e.data = :data AND e.data <> e.login " +
                     "ORDER BY time DESC LIMIT :limit OFFSET :offset";
-
 
     public static String selectUserEventsCount = "SELECT COUNT(*) FROM events WHERE login = :login OR data = :login";
     public static String selectUnreadUserEventsCount = "SELECT COUNT(*) FROM events WHERE data = :login AND active = TRUE AND needShow = TRUE";

@@ -1,8 +1,6 @@
 package matcha.userprofile.service;
 
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import matcha.event.service.EventService;
 import matcha.profile.db.ProfileDB;
 import matcha.profile.model.ProfileEntity;
 import matcha.user.db.UserDB;
@@ -10,11 +8,7 @@ import matcha.user.model.UserEntity;
 import matcha.userprofile.model.UserProfileChat;
 
 @Slf4j
-//@Service
-//@AllArgsConstructor
 public class UserProfileService implements UserProfileInterface {
-
-    //TODO РЕФАКТОРИНГ! ТУДУ ТУДУ!
 
     private UserDB userDB = new UserDB();
     private ProfileDB profileDB = new ProfileDB();
@@ -37,10 +31,7 @@ public class UserProfileService implements UserProfileInterface {
                 .fname(userByLogin.getFname())
                 .lname(userByLogin.getLname())
                 .gender(profileById.getGender())
-//                .tags(profileById.getTags())
                 .images(profileById.getImages())
                 .build();
     }
-
-
 }

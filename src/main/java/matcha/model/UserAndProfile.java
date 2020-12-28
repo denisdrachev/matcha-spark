@@ -1,7 +1,8 @@
 package matcha.model;
 
-import lombok.*;
-import matcha.converter.Converter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import matcha.image.model.Image;
 import matcha.location.model.Location;
 import matcha.profile.model.ProfileEntity;

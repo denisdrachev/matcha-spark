@@ -1,5 +1,6 @@
 package matcha;
 
+import lombok.extern.slf4j.Slf4j;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
@@ -10,6 +11,7 @@ import java.io.IOException;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+@Slf4j
 @WebSocket
 public class EchoWebSocket {
 
@@ -18,19 +20,19 @@ public class EchoWebSocket {
 
     @OnWebSocketConnect
     public void connected(Session session) {
-        System.out.println("Socket connected!");
+        log.info("Socket connected!");
         sessions.add(session);
     }
 
     @OnWebSocketClose
     public void closed(Session session, int statusCode, String reason) {
-        System.out.println("Socket closed!");
+        log.info("Socket closed!");
         sessions.remove(session);
     }
 
     @OnWebSocketMessage
     public void message(Session session, String message) throws IOException {
-        System.out.println("Got: " + message);   // Print message
+        log.info("Got: {}", message);
         session.getRemote().sendString(message); // and send it back
     }
 

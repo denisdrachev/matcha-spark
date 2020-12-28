@@ -71,22 +71,6 @@ public class ProfileService {
                 }
             }
         }
-//
-//        newProfile.getImages().forEach(image -> {
-////            System.err.println("IN CYCLE");
-//            for (Image img : images) {
-////                System.err.println("image.getIndex() == img.getIndex(): " + (image.getIndex() == img.getIndex()));
-//                if (image.getIndex() == img.getIndex()) {
-////                    System.err.println("INNER! ");
-////                    System.err.println(image);
-////                    System.err.println(img);
-//                    img.setSrc(image.getSrc());
-//                    img.setAvatar(image.isAvatar());
-//
-////                    image.setId(img.getId());
-//                }
-//            }
-//        });
 
         newProfile.setImages(images);
         System.err.println(newProfile.getImages());

@@ -15,7 +15,6 @@ public class ProfileController {
     }
 
     public void profileUpdate() {
-
         post("/profile-update", (req, res) -> userService.profileUpdate(req.headers("Authorization"), req.body()));
     }
 }

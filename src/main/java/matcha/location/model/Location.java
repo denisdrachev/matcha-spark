@@ -19,20 +19,8 @@ public class Location extends LocationLight implements Serializable {
 
     private int id;
     private int profileId;
-//    @Expose
-//    @NotNull(message = "Поле location.x не может быть пустым")
-//    private Double x;
-//
-//    @Expose
-//    @NotNull(message = "Поле location.y не может быть пустым")
-//    private Double y;
-
-//    @ToString.Exclude
     private boolean active = false;
-
-    //    @ToString.Exclude
     private boolean userSet = false;
-
     private Date time = Calendar.getInstance().getTime();
 
     public Location(Double x, Double y) {
@@ -50,9 +38,4 @@ public class Location extends LocationLight implements Serializable {
     public void setProfileId(Object user) {
         this.profileId = (int) user;
     }
-
-//    @Override
-//    public String toString() {
-//        return Converter.objectToJson(this).get();
-//    }
 }

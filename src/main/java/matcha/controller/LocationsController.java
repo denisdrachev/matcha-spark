@@ -29,7 +29,6 @@ public class LocationsController {
     private final ChatService chatService = ChatService.getInstance();
     private final ConnectedService connectedService = ConnectedService.getInstance();
 
-
     public LocationsController() {
         registration();
         getAllBlackList();
@@ -42,23 +41,11 @@ public class LocationsController {
     }
 
     private void clearTables() {
-
         get("/clear", (req, res) -> {
             clearAllTables();
             return "{\"type\": \"ok\"}";
         });
-
     }
-
-//    @GetMapping("/locations")
-//    public String confirmRegistration(Model model) {
-//        List<Location> locationList = locationService.getAllLocations();
-//        if (locationList != null)
-//            model.addAttribute("name", locationList.stream().map(location -> "<p>" + location + "</p>").collect(Collectors.joining()));
-//        else
-//            model.addAttribute("name", String.join("", "Filed to load locations"));
-//        return "greeting";
-//    }
 
     public void registration() {
         get("/locations", (req, res) -> {

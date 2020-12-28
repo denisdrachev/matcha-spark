@@ -13,7 +13,7 @@ public class ImageLikeModel implements Serializable {
 
     private int id;
     private boolean active;
-    private int image;  //изменить на imageId
+    private int image;
     private int who;
     private int whom;
 }

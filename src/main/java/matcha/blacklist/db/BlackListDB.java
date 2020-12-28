@@ -28,9 +28,6 @@ public class BlackListDB {
                     .addParameter("isBlocked", message.isBlocked())
                     .executeUpdate().getResult();
             conn.commit();
-
-//            int insert = jdbcTemplate.update(Insert.insertBlacklist,
-//                    message.getFromLogin(), message.getToLogin(), message.isBlocked());
             log.info("Insert BlackList message result: {}", result);
         } catch (Exception e) {
             log.warn("Exception. insertBlackListMessage: {}", e.getMessage());
@@ -48,9 +45,6 @@ public class BlackListDB {
                     .addParameter("isBlocked", message.isBlocked())
                     .executeUpdate().getResult();
             conn.commit();
-
-//            int update = jdbcTemplate.update(Update.updateBlacklistById,
-//                    message.isBlocked(), message.getFromLogin(), message.getToLogin());
             log.info("Update BlackList message result: {}", result);
         } catch (Exception e) {
             log.warn("Exception. updateBlackListMessage: {}", e.getMessage());
@@ -67,9 +61,6 @@ public class BlackListDB {
                     .addParameter("toLogin", toLogin)
                     .executeAndFetch(BlackListMessage.class);
             conn.commit();
-
-//            BlackListMessage result = jdbcTemplate.queryForObject(Select.selectBlacklist,
-//                    new BlackListMessageRowMapper(), fromLogin, toLogin);
             log.info("Get BlackList message result: {}", result);
             return result.get(0);
         } catch (Exception e) {
@@ -82,15 +73,11 @@ public class BlackListDB {
         log.info("Get BlackList message: [fromLogin:{}][toLogin:{}]", fromLogin, toLogin);
         try (org.sql2o.Connection conn = sql2o.open()) {
 
-            //SELECT COUNT(*) FROM blacklist WHERE fromLogin = :fromLogin AND toLogin = :toLogin
             List<Integer> integer = conn.createQuery(Select.selectBlackListCount)
                     .addParameter("fromLogin", fromLogin)
                     .addParameter("toLogin", toLogin)
                     .executeAndFetch(Integer.class);
             conn.commit();
-
-//            Integer integer = jdbcTemplate.queryForObject(Select.selectBlackListCount,
-//                    Integer.class, fromLogin, toLogin);
             log.info("Get BlackList message result: {}", integer);
             return integer.get(0) > 0;
         } catch (Exception e) {
@@ -106,9 +93,6 @@ public class BlackListDB {
             List<BlackListMessage> result = conn.createQuery(Select.selectBlacklists)
                     .executeAndFetch(BlackListMessage.class);
             conn.commit();
-
-//            BlackListMessage result = jdbcTemplate.queryForObject(Select.selectBlacklist,
-//                    new BlackListMessageRowMapper(), fromLogin, toLogin);
             log.info("Get all BlackList result size: {}", result.size());
             return result;
         } catch (Exception e) {

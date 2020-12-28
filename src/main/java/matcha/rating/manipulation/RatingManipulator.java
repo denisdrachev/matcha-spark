@@ -19,17 +19,9 @@ public class RatingManipulator {
         ratingDB.incRatingByLogin(login);
     }
 
-//    public void updateBlackListMessage(BlackListMessage blackListMessage) {
-//        ratingDB.updateBlackListMessage(blackListMessage);
-//    }
-
     public Rating getRatingByLogin(String login) {
         return ratingDB.getRatingByLogin(login);
     }
-
-//    public boolean isBlackListExists(String fromLogin, String toLogin) {
-//        return ratingDB.isBlackListExists(fromLogin, toLogin);
-//    }
 
     public List<Rating> getAllRatings() {
         return ratingDB.getAllRatings();

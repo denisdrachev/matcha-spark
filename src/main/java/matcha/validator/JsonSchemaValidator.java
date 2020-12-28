@@ -5,12 +5,12 @@ import org.everit.json.schema.loader.SchemaLoader;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 import spark.resource.ClassPathResource;
-//import org.springframework.core.io.ClassPathResource;
 
 import java.io.IOException;
 import java.io.InputStream;
 
-//@Service
+//import org.springframework.core.io.ClassPathResource;
+
 public class JsonSchemaValidator {
 
     private Schema schema;

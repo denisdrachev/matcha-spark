@@ -1,7 +1,5 @@
 package matcha.connected.service;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import matcha.connected.manipulation.ConnectedManipulator;
 import matcha.connected.model.ConnectedEntity;
 import matcha.connected.model.ConnectedWithUserInfo;

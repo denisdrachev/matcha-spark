@@ -1,17 +1,13 @@
-package matcha.controller;//package matcha.controller;
+package matcha.controller;
 
-import lombok.RequiredArgsConstructor;
 import matcha.event.model.Event;
 import matcha.event.service.EventService;
-import matcha.image.model.Image;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static spark.Spark.get;
 
-//@Controller
-//@RequiredArgsConstructor
 public class EventsController {
 
     private final EventService eventService = EventService.getInstance();

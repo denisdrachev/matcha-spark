@@ -2,7 +2,6 @@ package matcha.event.controller;
 
 import com.google.gson.Gson;
 import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpUriRequest;
@@ -20,7 +19,6 @@ class EventControllerTest {
 
 //    @Test
     void getHistory() throws ClientProtocolException, IOException {
-        // Given
 //        String name = RandomStringUtils.randomAlphabetic(8);
         HttpUriRequest request = new HttpGet("http://localhost:4567/history?limit=10&offset=0");
 

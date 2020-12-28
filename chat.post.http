@@ -1,9 +1,0 @@
-POST http://localhost:8080/chat
-Content-Type: application/json
-
-{
-  "toLogin": "book1",
-  "fromLogin": "book2"
-}
-
-###

@@ -44,13 +44,9 @@ public class ChatService implements ChatInterface {
         chatManipulator.insertChatMessage(chatMessage);
         Event newEvent = new Event(EventType.SEND_MESSAGE, chatMessage.getFromLogin(), true, chatMessage.getToLogin(), true);
         eventService.saveNewEvent(newEvent);
-//        Event newToEvent = new Event(EventType.INCOME_MESSAGE, chatMessage.getToLogin(), true, chatMessage.getFromLogin(), true);
-//        eventService.saveNewEvent(newToEvent);
-
         return validationMessageService.prepareMessageOkOnlyType();
     }
 
-    //мб и не нужен этот функционал
     @Deprecated
     @Override
     public Response getMessages(String toLogin, String fromLogin, int limit) {

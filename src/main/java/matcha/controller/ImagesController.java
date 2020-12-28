@@ -1,4 +1,4 @@
-package matcha.controller;//package matcha.controller;
+package matcha.controller;
 
 import matcha.image.model.Image;
 import matcha.image.service.ImageService;

@@ -40,17 +40,6 @@ public class UserEntity implements Serializable, MyObject {
         this.time = Calendar.getInstance().getTime();
     }
 
-//    public UserEntity(UserInfoModel userRegistry) {
-//        this.email = userRegistry.getEmail();
-//        this.fname = userRegistry.getFname();
-//        this.lname = userRegistry.getLname();
-//        this.login = userRegistry.getLogin();
-//        this.password = userRegistry.getPassword();
-//        this.location = userRegistry.getLocation();
-//        this.time = userRegistry.getTime();
-//        this.activationCode = userRegistry.getActivationCode();
-//    }
-
     public UserEntity(UserEntity2 userRegistry) {
         this.email = userRegistry.getEmail();
         this.fname = userRegistry.getFname();

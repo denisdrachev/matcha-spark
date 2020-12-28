@@ -5,11 +5,6 @@ import matcha.location.model.Location;
 
 import java.util.List;
 
-//import org.springframework.stereotype.Service;
-
-//@Service
-//@AllArgsConstructor
-//@NoArgsConstructor
 public class LocationService {
 
     private static LocationService locationService;
@@ -22,16 +17,12 @@ public class LocationService {
     }
 
     public void init() {
-//        registration();
     }
 
     private LocationManipulator locationManipulator = new LocationManipulator();
 
     public Location getLocationIfActiveByProfileId(int profileId) {
-        Location location = locationManipulator.getLocationByProfileId(profileId);
-//        if (!location.isActive())
-//            return null;
-        return location;
+        return locationManipulator.getLocationByProfileId(profileId);
     }
 
     public Location getLocationByProfileId(int profileId) {

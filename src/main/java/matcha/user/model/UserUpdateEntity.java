@@ -23,7 +23,6 @@ public class UserUpdateEntity {
         this.email = userRegistry.getEmail();
         this.fname = userRegistry.getFname();
         this.lname = userRegistry.getLname();
-//        this.login = userRegistry.getLogin();
         this.login = login;
     }
 }

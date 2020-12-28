@@ -14,7 +14,7 @@ import java.util.Date;
 public class ChatMessage {
 
     private long id;
-@Expose
+    @Expose
     private String toLogin;
     @Expose
     private String fromLogin;

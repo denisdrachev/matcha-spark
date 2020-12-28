@@ -88,8 +88,6 @@ public class SearchModel implements MyObject {
 
         setUserLocation(location);
         setMinAge(minAge);
-        //tags=24,sefad&sortAge=1&sortLocation=1&sortRating=1&sortTags=1&ageMin=18&ageMax=27&minRating=0&maxRating=500&deltaRadius=500&limit=3&offset=0
-        //get-users?ageMin=0&ageMax=100&minRating=0&maxRating=999&deltaRadius=1000&limit=100&offset=0&sortAge=1&sortLocation=1&sortRating-1&sortTags=1&needPreference=1
         setMaxAge(maxAge);
         setMinRatingAge(minRatingAge);
         setMaxRatingAge(maxRatingAge);
@@ -104,14 +102,6 @@ public class SearchModel implements MyObject {
         setSortRating(sortRating);
         setSortTags(sortTags);
     }
-
-//    private void validate() throws Exception {
-//        if (userLocation == null || minAge < 0 || minAge > 150 || maxAge < 0 || maxAge > 150 || minRatingAge < 0
-//                || maxRatingAge < 0 || deltaRadius < 0 || limit <= 0 || limit > 100 || offset < 0 || login == null
-//                || login.isEmpty() || sortAge < -1 || sortAge > 1 || sortLocation < -1 || sortLocation > 1
-//                || sortRating < -1 || sortRating > 1 || sortTags < -1 || sortTags > 1)
-//            throw new Exception();
-//    }
 
     public void setMinAge(String minAge) {
         if (minAge != null)
@@ -148,17 +138,7 @@ public class SearchModel implements MyObject {
         else
             distance = 100;
         this.deltaRadius = distance;
-//        this.deltaRadius = distance * oneKmConst;
     }
-
-//    public void setTags(String tags) {
-//        if (tags != null) {
-//            String[] split = tags.split(",");
-//            this.tags = Arrays.asList(split);
-//        } else {
-//            this.tags = List.of();
-//        }
-//    }
 
     public void setLimit(String limit) {
         if (limit != null)
@@ -172,22 +152,6 @@ public class SearchModel implements MyObject {
             this.offset = Integer.parseInt(offset);
         else
             this.offset = 0;
-    }
-
-    public Double getMaxX() {
-        return userLocation.getX() + this.deltaRadius;
-    }
-
-    public Double getMaxY() {
-        return userLocation.getY() + this.deltaRadius;
-    }
-
-    public Double getMinX() {
-        return userLocation.getX() - this.deltaRadius;
-    }
-
-    public Double getMinY() {
-        return userLocation.getY() - this.deltaRadius;
     }
 
     public void setPreference(Integer preference) {

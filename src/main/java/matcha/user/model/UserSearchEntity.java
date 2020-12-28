@@ -39,9 +39,5 @@ public class UserSearchEntity implements Serializable, MyObject {
 
     public void initDistance(Double x, Double y) {
         this.distance = Utils.getDistance(x, y, this.x, this.y);
-//        double ac = Math.abs(x - this.x);
-//        double cb = Math.abs(y - this.y);
-//
-//        this.distance = Math.hypot(ac, cb) * 100;
     }
 }

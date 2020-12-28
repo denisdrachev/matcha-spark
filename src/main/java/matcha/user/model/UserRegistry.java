@@ -19,9 +19,7 @@ import java.io.Serializable;
 @Getter
 @Setter
 @ToString(exclude = {"password"})
-//@AllArgsConstructor
 @NoArgsConstructor
-//@JsonIgnoreProperties(value = {"time"})
 public class UserRegistry implements Serializable, MyObject {
 
     @Length(min = 1, max = 50, message = "Допустимая длина логина от 1 до 50 символов")
@@ -44,8 +42,6 @@ public class UserRegistry implements Serializable, MyObject {
     @NotBlank(message = "Поле 'email' не может быть пустым")
     @Email(message = "Поле 'email' не соответствует email формату")
     private String email;
-
-//    private Date time = Calendar.getInstance().getTime();
 
     @Valid
     @NotNull(message = "Поле 'location' не может быть пустым")

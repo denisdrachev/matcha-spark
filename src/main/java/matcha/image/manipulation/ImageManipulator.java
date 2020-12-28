@@ -1,6 +1,5 @@
 package matcha.image.manipulation;
 
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import matcha.image.db.ImageDB;
 import matcha.image.model.Image;
@@ -8,7 +7,6 @@ import matcha.image.model.Image;
 import java.util.List;
 
 @Slf4j
-//@RequiredArgsConstructor
 public class ImageManipulator {
 
     private final ImageDB imageDB = new ImageDB();

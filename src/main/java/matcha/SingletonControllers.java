@@ -15,27 +15,16 @@ import matcha.user.controller.UserController;
 public class SingletonControllers {
 
     public static void init() {
-
-        UserController userController = new UserController();
-
-        UsersController usersController = new UsersController();
-
-        LocationsController locationsController = new LocationsController();
-
-        ProfileController profileController = new ProfileController();
-
-        EventController eventController = new EventController();
-
-        ImagesController imagesController = new ImagesController();
-
+        new UserController();
+        new UsersController();
+        new LocationsController();
+        new ProfileController();
+        new EventController();
+        new ImagesController();
         new BlackListController();
-
         new EventsController();
-
         new ChatController();
-
         new ConnectedController();
-
         new SpringJdbcConfig();
     }
 }

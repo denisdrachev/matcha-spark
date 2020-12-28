@@ -15,7 +15,6 @@ import java.util.Date;
 @AllArgsConstructor
 public class ChatNewMessageFromUser implements MyObject {
 
-//    @NotBlank(message = "Поле 'toLogin' не может быть пустым")
     private String toLogin;
     @NotBlank(message = "Поле 'fromLogin' не может быть пустым")
     private String fromLogin;

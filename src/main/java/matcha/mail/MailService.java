@@ -8,23 +8,13 @@ import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.Properties;
-//import org.springframework.mail.SimpleMailMessage;
-//import org.springframework.mail.javamail.JavaMailSender;
-//import org.springframework.stereotype.Component;
 
 @Slf4j
-//@Component
-//@AllArgsConstructor
-//@NoArgsConstructor
 public class MailService {
 
-//    private JavaMailSender mailSender;
-//    private ConfigProperties configProperties;
 
-    //TODO return void
     public boolean sendRegistrationMail(String userEmail, String userActivationCode) {
         try {
-//            String url = "<a href=\"http://localhost:4567/registration-check?token=\" " + userActivationCode + " target=\"_blank\">ссылка</a>";
             String url = "<a href=\"" + ConfigProperties.baseUrl + "/verification?token=" + userActivationCode + "\" target=\"_blank\">клац</a>";
             String subject = "Регистрация Matcha";
             String text = "Воу воу, ковбой, ты зарегался, поздравляю!</br>Осталось активировать учетную запись по ссылке:</br>" + url;
@@ -41,8 +31,6 @@ public class MailService {
 
     public boolean sendResetPasswordEmail(String userEmail, String userActivationCode) {
         try {
-//            String url = "<a href=\"http://localhost:4567/registration-check?token=\" " + userActivationCode + " target=\"_blank\">ссылка</a>";
-//            String url = ConfigProperties.baseUrl + /*":" + ConfigProperties.basePort +*/ "/change-password?token=" + userActivationCode;
             String url = "<a href=\"" + ConfigProperties.baseUrl + "/change-password?token=" + userActivationCode + "\" target=\"_blank\">клац</a>";
             String subject = "Смена пароля Matcha";
             String text = "Воу воу, ковбой, ты хочешь сменить пароль - ноу проблем.</br>Переходи по ссылке и делай свои делишки:</br>" + url;
@@ -84,15 +72,11 @@ public class MailService {
                     InternetAddress.parse(email)
             );
             message.setSubject(subject);
-
             Transport.send(message);
-
             log.info("Send message to '{}', with subject '{}' done.", email, subject);
-
         } catch (MessagingException e) {
-            e.printStackTrace();
+            log.warn("Error send message to {}", email);
         }
-
         return true;
     }
 }

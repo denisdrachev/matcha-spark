@@ -20,7 +20,6 @@ public class ProfileEntity implements Serializable {
     private Integer gender = null;
     private Integer preference;
     private String biography;
-//    private List<String> tags = new ArrayList<>();
     private List<Image> images = new ArrayList<>();
     private boolean isFilled = true;
 
@@ -30,7 +29,6 @@ public class ProfileEntity implements Serializable {
         this.gender = userAndProfileUpdateModel.getGender();
         this.preference = userAndProfileUpdateModel.getPreference();
         this.biography = userAndProfileUpdateModel.getBiography();
-//        this.tags = userAndProfileUpdateModel.getTags();
         this.images = userAndProfileUpdateModel.getImages();
         this.isFilled = true;
     }
@@ -40,24 +38,7 @@ public class ProfileEntity implements Serializable {
         this.age = profileEntityWithoutImages.getAge();
         this.gender = profileEntityWithoutImages.getGender();
         this.preference = profileEntityWithoutImages.getPreference();
-//        if (profileEntityWithoutImages.getPreference() != null && !profileEntityWithoutImages.getPreference().isEmpty())
-//            this.preference = Stream.of(profileEntityWithoutImages.getPreference().split(","))
-//                    .map(Integer::parseInt).collect(Collectors.toList());
         this.biography = profileEntityWithoutImages.getBiography();
-//        if (profileEntityWithoutImages.getTags() != null && !profileEntityWithoutImages.getTags().isEmpty())
-//            this.tags = Arrays.asList(profileEntityWithoutImages.getTags().split(","));
         this.isFilled = profileEntityWithoutImages.isFilled();
     }
-
-//    public String getPreferenceAsString() {
-//        String newPreference = null;
-//        newPreference = preference.stream()
-//                .map(String::valueOf)
-//                .collect(Collectors.joining(","));
-//        return newPreference;
-//    }
-
-//    public String getTagsAsString() {
-//        return String.join(",", tags);
-//    }
 }

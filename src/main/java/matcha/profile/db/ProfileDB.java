@@ -30,29 +30,25 @@ public class ProfileDB {
                     .addParameter("gender", 3)
                     .addParameter("preference", 3)
                     .addParameter("biography", "")
-//                    .addParameter("tags", "")
                     .addParameter("isFilled", false)
                     .executeUpdate().getKey(Integer.class);
             conn.commit();
-
             log.info("Create empty profile result: {}", profileId);
             return profileId;
         } catch (Exception e) {
             log.warn("Exception. insertEmptyProfile: {}", e.getMessage());
-            e.printStackTrace();
             throw new UserRegistrationException();
         }
     }
 
     public Integer getProfileCountById(int profileId) {
         log.info("Get profile cound by ID. profileId: {}", profileId);
-        try (org.sql2o.Connection conn = sql2o.beginTransaction()) {
+        try (org.sql2o.Connection conn = sql2o.open()) {
 
             List<Integer> count = conn.createQuery(Select.selectProfilesCountById)
                     .addParameter("id", profileId)
                     .executeAndFetch(Integer.class);
             conn.commit();
-
             log.info("Get profile cound by ID. profileId: {} count: {}", profileId, count.get(0));
             return count.get(0);
         } catch (Exception e) {
@@ -69,15 +65,9 @@ public class ProfileDB {
                     .addParameter("id", profileId)
                     .executeAndFetch(ProfileEntityWithoutImages.class);
             conn.commit();
-
-
-//            ProfileEntity profile = jdbcTemplate.queryForObject(Select.selectProfileById,
-//                    new ProfileRowMapper(), profileId);
             log.info("Get profile by ID:{} result:{}", profileId, profile);
-
             return new ProfileEntity(profile.get(0));
         } catch (Exception e) {
-            e.printStackTrace();
             log.warn("Exception. getProfileById: {}", e.getMessage());
             throw new SelectDBException("Ошибка. Не удалось загрузить профиль");
         }
@@ -97,28 +87,21 @@ public class ProfileDB {
                     .addParameter("id", profile.getId())
                     .executeUpdate().getResult();
             conn.commit();
-
-//            int update = jdbcTemplate.update(Update.updateProfileById,
-//                    profile.getAge(), profile.getGender(), profile.getPreferenceAsString(),
-//                    profile.getBiography(), profile.getTagsAsString(), profile.isFilled(), profile.getId());
             log.info("Update profile end. result: {}", result);
         } catch (Exception e) {
             log.warn("Exception. updateProfileById: {}", e.getMessage());
-            e.printStackTrace();
             throw new UpdateDBException();
         }
     }
 
     public void dropProfileById(int id) {
         log.info("Drop profile by id. id: {}", id);
-        try (org.sql2o.Connection conn = sql2o.beginTransaction()) {
+        try (org.sql2o.Connection conn = sql2o.open()) {
 
             int result = conn.createQuery(Delete.deleteProfileById)
                     .addParameter("id", id)
                     .executeUpdate().getResult();
             conn.commit();
-
-//            int drop = jdbcTemplate.update(Drop.deleteProfileById, id);
             log.info("Drop profile by id end. result: {}", result);
         } catch (Exception e) {
             log.warn("Exception. dropProfileById: {}", e.getMessage());
@@ -133,10 +116,8 @@ public class ProfileDB {
                     .executeAndFetch(ProfileEntityWithoutImages.class);
             conn.commit();
             log.info("Get all profiles done. Result size: {}", profiles.size());
-
             return profiles;
         } catch (Exception e) {
-            e.printStackTrace();
             log.warn("Exception. getAllProfiles: {}", e.getMessage());
             throw new SelectDBException("Ошибка. Не удалось загрузить профили");
         }

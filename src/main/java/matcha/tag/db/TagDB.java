@@ -20,7 +20,6 @@ public class TagDB {
 
     private final Sql2o sql2o = Sql2oModel.getSql2o();
 
-
     public int getTagId(String tag) {
         log.info("Get tag ID: {}", tag);
         try (org.sql2o.Connection conn = sql2o.open()) {
@@ -110,7 +109,6 @@ public class TagDB {
             log.info("Inc tag count by tag ID. result: {}", result);
         } catch (Exception e) {
             log.warn("Exception. incTagCount: {}", e.getMessage());
-            e.printStackTrace();
             throw new UpdateDBException();
         }
     }
@@ -126,7 +124,6 @@ public class TagDB {
             log.info("Dec tag count by tag ID. result: {}", result);
         } catch (Exception e) {
             log.warn("Exception. decTagCount: {}", e.getMessage());
-            e.printStackTrace();
             throw new UpdateDBException();
         }
     }
@@ -144,7 +141,6 @@ public class TagDB {
             return tagId;
         } catch (Exception e) {
             log.warn("Exception. createNewTag: {}", e.getMessage());
-            e.printStackTrace();
             throw new InsertDBException();
         }
     }
@@ -161,7 +157,6 @@ public class TagDB {
             log.info("Delete user tag relations. Result: {}", result);
         } catch (Exception e) {
             log.warn("Exception. clearUserTagRelations: {}", e.getMessage());
-            e.printStackTrace();
             throw new DeleteDBException();
         }
     }
@@ -179,7 +174,6 @@ public class TagDB {
             log.info("Create new tag relation. Result: {}", result);
         } catch (Exception e) {
             log.warn("Exception. addTagRelation: {}", e.getMessage());
-            e.printStackTrace();
             throw new InsertDBException();
         }
     }
@@ -188,16 +182,13 @@ public class TagDB {
         log.info("Get users with common tags: {}", tagsIds);
         try (org.sql2o.Connection conn = sql2o.open()) {
 
-            //TODO мб тут сортировку по убываниюдобавить и брать только логины, без количества
             List<Tag> tagsResult = conn.createQuery(Select.selectUsersWithCommonTags)
                     .addParameter("tagIds", tagsIds)
                     .executeAndFetch(Tag.class);
             conn.commit();
-            tagsResult.forEach(System.out::println);
             log.info("Get users with common tags. Result count: {} ", tagsResult.size());
             return tagsResult;
         } catch (Exception e) {
-            e.printStackTrace();
             log.warn("Exception. getUsersWithCommonTags: {}", e.getMessage());
             throw new SelectDBException();
         }

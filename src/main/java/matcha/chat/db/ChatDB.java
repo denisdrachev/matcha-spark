@@ -49,7 +49,6 @@ public class ChatDB {
             conn.commit();
             log.info("Update chat message. Result: {}", result);
         } catch (Exception e) {
-            e.printStackTrace();
             log.warn("Exception. updateChatMessage: {}", e.getMessage());
             throw new UpdateDBException();
         }
@@ -65,7 +64,6 @@ public class ChatDB {
             conn.commit();
             log.info("Update chat messages by ids. Result: {}", result);
         } catch (Exception e) {
-            e.printStackTrace();
             log.warn("Exception. updateChatMessagesByIds: {}", e.getMessage());
             throw new UpdateDBException();
         }
@@ -102,8 +100,6 @@ public class ChatDB {
             return chatMessages;
         } catch (Exception e) {
             log.warn("Exception. getFullChatMessages: {}", e.getMessage());
-            //TODO на уровень выше поймать эксепшн и вернуть List.of();
-//            return List.of();
             throw new SelectDBException();
         }
     }
@@ -120,8 +116,6 @@ public class ChatDB {
             return result;
         } catch (Exception e) {
             log.warn("Exception. getNewChatMessages: {}", e.getMessage());
-            //TODO на уровень выше поймать эксепшн и вернуть List.of();
-//            return List.of();
             throw new SelectDBException();
         }
     }
@@ -137,8 +131,6 @@ public class ChatDB {
             return result;
         } catch (Exception e) {
             log.warn("Exception. getAllNewChatMessages: {}", e.getMessage());
-            //TODO на уровень выше поймать эксепшн и вернуть List.of();
-//            return List.of();
             throw new SelectDBException();
         }
     }

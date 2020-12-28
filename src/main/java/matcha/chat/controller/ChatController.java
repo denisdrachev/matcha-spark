@@ -22,18 +22,6 @@ public class ChatController {
         post("/chat/save", (req, res) -> userService.postChatMessage(req.headers("Authorization"), req.body()));
     }
 
-    //TODO получение id сообщения, которое прочитано
-//    public void postChatMessage() {
-//        post("/chat/save", (req, res) -> userService.postChatMessage(req.headers("Authorization"), req.body()));
-//    }
-
-//    @Deprecated
-//    @GetMapping(value = "/{toLogin}/{fromLogin}/{limit}", produces = "application/json")
-//    public Response getMessagesByLimit(@PathVariable String toLogin, @PathVariable String fromLogin, @PathVariable int limit) {
-//        log.info("Chat GET message to {} from {} limit {}", toLogin, fromLogin, limit);
-//        return chatService.getMessages(toLogin, fromLogin, limit);
-//    }
-
     public void getFullMessagesByLimit() {
         get("chat/full", (req, res) -> userService.getFullMessagesByLimit(req.headers("Authorization"), req.queryParams("toLogin"), req.queryParams("limit")));
     }

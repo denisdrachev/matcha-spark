@@ -15,9 +15,6 @@ import org.sql2o.Sql2o;
 import java.util.List;
 
 @Slf4j
-//@Service
-//@RequiredArgsConstructor
-//@NoArgsConstructor
 public class ConnectedDB {
 
     private final Sql2o sql2o = Sql2oModel.getSql2o();
@@ -76,28 +73,7 @@ public class ConnectedDB {
             throw new SelectDBException();
         }
     }
-//
-//    public Boolean isBlackListExists(String fromLogin, String toLogin) {
-//        log.info("Get BlackList message: [fromLogin:{}][toLogin:{}]", fromLogin, toLogin);
-//        try (org.sql2o.Connection conn = sql2o.open()) {
-//
-//            //SELECT COUNT(*) FROM blacklist WHERE fromLogin = :fromLogin AND toLogin = :toLogin
-//            List<Integer> integer = conn.createQuery(Select.selectBlackListCount)
-//                    .addParameter("fromLogin", fromLogin)
-//                    .addParameter("toLogin", toLogin)
-//                    .executeAndFetch(Integer.class);
-//            conn.commit();
-//
-////            Integer integer = jdbcTemplate.queryForObject(Select.selectBlackListCount,
-////                    Integer.class, fromLogin, toLogin);
-//            log.info("Get BlackList message result: {}", integer);
-//            return integer.get(0) > 0;
-//        } catch (Exception e) {
-//            log.warn("Exception. isBlackListExists: {}", e.getMessage());
-//            return false;
-//        }
-//    }
-//
+
     public List<ConnectedEntity> getAllConnected() {
         log.info("Get all Connected");
         try (org.sql2o.Connection conn = sql2o.open()) {
@@ -105,9 +81,6 @@ public class ConnectedDB {
             List<ConnectedEntity> result = conn.createQuery(Select.selectConnectedList)
                     .executeAndFetch(ConnectedEntity.class);
             conn.commit();
-
-//            BlackListMessage result = jdbcTemplate.queryForObject(Select.selectBlacklist,
-//                    new BlackListMessageRowMapper(), fromLogin, toLogin);
             log.info("Get all Connected result size: {}", result.size());
             return result;
         } catch (Exception e) {
@@ -125,10 +98,8 @@ public class ConnectedDB {
                     .executeAndFetch(ConnectedWithUserInfo.class);
             conn.commit();
             log.info("Get all Connected users result size: {}", result.size());
-            result.forEach(System.out::println);
             return result;
         } catch (Exception e) {
-            e.printStackTrace();
             log.warn("Failed to load all Connected users. Exception message: {}", e.getMessage());
             throw new SelectDBException();
         }

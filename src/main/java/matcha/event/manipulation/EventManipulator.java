@@ -1,6 +1,5 @@
 package matcha.event.manipulation;
 
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import matcha.event.db.EventDB;
 import matcha.event.model.Event;
@@ -25,15 +24,6 @@ public class EventManipulator {
         return eventDB.getAllEvents();
     }
 
-    //TODO Доделать, пока не понятно что должно быть
-    public Event getLikeEvent(String fromLogin, String toLogin) {
-//        try {
-        return eventDB.getLikeEvent(fromLogin, toLogin);
-//        } catch (Exception e) {
-//            return new Event(EventType.IMAGE_LIKE, )
-//        }
-    }
-
     public boolean isLikeEvent(String fromLogin, String toLogin) {
         return eventDB.isLikeEvent(fromLogin, toLogin);
     }
@@ -44,14 +34,6 @@ public class EventManipulator {
 
     public List<EventWithUserInfo> getNotifications(String toLogin, Integer limit, Integer offset) {
         return eventDB.getNotifications(toLogin, limit, offset);
-    }
-
-    public List<Event> findActiveLikeOrUnlikeEvents(String login, String data) {
-        return eventDB.findActiveLikeOrUnlikeEvents(login, data);
-    }
-
-    public boolean isConnectedEvent(String fromLogin, String toLogin) {
-        return eventDB.isConnectedEvent(fromLogin, toLogin);
     }
 
     public Integer getUserActivityByLogin(String login) {

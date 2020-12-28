@@ -29,7 +29,7 @@ public class UserDB {
     public Integer getUserCountByLogin(String login) {
         log.info("Get user count by login. Login: {}", login);
 
-        try (org.sql2o.Connection conn = sql2o.beginTransaction()) {
+        try (org.sql2o.Connection conn = sql2o.open()) {
             List<Integer> login1 = conn.createQuery(Select.selectUsersCountByLogin)
                     .addParameter("login", login)
                     .executeAndFetch(Integer.class);
@@ -44,18 +44,14 @@ public class UserDB {
 
     public UserEntity getUserByLogin(String login) {
         log.info("Get user by login [{}]", login);
-        try (org.sql2o.Connection conn = sql2o.beginTransaction()) {
+        try (org.sql2o.Connection conn = sql2o.open()) {
 
             List<UserEntity2> user = conn.createQuery(Select.selectUserByLogin)
                     .addParameter("login", login)
                     .executeAndFetch(UserEntity2.class);
-            //user.setPasswordBytes(rs.getBytes("password"));
             conn.commit();
-
             log.info("Get user by login result: {}", user.get(0));
-
             UserEntity userEntity = new UserEntity(user.get(0));
-
             return userEntity;
         } catch (Exception e) {
             log.warn("Exception. getUserByLogin: {}", e.getMessage());
@@ -81,25 +77,6 @@ public class UserDB {
                     .addParameter("profileId", user.getProfileId())
                     .executeUpdate().getKey(Integer.class);
             conn.commit();
-/*
-            int userId = jdbcTemplate.update(new PreparedStatementCreator() {
-                @Override
-                public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-                    PreparedStatement ps = connection.prepareStatement(Insert.insertUser, new String[]{"id"});
-                    ps.setString(1, user.getLogin());
-                    ps.setBytes(2, user.getPasswordBytes());
-                    ps.setString(3, user.getActivationCode());
-                    ps.setString(4, user.getFname());
-                    ps.setString(5, user.getLname());
-                    ps.setString(6, user.getEmail());
-                    ps.setBoolean(7, user.isActive());
-                    ps.setBoolean(8, user.isBlocked());
-                    ps.setTimestamp(9, new Timestamp(System.currentTimeMillis()));
-                    ps.setBytes(10, user.getSalt());
-                    ps.setInt(11, user.getProfileId());
-                    return ps;
-                }
-            }, keyHolder);*/
             log.info("Insert user result userId: {}", userId);
             return userId;
         } catch (Exception e) {
@@ -110,7 +87,7 @@ public class UserDB {
 
     public void updateUserById(UserEntity user) {
         log.info("Update user: {}", user);
-        try (org.sql2o.Connection conn = sql2o.beginTransaction()) {
+        try (org.sql2o.Connection conn = sql2o.open()) {
 
             int result = conn.createQuery(Update.updateUserById)
                     .addParameter("id", user.getId())
@@ -125,11 +102,6 @@ public class UserDB {
                     .addParameter("profileId", user.getProfileId())
                     .executeUpdate().getResult();
             conn.commit();
-
-//            int update = jdbcTemplate.update(Update.updateUserById,
-//                    user.getLogin(), user.getActivationCode(),
-//                    user.getFname(), user.getLname(), user.getEmail(),
-//                    user.isActive(), user.isBlocked(), user.getTime(), user.getProfileId(), user.getId());
             log.info("Update user end. result: {}", result);
         } catch (Exception e) {
             log.warn("Exception. updateUserById: {}", e.getMessage());
@@ -158,59 +130,40 @@ public class UserDB {
         }
     }
 
-//    public void dropUserByLogin(String login) {
-//        log.info("Drop user by login: {}", login);
-//        try {
-//            int drop = jdbcTemplate.update(Delete.deleteUserById, login);
-//            log.info("Drop user by login result: {}", drop);
-//        } catch (Exception e) {
-//            log.warn("Exception. dropUserByLogin: {}", e.getMessage());
-//            throw new DropUserByLoginDBException();
-//        }
-//    }
-
-    //TODO рефакторинг метода
     public List<UserEntity> getUserByToken(String activationCode) {
         log.info("Get user by Activation Code");
-        try (org.sql2o.Connection conn = sql2o.beginTransaction()) {
+        try (org.sql2o.Connection conn = sql2o.open()) {
 
             List<UserEntity> users = conn.createQuery(Select.selectUserByActivationCode)
                     .addParameter("activationCode", activationCode)
                     .executeAndFetch(UserEntity.class);
             conn.commit();
-
-//            UserEntity user = jdbcTemplate.queryForObject(Select.selectUserByActivationCode,
-//                    new Object[]{activationCode}, new UserRowMapper());
             log.info("Get user by Activation Code. Result user: {}", users.get(0));
             return users;
         } catch (Exception e) {
             log.info("Exception. getUserByToken: {}", e.getMessage());
-            //мб другое искючение тут?
             throw new SelectDBException("Ошибка авторизации");
         }
     }
 
     public List<UserEntity> checkUserByToken(String token) {
         log.info("Check user by Activation Code.");
-        try (org.sql2o.Connection conn = sql2o.beginTransaction()) {
+        try (org.sql2o.Connection conn = sql2o.open()) {
 
             List<UserEntity> users = conn.createQuery(Select.selectUsersCountByActivationCode)
                     .addParameter("activationCode", token)
                     .executeAndFetch(UserEntity.class);
 
-            int result = 0;
             if (users != null && users.size() == 1) {
-                result = conn.createQuery(Update.updateUserTimeByToken)
+                int result = conn.createQuery(Update.updateUserTimeByToken)
                         .addParameter("token", token)
                         .addParameter("time", Calendar.getInstance().getTime())
                         .executeUpdate().getResult();
+                log.info("Update user time by login end. Result: {}", result);
             }
             conn.commit();
 
-
-//            Integer count = jdbcTemplate.queryForObject(Select.selectUsersCountByActivationCode, Integer.class, token);
             log.info("Check user by Activation Code. Result: {}", users);
-            log.info("Update user time by login end. Result: {}", result);
             return users;
         } catch (Exception e) {
             log.info("Exception. checkUserByToken: {}", e.getMessage());
@@ -220,15 +173,13 @@ public class UserDB {
 
     public Integer checkUserByLoginAndToken(String login, String activationCode) {
         log.info("Get user count by login and activation code. login:{} activationCode:{}", login, activationCode);
-        try (org.sql2o.Connection conn = sql2o.beginTransaction()) {
+        try (org.sql2o.Connection conn = sql2o.open()) {
 
             List<Integer> usersCount = conn.createQuery(Select.selectUsersCountByLoginAndActivationCode)
                     .addParameter("login", login)
                     .addParameter("activationCode", activationCode)
                     .executeAndFetch(Integer.class);
             conn.commit();
-
-//            Integer usersCount = jdbcTemplate.queryForObject(Select.selectUsersCountByLoginAndActivationCode, Integer.class, login, activationCode);
             log.info("Get user count by login and activation code result: {}", usersCount.get(0));
             return usersCount.get(0);
         } catch (Exception e) {
@@ -239,7 +190,7 @@ public class UserDB {
 
     public void updateUserByLogin(UserUpdateEntity user) {
         log.info("Update user by login: {}", user);
-        try (org.sql2o.Connection conn = sql2o.beginTransaction()) {
+        try (org.sql2o.Connection conn = sql2o.open()) {
 
             int result = conn.createQuery(Update.updateUserByLogin)
                     .addParameter("login", user.getLogin())
@@ -249,9 +200,6 @@ public class UserDB {
                     .addParameter("time", user.getTime())
                     .executeUpdate().getResult();
             conn.commit();
-
-//            int update = jdbcTemplate.update(Update.updateUserByLogin,
-//                    user.getFname(), user.getLname(), user.getEmail(), user.getTime(), user.getLogin());
             log.info("Update user by login end. result: {}", result);
         } catch (Exception e) {
             log.warn("Exception. updateUserByActivationCode: {}", e.getMessage());
@@ -261,7 +209,7 @@ public class UserDB {
 
     public void updateUserByLogin(UserEntity user) {
         log.info("Update user by login: {}", user);
-        try (org.sql2o.Connection conn = sql2o.beginTransaction()) {
+        try (org.sql2o.Connection conn = sql2o.open()) {
 
             int result = conn.createQuery(Update.updateUserByLogin)
                     .addParameter("login", user.getLogin())
@@ -271,9 +219,6 @@ public class UserDB {
                     .addParameter("time", user.getTime())
                     .executeUpdate().getResult();
             conn.commit();
-
-//            int update = jdbcTemplate.update(Update.updateUserByLogin,
-//                    user.getLogin(), user.getFname(), user.getLname(), user.getEmail(), user.getTime());
             log.info("Update user by login end. result: {}", result);
         } catch (Exception e) {
             log.warn("Exception. updateUserByActivationCode: {}", e.getMessage());
@@ -283,14 +228,12 @@ public class UserDB {
 
     public Integer getUserProfileIdByLogin(String login) {
         log.info("Get profile id by user login: {}", login);
-        try (org.sql2o.Connection conn = sql2o.beginTransaction()) {
+        try (org.sql2o.Connection conn = sql2o.open()) {
 
             List<Integer> profileId = conn.createQuery(Select.selectUserProfileIdByLogin)
                     .addParameter("login", login)
                     .executeAndFetch(Integer.class);
             conn.commit();
-
-//            Integer profileId = jdbcTemplate.queryForObject(Select.selectUserProfileIdByLogin, Integer.class, login);
             log.info("Get profile id by user login:{} result:{}", login, profileId.get(0));
             return profileId.get(0);
         } catch (Exception e) {
@@ -306,8 +249,6 @@ public class UserDB {
             List<UserEntity> users = conn.createQuery(Select.selectUsers)
                     .executeAndFetch(UserEntity.class);
             conn.commit();
-
-//            List<UserEntity> query = jdbcTemplate.query(Select.selectUsers, new UserRowMapper());
             log.info("Get all users result count: {}", users.size());
             return users;
         } catch (Exception e) {
@@ -355,20 +296,17 @@ public class UserDB {
                         .executeAndFetch(UserSearchEntity.class);
                 conn.commit();
             }
-
-
             log.info("Get users with filters. Result count: {}", users.size());
             return users;
         } catch (Exception e) {
             log.warn("Exception. getUsersWithFilters: {}", e.getMessage());
-            e.printStackTrace();
             throw new SelectDBException();
         }
     }
 
     public void updateTimeByLogin(String userLogin) {
         log.info("Update user time by login: {}", userLogin);
-        try (org.sql2o.Connection conn = sql2o.beginTransaction()) {
+        try (org.sql2o.Connection conn = sql2o.open()) {
 
             int result = conn.createQuery(Update.updateUserTimeByLogin)
                     .addParameter("login", userLogin)

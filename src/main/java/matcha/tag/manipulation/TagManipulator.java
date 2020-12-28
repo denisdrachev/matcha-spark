@@ -45,12 +45,6 @@ public class TagManipulator {
     }
 
     public Object getUsersWithCommonTags(List<Integer> tags) {
-//        List<Integer> tagsId = new ArrayList<>();
-//        tags.forEach(tag -> {
-//            int tagId = tagDB.getTagId(tag);
-//            if (tagId != -1)
-//                tagsId.add(tagId);
-//        });
         return tagDB.getUsersWithCommonTags(tags);
     }
 

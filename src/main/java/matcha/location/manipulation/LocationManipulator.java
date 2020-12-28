@@ -1,6 +1,5 @@
 package matcha.location.manipulation;
 
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import matcha.location.db.LocationDB;
 import matcha.location.model.Location;
@@ -15,20 +14,6 @@ public class LocationManipulator {
     public Location getLocationByProfileId(Integer profileId) {
 
         return locationDB.getLocationByProfileId(profileId);
-
-//        Location locationByUserIdAndActive = locationDB.getLocationByUserIdAndActive(userId);
-//        if (locationByUserIdAndActive == null) {
-//            return new Location();
-//        } else {
-//            return locationByUserIdAndActive;
-//        }
-
-
-//        try {
-//            return locationDB.getLocationByUserIdAndActive(userId);
-//        } catch (GetActiveLocationByLoginException e) {
-//            return new Location();
-//        }
     }
 
     public void insertLocation(Location location) {
