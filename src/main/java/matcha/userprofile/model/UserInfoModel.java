@@ -52,7 +52,7 @@ public class UserInfoModel implements Serializable, MyObject {
 
     @Size(min = 1, max = 5, message = "Количество тегов должно быть от 1 до 5")
     @NotNull(message = "Значение поля 'tags' не может быть пустым.")
-    private List<String> tags;
+    private List<@Length(min = 1, max = 10, message = "Допустимая длина тега до 10 символов") String> tags;
 
     @NotNull(message = "Значение поля 'images' не может быть пустым.")
     @Size(min = 1, max = 5, message = "Количество изображений долюно быть от 1 до 5")

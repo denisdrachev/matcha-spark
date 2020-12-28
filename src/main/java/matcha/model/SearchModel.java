@@ -23,10 +23,10 @@ public class SearchModel implements MyObject {
     private int maxAge;
 
     @Min(value = 0, message = "Минимальное значение параметра minRatingAge равно 0")
-    private int minRatingAge;
+    private int minRating;
 
     @Min(value = 0, message = "Минимальное значение параметра maxRatingAge равно 0")
-    private int maxRatingAge;
+    private int maxRating;
 
     @Min(value = 0, message = "Минимальное значение параметра deltaRadius равно 0")
     private double deltaRadius;
@@ -74,8 +74,8 @@ public class SearchModel implements MyObject {
 
         String minAge = params.get("ageMin");
         String maxAge = params.get("ageMax");
-        String minRatingAge = params.get("minRating");
-        String maxRatingAge = params.get("maxRating");
+        String minRatingAge = params.putIfAbsent("minRating", "0");
+        String maxRatingAge = params.putIfAbsent("maxRating", String.valueOf(Integer.MAX_VALUE));
         String deltaRadius = params.get("deltaRadius");
         String limit = params.get("limit");
         String offset = params.get("offset");
@@ -89,8 +89,8 @@ public class SearchModel implements MyObject {
         setUserLocation(location);
         setMinAge(minAge);
         setMaxAge(maxAge);
-        setMinRatingAge(minRatingAge);
-        setMaxRatingAge(maxRatingAge);
+        setMinRating(minRatingAge);
+        setMaxRating(maxRatingAge);
         setDeltaRadius(deltaRadius);
         this.tags = tags;
         setLimit(limit);
@@ -117,18 +117,18 @@ public class SearchModel implements MyObject {
             this.maxAge = 100;
     }
 
-    public void setMinRatingAge(String minRatingAge) {
-        if (minRatingAge != null)
-            this.minRatingAge = Integer.parseInt(minRatingAge);
+    public void setMinRating(String minRating) {
+        if (minRating != null)
+            this.minRating = Integer.parseInt(minRating);
         else
-            this.minRatingAge = 0;
+            this.minRating = 0;
     }
 
-    public void setMaxRatingAge(String maxRatingAge) {
-        if (maxRatingAge != null)
-            this.maxRatingAge = Integer.parseInt(maxRatingAge);
+    public void setMaxRating(String maxRating) {
+        if (maxRating != null)
+            this.maxRating = Integer.parseInt(maxRating);
         else
-            this.maxRatingAge = Integer.MAX_VALUE;
+            this.maxRating = Integer.MAX_VALUE;
     }
 
     public void setDeltaRadius(String deltaRadius) {

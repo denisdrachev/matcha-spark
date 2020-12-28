@@ -38,6 +38,7 @@ public class Select {
                     "LEFT JOIN blacklist b ON b.fromLogin = :login AND b.toLogin = u.login) " +
                     "INNER JOIN images i ON i.profileId = u.profileId AND i.avatar = TRUE) " +
                     "WHERE (b.isBlocked IS NULL OR b.isBlocked <> TRUE) " +
+                    "AND r.rating >= :ratingMin AND r.rating <= :ratingMax " +
                     "AND u.login <> :login " +
                     "AND p.gender IN (:preferenceGender) " +
                     "AND t.count > 0 " +
@@ -52,6 +53,7 @@ public class Select {
                     "LEFT JOIN blacklist b ON b.fromLogin = :login AND b.toLogin = u.login) " +
                     "INNER JOIN images i ON i.profileId = u.profileId AND i.avatar = TRUE) " +
                     "WHERE (b.isBlocked IS NULL OR b.isBlocked <> TRUE) " +
+                    "AND r.rating >= :ratingMin AND r.rating <= :ratingMax " +
                     "AND u.login <> :login " +
                     "AND p.gender IN (:preferenceGender) " +
                     "AND p.age >= :ageMin AND p.age <= :ageMax " + //возраст

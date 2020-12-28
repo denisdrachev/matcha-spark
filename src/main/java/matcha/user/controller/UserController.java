@@ -54,7 +54,6 @@ public class UserController {
             stream.close();
             log.info("Read passwords done");
         } catch (IOException e) {
-            e.printStackTrace();
             log.warn("Error read passwords");
         }
     }

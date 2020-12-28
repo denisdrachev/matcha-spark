@@ -1,8 +1,5 @@
 package matcha;
 
-//import ch.qos.logback.classic.Level;
-//import ch.qos.logback.classic.Logger;
-
 import lombok.extern.slf4j.Slf4j;
 import matcha.exception.BaseException;
 import matcha.properties.ConfigProperties;
@@ -72,7 +69,6 @@ public class Application {
 
         String s1 = validationMessageService.prepareErrorMessage("Некорректные параметры запроса").toString();
         exception(Exception.class, (exception, request, response) -> {
-            exception.printStackTrace();
             String s = validationMessageService.prepareErrorMessage(exception.getMessage()).toString();
             if (exception instanceof BaseException) {
                 if (s == null || s.isEmpty()) {
