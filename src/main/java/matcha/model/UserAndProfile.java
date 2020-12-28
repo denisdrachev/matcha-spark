@@ -39,39 +39,8 @@ public class UserAndProfile implements Serializable {
         gender = profile.getGender();
         preference = profile.getPreference();
         biography = profile.getBiography();
-//        tags = profile.getTags();
         images = profile.getImages();
         time = user.getTime();
         location = user.getLocation();
     }
-//
-//    public JSONObject toJSONObject() {
-//        JSONObject jsonObject = new JSONObject();
-//        jsonObject.put("login", login);
-//        jsonObject.put("fname", fname == null ? JSONObject.NULL : fname);
-//        jsonObject.put("lname", lname == null ? JSONObject.NULL : lname);
-//        jsonObject.put("email", email);
-//        jsonObject.put("age", age == null ? JSONObject.NULL : age);
-//        jsonObject.put("gender", gender == null ? JSONObject.NULL : gender);
-//        jsonObject.put("preference", preference);
-//        jsonObject.put("biography", biography == null ? JSONObject.NULL : biography);
-//        jsonObject.put("tags", tags);
-//        jsonObject.put("images", images);
-//        jsonObject.put("avatar", avatar == null ? JSONObject.NULL : avatar);
-//        jsonObject.put("time", time);
-//
-//        JSONObject locationJson = new JSONObject();
-//        if (location != null) {
-//            locationJson.put("x", location.getX());
-//            locationJson.put("y", location.getY());
-//        }
-//        jsonObject.put("location", location == null ? JSONObject.NULL : locationJson);
-//        return jsonObject;
-//    }
-
-//    @Override
-//    public String toString() {
-//        return Converter.objectToJson(this).get();
-//    }
-
 }

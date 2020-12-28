@@ -33,6 +33,7 @@ import matcha.properties.ConfigProperties;
 import matcha.rating.model.Rating;
 import matcha.rating.service.RatingService;
 import matcha.response.Response;
+import matcha.tag.model.Tag;
 import matcha.tag.service.TagService;
 import matcha.user.manipulation.UserManipulator;
 import matcha.user.model.*;
@@ -501,7 +502,7 @@ public class UserService implements UserInterface {
     }
 
     public Response getFullMessagesByLimit(String token, String toLogin, String limit) {
-        log.info("chat/full toLogin: {} limit: {}", toLogin, limit);
+        log.info("Request chat/full toLogin: {} limit: {}", toLogin, limit);
 
         ChatMessageFull chatMessageFull = new ChatMessageFull(toLogin, limit);
         Response response = validationMessageService.validateMessage(chatMessageFull);
@@ -515,7 +516,7 @@ public class UserService implements UserInterface {
     }
 
     public Response getNewMessages(String token, String body) {
-        log.info("/chat/new {}", body);
+        log.info("Request /chat/new {}", body);
         ChatNewMessageFromUser chatNewMessageFromUser = new Gson().fromJson(body, ChatNewMessageFromUser.class);
         Response response = validationMessageService.validateMessage(chatNewMessageFromUser);
         if (response != null) {
@@ -528,7 +529,7 @@ public class UserService implements UserInterface {
     }
 
     public Response getAllNewMessages(String token, String body) {
-        log.info("/chat/allnew {}", body);
+        log.info("Request /chat/allnew {}", body);
         ChatAllNewMessage chatNewMessageFromUser = new Gson().fromJson(body, ChatAllNewMessage.class);
         Response response = validationMessageService.validateMessage(chatNewMessageFromUser);
         if (response != null) {
@@ -585,5 +586,12 @@ public class UserService implements UserInterface {
 
     public void updateTimeByLogin(String userLogin) {
         userManipulator.updateTimeByLogin(userLogin);
+    }
+
+    public Response getTags(String token) {
+        log.info("Request /get-tags");
+        userService.getUserByToken(token);
+        List<Tag> popularTags = tagService.getPopularTags(10);
+        return validationMessageService.prepareMessageOkData(gson.toJsonTree(popularTags));
     }
 }

@@ -71,7 +71,6 @@ public class TagDB {
     public List<Tag> getAllTags() {
         log.info("Get all tags");
         try (org.sql2o.Connection conn = sql2o.open()) {
-
             List<Tag> tags = conn.createQuery(Select.selectAllTags)
                     .executeAndFetch(Tag.class);
             conn.commit();
@@ -83,10 +82,24 @@ public class TagDB {
         }
     }
 
+    public List<Tag> getPopularTags(int limit) {
+        log.info("Get popular tags [limit:{}]", limit);
+        try (org.sql2o.Connection conn = sql2o.open()) {
+            List<Tag> tags = conn.createQuery(Select.selectPopularTagsByLimit)
+                    .addParameter("limit", limit)
+                    .executeAndFetch(Tag.class);
+            conn.commit();
+            log.info("Get popular tags. {} ", tags);
+            return tags;
+        } catch (Exception e) {
+            log.warn("Exception. getPopularTags: {}", e.getMessage());
+            throw new SelectDBException();
+        }
+    }
+
     public List<Tag> getAllTagRelations() {
         log.info("Get all tag relations");
         try (org.sql2o.Connection conn = sql2o.open()) {
-
             List<Tag> tags = conn.createQuery(Select.selectAllTagRelations)
                     .executeAndFetch(Tag.class);
             conn.commit();

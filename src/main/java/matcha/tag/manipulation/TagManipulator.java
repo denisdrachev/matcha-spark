@@ -51,4 +51,8 @@ public class TagManipulator {
     public int getTagId(String tag) {
         return tagDB.getTagId(tag);
     }
+
+    public List<Tag> getPopularTags(int limit) {
+        return tagDB.getPopularTags(limit);
+    }
 }

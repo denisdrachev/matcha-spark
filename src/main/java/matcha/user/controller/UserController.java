@@ -44,6 +44,7 @@ public class UserController {
         changeResetPassword();
         confirmRegistration();
         validatePassword();
+        getTags();
         init();
     }
 
@@ -179,5 +180,14 @@ public class UserController {
             }
             return validationMessageService.prepareMessageOkOnlyType();
         });
+    }
+
+    private void getTags() {
+        get("/get-tags", (req, res) -> {
+                    return userService.getTags(
+                            req.headers("Authorization")
+                    );
+                }
+        );
     }
 }

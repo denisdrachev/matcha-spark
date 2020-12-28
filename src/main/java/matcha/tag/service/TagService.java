@@ -50,4 +50,8 @@ public class TagService {
     public Object getUsersWithCommonTags(List<Integer> tags) {
         return tagManipulator.getUsersWithCommonTags(tags);
     }
+
+    public List<Tag> getPopularTags(int limit) {
+        return tagManipulator.getPopularTags(limit);
+    }
 }

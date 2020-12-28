@@ -9,8 +9,6 @@ import spark.resource.ClassPathResource;
 import java.io.IOException;
 import java.io.InputStream;
 
-//import org.springframework.core.io.ClassPathResource;
-
 public class JsonSchemaValidator {
 
     private Schema schema;

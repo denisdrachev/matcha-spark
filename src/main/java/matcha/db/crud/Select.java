@@ -60,6 +60,7 @@ public class Select {
                     "AND GET_DISTANCE(:x, :y, l.x, l.y) <= :radius "; //растояние
 
     public static String selectAllTags = "SELECT * FROM tags";
+    public static String selectPopularTagsByLimit = "SELECT * FROM tags ORDER BY count DESC LIMIT :limit";
     public static String selectAllTagRelations = "SELECT * FROM tagRelations";
 
     public static String selectImagesCountById = "SELECT COUNT(*) FROM images WHERE id = :id";
