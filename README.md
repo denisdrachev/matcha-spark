@@ -1,10 +1,10 @@
 # Matcha 
 >Сайт знакомств [project school21: ltuffleb] 
 
-###Command line:
+##Command line:
 java -jar matcha.jar [options]
 
-####options:
+##options:
 >format: option=value
 
 - baseUrl=[http://localhost:4567] - пусть до клиентского интерфейса
