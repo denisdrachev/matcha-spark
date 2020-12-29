@@ -27,7 +27,7 @@ public class SearchModel implements MyObject {
     private int minRating;
 
     @Min(value = 0, message = "Максимальное значение рейтинга в диапазоне [0-" + Integer.MAX_VALUE + "]")
-    @Min(value = Integer.MAX_VALUE, message = "Максимальное значение рейтинга в диапазоне [0-" + Integer.MAX_VALUE + "]")
+    @Max(value = Integer.MAX_VALUE, message = "Максимальное значение рейтинга в диапазоне [0-" + Integer.MAX_VALUE + "]")
     private int maxRating;
 
     @Min(value = 0, message = "Минимальный Радиус равен 0")
