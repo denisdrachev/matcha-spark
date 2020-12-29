@@ -19,7 +19,8 @@ public class Sql2oModel {
 
     private static Sql2o init() {
         String connectionString = "jdbc:h2:mem:matcha;DB_CLOSE_DELAY=-1;INIT=RUNSCRIPT from 'classpath:sql/tables/all.sql'";
-        Sql2o mySql2o = new Sql2o(connectionString, "root", "root", new NoQuirks() {
+        Sql2o mySql2o = new Sql2o(connectionString, "root", "", new NoQuirks() {{
+        }
         });
         return mySql2o;
     }

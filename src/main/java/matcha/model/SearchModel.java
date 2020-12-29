@@ -14,21 +14,24 @@ public class SearchModel implements MyObject {
 
     private double oneKmConst = 0.016608;
 
-    @Max(value = 100, message = "Максимальное значение параметра minAge равно 100")
-    @Min(value = 0, message = "Минимальное значение параметра minAge равно 0")
+    @Max(value = 99, message = "Минимальный возраст в диапазоне [18-99] лет")
+    @Min(value = 18, message = "Минимальный возраст в диапазоне [18-99] лет")
     private int minAge;
 
-    @Max(value = 100, message = "Максимальное значение параметра maxAge равно 100")
-    @Min(value = 0, message = "Минимальное значение параметра maxAge равно 0")
+    @Max(value = 99, message = "Максимальный возраст в диапазоне [18-99] лет")
+    @Min(value = 18, message = "Максимальный возраст в диапазоне [18-99] лет")
     private int maxAge;
 
-    @Min(value = 0, message = "Минимальное значение параметра minRatingAge равно 0")
+    @Min(value = 0, message = "Минимальное значение рейтинга в диапазоне [0-" + Integer.MAX_VALUE + "]")
+    @Max(value = Integer.MAX_VALUE, message = "Минимальное значение рейтинга в диапазоне [0-" + Integer.MAX_VALUE + "]")
     private int minRating;
 
-    @Min(value = 0, message = "Минимальное значение параметра maxRatingAge равно 0")
+    @Min(value = 0, message = "Максимальное значение рейтинга в диапазоне [0-" + Integer.MAX_VALUE + "]")
+    @Min(value = Integer.MAX_VALUE, message = "Максимальное значение рейтинга в диапазоне [0-" + Integer.MAX_VALUE + "]")
     private int maxRating;
 
-    @Min(value = 0, message = "Минимальное значение параметра deltaRadius равно 0")
+    @Min(value = 0, message = "Минимальный Радиус равен 0")
+    @Max(value = Integer.MAX_VALUE, message = "Максимальный Радиус равен " + Integer.MAX_VALUE)
     private double deltaRadius;
 
     @NotNull(message = "tags не может быть NULL")

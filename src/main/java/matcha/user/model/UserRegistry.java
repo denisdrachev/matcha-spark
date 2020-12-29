@@ -20,23 +20,23 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class UserRegistry implements Serializable, MyObject {
 
-    @Length(min = 1, max = 50, message = "Допустимая длина логина от 1 до 50 символов")
-    @NotBlank(message = "Поле 'login' не может быть пустым")
+    @Length(min = 1, max = 20, message = "Допустимая длина логина от 1 до 20 символов")
+    @NotBlank(message = "Поле логин не может быть пустым")
     private String login;
 
-    @Length(min = 1, max = 50, message = "Допустимая длина пароля от 1 до 50 символов")
-    @NotBlank(message = "Поле 'password' не может быть пустым")
+    @Length(min = 6, max = 20, message = "Допустимая длина пароля от 6 до 20 символов")
+    @NotBlank(message = "Пароль не может быть пустым")
     private String password;
 
-    @Length(min = 1, max = 50, message = "Допустимая длина имени от 1 до 50 символов")
-    @NotBlank(message = "Поле 'fname' не может быть пустым")
+    @Length(min = 1, max = 20, message = "Допустимая длина имени от 1 до 20 символов")
+    @NotBlank(message = "Поле Имя не может быть пустым")
     private String fname;
 
-    @Length(min = 1, max = 50, message = "Допустимая длина фамилии от 1 до 50 символов")
-    @NotBlank(message = "Поле 'lname' не может быть пустым")
+    @Length(min = 1, max = 20, message = "Допустимая длина фамилии от 1 до 20 символов")
+    @NotBlank(message = "Поле Фамилия не может быть пустым")
     private String lname;
 
-    @Length(max = 50, message = "Допустимая длина email до 50 символов")
+    @Length(max = 30, message = "Допустимая длина email до 30 символов")
     @NotBlank(message = "Поле 'email' не может быть пустым")
     @Email(message = "Поле 'email' не соответствует email формату")
     private String email;

@@ -558,7 +558,7 @@ public class UserService implements UserInterface {
         log.info("Request /reset-password {}", body);
         Map<String, String> map = gson.fromJson(body, HashMap.class);
         UserEntity user = userService.getSimpleUserByLogin(map.get("login"));
-        if (user.getEmail().equals(map.get("email")) && user.isActive()) {
+        if (user.getEmail().equals(map.get("email"))) {
             user.setActive(false);
             userManipulator.updateUserToken(user);
             mailService.sendResetPasswordEmail(user.getEmail(), user.getActivationCode());
@@ -573,10 +573,14 @@ public class UserService implements UserInterface {
         Map<String, String> map = gson.fromJson(body, HashMap.class);
 
         String password = map.get("password");
-        if (password == null || password.isEmpty())
+        if (password == null || password.isEmpty()) {
             return validationMessageService.prepareErrorMessage("Указан недопустимый пароль");
+        }
+        if (password.length() < 6) {
+            return validationMessageService.prepareErrorMessage("Слишком короткий пароль");
+        }
 
-        UserEntity user = userService.checkUserByToken(token);
+        UserEntity user = userService.getUserByToken(token);
         user.setPassword(password);
         initRegistryUser(user);
         user.setActive(true);

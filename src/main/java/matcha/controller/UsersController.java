@@ -3,6 +3,7 @@ package matcha.controller;
 import matcha.profile.model.ProfileEntityWithoutImages;
 import matcha.profile.service.ProfileService;
 import matcha.user.model.UserEntity;
+import matcha.user.model.UserEntityFull;
 import matcha.user.service.UserService;
 
 import java.util.List;
@@ -22,12 +23,18 @@ public class UsersController {
 
     public void registration() {
         get("/users", (req, res) -> {
-            res.type("text/html");
-            List<UserEntity> allUsers = userService.getAllUsers();
-            if (allUsers != null)
-                return allUsers.stream().map(location -> "<p>" + location + "</p>").collect(Collectors.joining());
-            else
-                return "<p>Filed to load users</p>";
+            try {
+                res.type("text/html");
+                List<UserEntity> allUsers = userService.getAllUsers();
+                List<UserEntityFull> collect = allUsers.stream().map(UserEntityFull::new).collect(Collectors.toList());
+                if (collect != null)
+                    return collect.stream().map(user -> "<p>" + user + "</p>").collect(Collectors.joining());
+                else
+                    return "<p>Filed to load users</p>";
+            } catch (Exception e) {
+
+            }
+            return "";
         });
     }
 
